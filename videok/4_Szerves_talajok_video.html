@@ -27466,6 +27466,8 @@ If you want to offset all timestamps of a track such that the first one is zero,
     }
     $("pp").onclick = () => playing ? pause() : play();
     st.onclick = () => play();
+    if (/autoplay/.test(location.hash)) { audio.play().then(() => { audio.pause(); play(); }).catch(() => {}); }
+    addEventListener("keydown", (e) => { if (e.key === "Escape" && window.parent !== window) window.parent.postMessage("ka-close-video", "*"); });
     $("seek").oninput = (e) => {
       tNow = +e.target.value;
       audio.currentTime = tNow;
