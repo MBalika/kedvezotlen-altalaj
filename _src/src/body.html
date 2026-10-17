@@ -1,0 +1,598 @@
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brandmark" href="#top" aria-label="Kezdőlap">
+      <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="7" y="1" width="12" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="2.5" width="9" height="5" fill="var(--c1s)"/><rect x="8.5" y="7.5" width="9" height="5" fill="var(--c2s)"/><rect x="8.5" y="12.5" width="9" height="5" fill="var(--c3s)"/><rect x="8.5" y="17.5" width="9" height="6" fill="var(--c4s)"/></svg>
+      <div><b>Kedvezőtlen altalaj</b><span>BME · Alapozás</span></div>
+    </a>
+    <nav class="navlinks" aria-label="Fejezetek">
+      <a href="#bevezeto" data-nav="bevezeto">Bevezető</a>
+      <a href="#terfogatvaltozo" data-nav="terfogatvaltozo" data-ch="1"><i></i>Térfogatváltozó</a>
+      <a href="#roskadekony" data-nav="roskadekony" data-ch="2"><i></i>Roskadékony</a>
+      <a href="#feltoltes" data-nav="feltoltes" data-ch="3"><i></i>Feltöltés</a>
+      <a href="#szerves" data-nav="szerves" data-ch="4"><i></i>Szerves talaj</a>
+      <a href="#osszevetes" data-nav="osszevetes">Összevetés</a>
+      <a href="#teszt" data-nav="teszt">Igaz / hamis</a>
+    </nav>
+    <button class="themebtn" id="themeBtn" type="button" aria-label="Világos / sötét téma">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="rail" aria-label="Fúrási szelvény navigáció">
+    <div class="rail-title">fúrási szelvény</div>
+    <div class="rail-log" id="railLog">
+      <a href="#terfogatvaltozo" data-ch="1" data-rail="terfogatvaltozo"><svg><rect width="100%" height="100%" fill="url(#hatch-clay)"/></svg><span>Agyag</span></a>
+      <a href="#roskadekony" data-ch="2" data-rail="roskadekony"><svg><rect width="100%" height="100%" fill="url(#hatch-loess)"/></svg><span>Lösz</span></a>
+      <a href="#feltoltes" data-ch="3" data-rail="feltoltes"><svg><rect width="100%" height="100%" fill="url(#hatch-fill)"/></svg><span>Feltöltés</span></a>
+      <a href="#szerves" data-ch="4" data-rail="szerves"><svg><rect width="100%" height="100%" fill="url(#hatch-peat)"/></svg><span>Tőzeg</span></a>
+      <div class="rail-marker" id="railMarker"></div>
+    </div>
+    <div class="rail-ticks"><span>0 m</span><span id="railDepth">0,0</span></div>
+  </aside>
+
+  <main id="top">
+    <!-- ============================================================ HERO -->
+    <section class="hero">
+      <div>
+        <div class="eyebrow">BME Építőmérnöki Kar · Alapozás · interaktív segédanyag</div>
+        <h1>Alapozás<br>kedvezőtlen<br><em>altalajon</em></h1>
+        <p class="lede">Négy talaj, amelyre nem lehet „csak úgy” alapozni: a duzzadó-zsugorodó agyag, a víztől összeroskadó lösz, a múlt hulladékából álló feltöltés és a vízzel teli, összenyomódó tőzeg. Mindegyiknél megnézzük, miért mozog, hogyan ismerjük fel, és hogyan alapozzunk rá.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#terfogatvaltozo">Kezdjük az agyaggal</a>
+          <a class="btn" href="#sim-clay">3D talajlabor</a>
+          <a class="btn" href="#teszt">Igaz / hamis teszt</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>4</b><span>talajtípus, 4 animáció</span></div>
+          <div class="stat"><b>4×3D</b><span>szimulátor csúszkákkal</span></div>
+          <div class="stat"><b id="statInter">20+</b><span>interaktív ábra</span></div>
+          <div class="stat"><b id="statQ">70+</b><span>kérdés és állítás</span></div>
+        </div>
+      </div>
+      <div class="cores" id="heroCores" aria-label="A négy talajminta"></div>
+    </section>
+
+    <!-- ============================================================ INTRO -->
+    <section class="sec" id="bevezeto">
+      <div class="sec-head">
+        <div class="sec-num">0</div>
+        <div>
+          <div class="eyebrow">Bevezető</div>
+          <h2>Mi a közös a négy talajban?</h2>
+          <p class="lede">Hazánk területének jelentős részén találunk a terepszint alatt térfogatváltozásra hajlamos agyagot, roskadásra hajlamos talajt, szerves üledéket és feltöltést. Ezekre csak kellő óvatossággal és szakszerűséggel szabad alapozni.</p>
+        </div>
+      </div>
+      <div class="two">
+        <div class="card">
+          <span class="k">Állapotváltozás az építés után</span>
+          <h4>Térfogatváltozó agyag és roskadékony lösz</h4>
+          <p>Az építmény elkészülte után, hosszabb-rövidebb idő múlva <b>külső hatásra</b> (leggyakrabban a víztartalom változására) olyan mértékben változtatják az állapotukat, hogy az épület egyenlőtlenül mozdul el és károsodik. Ránézésre teherbíró talajok.</p>
+        </div>
+        <div class="card">
+          <span class="k">Eleve gyenge talajok</span>
+          <h4>Szerves talajok és feltöltések</h4>
+          <p>Kis szilárdságúak, nagymértékben összenyomódnak, ezért <b>általában alkalmatlanok</b> a terhek viselésére. A felismerésük viszonylag egyszerű és egyértelmű, ha a feltárás elég alapos.</p>
+        </div>
+      </div>
+      <div class="widget" data-ch="0">
+        <div class="widget-head"><h4>Négy talaj egy pillantásra</h4><span class="hint">Válassz szempontot</span></div>
+        <div class="widget-body">
+          <div class="seg" id="cmpSeg"></div>
+          <div class="cols" id="cmpCards" style="margin-top:14px"></div>
+        </div>
+      </div>
+      <div class="note web"><b class="lbl">A víz a közös nevező</b>A duzzadás, a zsugorodás, a roskadás, a feltöltés átázása és a tőzeg kiszáradása mögött is a víz áll. Ezért a legtöbb tervezési szabály végül arról szól, hogyan tartsuk távol, vagy hogyan tartsuk állandó szinten a vizet az alapok környezetében.</div>
+    </section>
+
+    <!-- ============================================================ 1 TÉRFOGATVÁLTOZÓ -->
+    <section class="sec" id="terfogatvaltozo" data-ch="1">
+      <div class="sec-head">
+        <div class="sec-num">1</div>
+        <div>
+          <div class="eyebrow">Duzzadó-zsugorodó agyag</div>
+          <h2>Térfogatváltozó talajok</h2>
+          <p class="lede">A kis terhelésű, nem kellő mélységben alapozott épületek legtöbbje az ilyen agyagon előbb-utóbb megsérül. A kár jellemzően egy nagy nyári szárazság után jelenik meg, főleg ha több száraz év követi egymást.</p>
+        </div>
+      </div>
+      <div class="video" data-video="1"></div>
+
+      <div class="sub">
+        <h3>Mi történik a talajban? <span class="tag">agyagásványok</span></h3>
+        <p>A kövér agyag lemezes agyagásványokból áll. A montmorillonit (szmektit) rétegei közé víz épül be, a rácsa „szétnyílik”, a talaj duzzad. Kiszáradáskor a víz távozik, a talaj zsugorodik és összerepedezik. A kaolinit alig, az illit közepesen, a montmorillonit nagyon erősen duzzad. A száraz időben mozaikosan repedezett felszín árulkodó jel.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Agyagásványok vízfelvétele</h4><span class="hint">Állítsd a víztartalmat, válts ásványt</span></div>
+          <div class="widget-body wgrid">
+            <canvas class="cv" id="clayMicro" width="760" height="420" aria-label="Agyaglemezek közötti víz animációja"></canvas>
+            <div class="ctl">
+              <div class="seg" id="mineralSeg"></div>
+              <div class="slider"><label for="microW">Víztartalom <output id="microWo"></output></label><input type="range" id="microW" min="0" max="100" value="35"><small><span>kiszáradt</span><span>telített</span></small></div>
+              <div class="readout"><div class="ro"><span>Rétegtávolság</span><b id="microD">–</b></div><div class="ro"><span>Térfogatváltozás</span><b id="microV">–</b></div></div>
+              <p class="small muted">Szemléltető modell: a lemezek közötti távolság és a térfogatváltozás arányai az ásványok viselkedésének jellegét mutatják, nem mért értékek.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Hogyan ismerjük fel? <span class="tag">határértékek</span></h3>
+        <p>A jegyzet szerint egy agyag akkor tekinthető térfogatváltozónak, ha az alábbi jellemzők teljesülnek. Állítsd be egy talajminta laboreredményeit, és nézd meg, mit mutat.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Térfogatváltozás-ellenőrző</h4><span class="hint">Laboreredmények → besorolás</span></div>
+          <div class="widget-body wgrid">
+            <div class="ctl" id="critCtl"></div>
+            <div><div id="critBars" class="rules"></div><div id="critVerdict"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Az épület egész évben mozog <span class="tag">1. ábra</span></h3>
+        <p>Ha a talaj víztartalma ismét megnő (csapadékosabb időben, főleg télen és tavasszal), a duzzadó agyag megemeli a kis terhelésű épületet, a repedések szűkülnek, sokszor teljesen záródnak. Nyár végére, ősszel a zsugorodás miatt az épület süllyed, a repedések kinyílnak. Beavatkozás nélkül ez évről évre ismétlődik.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Szezonális épületmozgás</h4><span class="hint">Görgesd az időt, állítsd az alapozási mélységet</span></div>
+          <div class="widget-body">
+            <div class="svgbox" id="seasonChart"></div>
+            <div class="cols" style="margin-top:6px">
+              <div class="slider"><label for="seasonT">Idő <output id="seasonTo"></output></label><input type="range" id="seasonT" min="0" max="1000" value="690"></div>
+              <div class="slider"><label for="seasonD">Alapozási mélység <output id="seasonDo"></output></label><input type="range" id="seasonD" min="50" max="300" value="80"><small><span>0,5 m</span><span>3,0 m</span></small></div>
+              <div class="slider"><label for="seasonDry">Aszály erőssége <output id="seasonDryo"></output></label><input type="range" id="seasonDry" min="0" max="100" value="60"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Miért a kis házak sérülnek? <span class="tag">83 / 13 / 4 %</span></h3>
+        <div class="two">
+          <div class="prose">
+            <p>A károk <b>83%-a egyszintes</b>, 13%-a kétszintes, és csak 4%-a háromszintes épületnél jelentkezik. A nagyobb épület nagyobb talpfeszültséggel nyomja az altalajt, és ez ellensúlyozza a duzzadási nyomást, amely ezeknél az agyagoknál 100 kPa fölött van.</p>
+            <p>Ezért a szabály: a talaj teherbírását minél jobban ki kell használni. Minél nagyobb a talpfeszültség, annál kevésbé tudja megemelni az épületet a duzzadó agyag.</p>
+          </div>
+          <div class="widget" style="margin-top:0">
+            <div class="widget-head"><h4>Talpfeszültség kontra duzzadási nyomás</h4></div>
+            <div class="widget-body">
+              <div class="svgbox" id="storeyChart"></div>
+              <div class="slider" style="margin-top:8px"><label for="storeyN">Szintek száma <output id="storeyNo"></output></label><input type="range" id="storeyN" min="1" max="3" step="1" value="1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub" id="sim-clay">
+        <h3>3D talajlabor: ház duzzadó agyagon <span class="tag">szimulátor</span></h3>
+        <p>Forgasd a modellt egérrel vagy ujjal. Állítsd az évszakot, a fa távolságát, az alapozási mélységet és a szintszámot, és figyeld, hogyan emelkedik, süllyed, billen és reped a ház.</p>
+        <div class="sim" data-soil="clay"></div>
+      </div>
+
+      <div class="sub">
+        <h3>Tervezési szabályok <span class="tag">ellenőrzőlista</span></h3>
+        <p>A térfogatváltozásból származó károk elkerülhetők, ha betartjuk az alábbi tapasztalati szabályokat. Pipáld ki, amit a terved teljesít, és figyeld, hogyan csökken a kockázat.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Megtervezted jól a házat?</h4><span class="hint" id="rulesHint"></span></div>
+          <div class="widget-body wgrid">
+            <div class="svgbox" id="rulesHouse"></div>
+            <div><div class="rules" id="rulesList"></div></div>
+          </div>
+        </div>
+        <div class="note web"><b class="lbl">Kitekintés a világba</b>Franciaországban a 2022-es aszály miatti, zsugorodó agyag okozta épületkárok becsült költsége meghaladta a 3,5 milliárd eurót. Az Egyesült Államokban a duzzadó talajok egy átlagos évben nagyobb anyagi kárt okoznak, mint a földrengések, árvizek, hurrikánok és tornádók együttvéve. Brit tapasztalat szerint a nagy vízigényű fák (tölgy, fűz, nyár) akár 25 m távolságból is károsíthatják az épületet.
+          <div class="src">Források: <a href="https://covea.com/en/analysis/drought-how-prevent-shrinkage-and-swelling-clay-soils" target="_blank" rel="noopener">Covéa / CCR</a> · <a href="https://geology.com/articles/expansive-soil.shtml" target="_blank" rel="noopener">Geology.com</a> · <a href="https://www.milton-keynes.gov.uk/sites/default/files/2022-03/Trees_and_buildings.pdf" target="_blank" rel="noopener">NHBC / Milton Keynes: Trees and buildings</a></div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Ellenőrizd magad <span class="tag">kvíz</span></h3>
+        <div class="quiz" data-quiz="1"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ 2 ROSKADÉKONY -->
+    <section class="sec" id="roskadekony" data-ch="2">
+      <div class="sec-head">
+        <div class="sec-num">2</div>
+        <div>
+          <div class="eyebrow">Lösz és társai</div>
+          <h2>Roskadékony talajok</h2>
+          <p class="lede">Szárazon falként megáll, ezért vájhattak bele pincesorokat. Átázva viszont hirtelen összeroskad, és ez a mozgás egyszeri és visszafordíthatatlan. Hazánk területének mintegy harmadát lösz borítja.</p>
+        </div>
+      </div>
+      <div class="video" data-video="2"></div>
+      <div class="figs">
+        <div class="fig"><b>~1/3</b><span>Magyarország területét borítja lösz</span></div>
+        <div class="fig"><b>~10%</b><span>a szárazföldeknek lösz vagy hasonló üledék (Wikipedia: Loess)</span></div>
+        <div class="fig"><b>i<sub>r</sub> &gt; 0,01</b><span>roskadási tényező felett roskadásveszélyes</span></div>
+        <div class="fig"><b>3</b><span>feltétel kell egyszerre: talaj, terhelés, víz</span></div>
+      </div>
+
+      <div class="sub">
+        <h3>A roskadás három feltétele <span class="tag">kapcsold be őket</span></h3>
+        <p>A roskadáshoz <b>roskadékony talaj, terhelés és víz</b> együttes jelenléte kell. Ha mindhárom megvan, akkor a talajtörés elleni biztonság növelésével, például alapszélesítéssel sem védhető meg az épület a gyors, hirtelen süllyedéstől. A nedves, telített lösz már a „puszta” terhelés hatására is roskad.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Lösz szemcseszinten</h4><span class="hint">Kapcsold a feltételeket</span></div>
+          <div class="widget-body wgrid">
+            <canvas class="cv" id="loessMicro" width="760" height="440" aria-label="Lösz makropórusos szerkezete"></canvas>
+            <div class="ctl">
+              <label class="toggle"><input type="checkbox" id="lcSoil" checked> Roskadékony talaj (makropórusos lösz)</label>
+              <label class="toggle"><input type="checkbox" id="lcLoad" checked> Terhelés (épület, önsúly)</label>
+              <label class="toggle"><input type="checkbox" id="lcWater"> Víz (csőtörés, beszivárgás)</label>
+              <div class="svgbox" id="vennBox"></div>
+              <div id="lcVerdict"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Laborban: elárasztásos ödométeres vizsgálat <span class="tag">2. ábra</span></h3>
+        <p>A mintát természetes víztartalmán terheljük, majd a választott terhelési fokozaton elárasztjuk. A roskadékony minta ekkor hirtelen többletösszenyomódást szenved. A roskadási tényező i<sub>r</sub> = Δh / h, ahol Δh az elárasztáskor bekövetkező összenyomódás, h a minta magassága.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Ödométer-szimulátor</h4><span class="hint">1. terhelj · 2. áraszd el</span></div>
+          <div class="widget-body wgrid">
+            <div class="svgbox" id="oedBox"></div>
+            <div class="ctl">
+              <div class="seg" id="oedSeg"></div>
+              <div class="slider"><label for="oedS">Függőleges terhelés σ <output id="oedSo"></output></label><input type="range" id="oedS" min="0" max="400" step="10" value="200"></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn acc small" id="oedFlood" type="button">Elárasztás</button><button class="btn small" id="oedReset" type="button">Új minta</button></div>
+              <div class="readout"><div class="ro"><span>h (mm)</span><b id="oedH">20,00</b></div><div class="ro"><span>Δh elárasztáskor</span><b id="oedDh">–</b></div><div class="ro"><span>i<sub>r</sub> = Δh/h</span><b id="oedIr">–</b></div></div>
+              <div id="oedVerdict"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Melyik talaj roskadásveszélyes?</h3>
+        <div class="cols">
+          <div class="card"><span class="k">1</span><h4>Lösz</h4><p>Szél hordta, laza vázú kőzetliszt, makropórusos szerkezettel. A szemcséket gyenge mész- és agyaghidak tartják, amelyeket a víz meggyengít.</p></div>
+          <div class="card"><span class="k">2</span><h4>Laza, száraz finomhomok</h4><p>És az átmeneti talajok. Laza állapotban a szemcsevázuk víz hatására tömörebb helyzetbe roskadhat.</p></div>
+          <div class="card"><span class="k">3</span><h4>Friss feltöltés</h4><p>A laza, 8–10 évnél fiatalabb, tömörítetlen feltöltés is roskadhat. Ez átvezet a 3. fejezethez.</p></div>
+        </div>
+      </div>
+
+      <div class="sub" id="sim-loess">
+        <h3>3D talajlabor: csőtörés a ház mellett <span class="tag">szimulátor</span></h3>
+        <p>Növeld a csőtörés kiterjedését, a terhelést és a talaj roskadékonyságát. Kapcsold be a védekezést, és figyeld, mikor következik be a roskadás.</p>
+        <div class="sim" data-soil="loess"></div>
+      </div>
+
+      <div class="sub">
+        <h3>Hogyan védekezzünk? <span class="tag">6 + 5 + 1</span></h3>
+        <div class="two">
+          <div>
+            <h4 style="font-size:17px">A károk elleni védekezés</h4>
+            <ul class="list">
+              <li>Felszíni vizek távoltartása: megfelelő tereprendezés, vízgyűjtő mélyedés ne legyen.</li>
+              <li>A tetővizek elvezetése az épülettől zárt csatornában.</li>
+              <li>A közművezetékek gondos tervezése és kivitelezése, védőcső alkalmazása.</li>
+              <li>Nedves üzemű alsó szinti helyiségbe vízzáró padozat.</li>
+              <li>Emeletenként falsüllyedésre méretezett monolit vasbeton koszorú és födém.</li>
+              <li>Vasalt sáv-, szalag- vagy gerendarács alap.</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="font-size:17px">Nagy felületű terhelésnél (pl. csarnok): talajjavítás</h4>
+            <ul class="list">
+              <li>Felszíni tömörítés ejtett döngölőlapokkal (3–5 tonna, 3–5 m-ről ejtve).</li>
+              <li>Mélytömörítés (vibroflotáció).</li>
+              <li>Talajszilárdítás, például vízüveggel.</li>
+              <li>Hőkezelés, talajégetés (környezetvédelmi okokból háttérbe szorult).</li>
+              <li>Elárasztás + előterhelés: előre kikényszerítjük a roskadást.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="note bad"><b class="lbl">Kivitelezéskor</b>A földkiemelés után az alapárkok és gödrök ne ázzanak át! Esős időben a betonozást rögtön meg kell kezdeni, vagy az alapsík alatti átázott talajrészt el kell távolítani.</div>
+      </div>
+
+      <div class="sub">
+        <h3>Ellenőrizd magad <span class="tag">kvíz</span></h3>
+        <div class="quiz" data-quiz="2"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ 3 FELTÖLTÉS -->
+    <section class="sec" id="feltoltes" data-ch="3">
+      <div class="sec-head">
+        <div class="sec-num">3</div>
+        <div>
+          <div class="eyebrow">A múlt hulladéka a ház alatt</div>
+          <h2>Feltöltések</h2>
+          <p class="lede">A városok és ipartelepek fejlődése egyre több feltöltött területet hozott létre. Téglagyári gödrök, kavics- és homokbányák, várárkok, salakhányók, szemétlerakók és mélyfekvésű területek kerültek feltöltésre. Budapesten a II. világháború után nagy mennyiségű törmeléket kellett elhelyezni.</p>
+        </div>
+      </div>
+      <div class="video" data-video="3"></div>
+
+      <div class="sub">
+        <h3>Egy telek története <span class="tag">rétegről rétegre</span></h3>
+        <p>A feltöltések anyaga és kora eltérő, és ennek megfelelően más-más tulajdonságokkal rendelkeznek. Kattints végig egy elképzelt telek történetén.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Gödörből telek</h4><span class="hint">Lépj az évtizedeken</span></div>
+          <div class="widget-body">
+            <div class="svgbox" id="histBox"></div>
+            <div class="seg" id="histSeg" style="margin-top:10px"></div>
+            <p class="small muted" id="histText" style="margin-top:10px"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Mennyire veszélyes? <span class="tag">osztályozd</span></h3>
+        <p>Anyaguk lehet talaj, építési és ipari törmelék, 10%-nál nagyobb szervesanyag-tartalmú anyag (meddőhányó, ipari hulladék), égési termék (salak, hamu), házi szemét és hulladék, valamint ezek keveréke. Nagyon veszélyes a házi szemét (kommunális hulladék) és a 8–10 évnél frissebb, tömörítetlen feltöltés.</p>
+        <div class="sort" id="sortGame"></div>
+        <div class="quiz-score" id="sortScore"></div>
+      </div>
+
+      <div class="sub">
+        <h3>Hol és miért sérülnek az épületek? <span class="tag">hazai statisztika</span></h3>
+        <div class="two">
+          <div class="widget" style="margin-top:0">
+            <div class="widget-head"><h4>A hazai károsodott elemek közül feltöltésen állt</h4></div>
+            <div class="widget-body"><div class="svgbox" id="statBars"></div></div>
+          </div>
+          <div class="widget" style="margin-top:0">
+            <div class="widget-head"><h4>A károk 87%-át víz váltotta ki</h4></div>
+            <div class="widget-body"><div class="svgbox" id="waterDonut"></div></div>
+          </div>
+        </div>
+        <p>A feltöltött területek tömörsége és összenyomhatósága tág határok között változhat. A laza feltöltések átázás hatására jelentős mértékben roskadhatnak. A talajon fekvő padozat és a ráállított válaszfalak közvetlenül a feltöltésre terhelnek, ezért sérülnek a leggyakrabban.</p>
+      </div>
+
+      <div class="sub">
+        <h3>Láthatatlan veszély: gázok <span class="tag">metán · cián</span></h3>
+        <p>A feltöltésben mérgező (például cián) és robbanásveszélyes gázok (metán) is képződhetnek. A lebomló szerves anyagból képződő hulladéklerakó-gáz nagyjából fele-fele arányban metán és szén-dioxid. A metán a levegővel 5 és 15 térfogatszázalék között robbanóképes elegyet alkot, és a pincékben, padló alatt, közműbevezetéseknél gyűlik össze.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Metánkoncentráció a pincében</h4><span class="hint">Húzd a csúszkát</span></div>
+          <div class="widget-body wgrid">
+            <div class="svgbox" id="gasGauge"></div>
+            <div class="ctl">
+              <div class="slider"><label for="gasC">CH<sub>4</sub> a levegőben <output id="gasCo"></output></label><input type="range" id="gasC" min="0" max="40" step="0.5" value="3"></div>
+              <div id="gasVerdict"></div>
+              <div class="svgbox" id="gasMix"></div>
+            </div>
+          </div>
+        </div>
+        <div class="note bad"><b class="lbl">Esettanulmány · Loscoe, Anglia, 1986</b>Egy egykori téglagyár agyaggödrét részben hulladékkal töltötték fel. A lerakóból kiáramló metán a ház alatti üregekben gyűlt össze, és a gázkazán gyújtólángja berobbantotta: a ház megsemmisült, a három lakó súlyosan megsérült. A légnyomás gyors esése (7 óra alatt 29 millibar) segítette a gáz kiáramlását. Az eset után Nagy-Britanniában alapjaiban szigorították a hulladéklerakó-gáz kezelését.
+          <div class="src">Források: <a href="https://www.legalfutures.co.uk/associate-news/ground-gas-the-lessons-from-loscoe" target="_blank" rel="noopener">Ground Gas: The Lessons from Loscoe</a> · ATSDR: Landfill Gas Primer</div>
+        </div>
+      </div>
+
+      <div class="sub" id="sim-fill">
+        <h3>3D talajlabor: ház a gödör szélén <span class="tag">szimulátor</span></h3>
+        <p>Told el a feltöltött gödör szélét a ház alatt, állítsd a feltöltés korát, anyagát és a talpfeszültséget, és kapcsold be az átázást.</p>
+        <div class="sim" data-soil="fill"></div>
+      </div>
+
+      <div class="sub">
+        <h3>Tervezési irányelvek</h3>
+        <p>Sokban hasonlítanak a roskadékony talajoknál látottakhoz.</p>
+        <div class="cols">
+          <div class="card"><span class="k">1</span><h4>Korlátozott talpfeszültség</h4><p>A talpfeszültség a feltöltés állapotától függően ne haladja meg a 150–200 kPa értéket.</p></div>
+          <div class="card"><span class="k">2</span><h4>Vizet távol</h4><p>A vizet távol kell tartani az épülettől: tetővíz, közművek, felszíni víz.</p></div>
+          <div class="card"><span class="k">3</span><h4>Azonos vastagság</h4><p>Az alapok alatt közel azonos vastagságú feltöltés maradjon.</p></div>
+          <div class="card"><span class="k">4</span><h4>Térbeli merevség</h4><p>Az építmény térbeli merevségét fokozni kell (koszorúk, födémtárcsák).</p></div>
+          <div class="card"><span class="k">5</span><h4>Nincs melléépítés</h4><p>Kerülni kell a melléépítést, mert eltérően süllyed (előadás, 9. dia).</p></div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Hogyan javítsuk a feltöltést? <span class="tag">módszerválasztó</span></h3>
+        <p>A feltöltések állapotán a roskadékony talajokhoz hasonlóan lehet javítani. Add meg, milyen mélységig kell javítani és hol a talajvíz, és megmutatjuk, melyik módszer jöhet szóba.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Javítási módszerek hatásmélysége</h4></div>
+          <div class="widget-body wgrid">
+            <div class="svgbox" id="impChart"></div>
+            <div class="ctl">
+              <div class="slider"><label for="impD">Javítandó vastagság <output id="impDo"></output></label><input type="range" id="impD" min="0.1" max="8" step="0.1" value="2.5"></div>
+              <div class="slider"><label for="impGW">Talajvízszint mélysége <output id="impGWo"></output></label><input type="range" id="impGW" min="0.5" max="10" step="0.1" value="3"></div>
+              <div class="seg" id="impSeg"></div>
+              <div id="impList" class="rules"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Ellenőrizd magad <span class="tag">kvíz</span></h3>
+        <div class="quiz" data-quiz="3"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ 4 SZERVES -->
+    <section class="sec" id="szerves" data-ch="4">
+      <div class="sec-head">
+        <div class="sec-num">4</div>
+        <div>
+          <div class="eyebrow">Tőzeg, szerves iszap és agyag</div>
+          <h2>Szerves talajok</h2>
+          <p class="lede">A feltöltés mellett a szerves talajok okozzák a legtöbb károsodást. Hazánkban viszonylag sok helyen alakultak ki kisebb-nagyobb vastagságban szerves üledékek. A legveszélyesebbek a tőzegek, de kedvezőtlenek a nagyobb szervesanyag-tartalmú iszapok és agyagok is.</p>
+        </div>
+      </div>
+      <div class="video" data-video="4"></div>
+
+      <div class="sub">
+        <h3>A talaj, amely eltűnik <span class="tag">Holme Fen, 1851–2024</span></h3>
+        <p>Az angliai Holme Fenben 1851-ben, a láp lecsapolása után egy oszlopot vertek a tőzegen át az alatta lévő agyagba úgy, hogy a teteje a terepszinttel egy magasságban volt. A kiszáradó tőzeg azóta zsugorodik és lebomlik: ma a terep több mint 4 méterrel lejjebb van.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Időgép</h4><span class="hint">Húzd az évszámot</span></div>
+          <div class="widget-body">
+            <div class="svgbox" id="holmeBox"></div>
+            <div class="slider" style="margin-top:8px"><label for="holmeY">Év <output id="holmeYo"></output></label><input type="range" id="holmeY" min="1851" max="2024" value="1851"></div>
+            <div class="src">Forrás: <a href="https://en.wikipedia.org/wiki/Holme_Fen" target="_blank" rel="noopener">Wikipedia: Holme Fen</a>. A görbe alakja szemléltető (gyors kezdeti, majd lassuló süllyedés).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Felismerés <span class="tag">melyik a tőzeg?</span></h3>
+        <p>A szerves talajok könnyen felismerhetők: <b>sötét színűek</b> (fekete, sötétbarna, sötétszürke), <b>kis térfogatsúlyúak</b> (könnyűek), a <b>víztartalmuk nagy</b> (w &gt; 50–70%, de több száz % is lehet), és sok esetben <b>szálas, rostos</b> szerkezetűek. Melyik minta tőzeg?</p>
+        <div class="cols" id="peatGame"></div>
+        <div id="peatGameFb"></div>
+      </div>
+
+      <div class="sub">
+        <h3>Számokban <span class="tag">víztartalom · modulus</span></h3>
+        <div class="two">
+          <div class="widget" style="margin-top:0"><div class="widget-head"><h4>Víztartalom (w)</h4></div><div class="widget-body"><div class="svgbox" id="wBars"></div><div class="src">A rostos tőzegre vonatkozó 2000% irodalmi érték (MATEC Web of Conf., 2019).</div></div></div>
+          <div class="widget" style="margin-top:0"><div class="widget-head"><h4>Összenyomódási modulus E<sub>oed</sub> (logaritmikus)</h4></div><div class="widget-body"><div class="svgbox" id="eBars"></div><div class="src">Tőzeg: jegyzet (300–2000 kPa); homok, kavics: tájékoztató tankönyvi tartomány.</div></div></div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Mennyit süllyed? <span class="tag">s = Δσ · h / E<sub>oed</sub></span></h3>
+        <p>Az összenyomódási modulus kicsi (300–2000 kPa), ezért ugyanakkora többletfeszültség a tőzegben sokszor akkora süllyedést okoz, mint egy homokrétegben.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Süllyedésbecslő</h4><span class="hint">Állítsd a réteget és a terhelést</span></div>
+          <div class="widget-body wgrid">
+            <div class="svgbox" id="settleBox"></div>
+            <div class="ctl">
+              <div class="slider"><label for="stH">Rétegvastagság h <output id="stHo"></output></label><input type="range" id="stH" min="0.5" max="6" step="0.1" value="2"></div>
+              <div class="slider"><label for="stS">Többletfeszültség Δσ <output id="stSo"></output></label><input type="range" id="stS" min="10" max="200" step="5" value="100"></div>
+              <div class="slider"><label for="stE">Tőzeg E<sub>oed</sub> <output id="stEo"></output></label><input type="range" id="stE" min="300" max="2000" step="50" value="500"></div>
+              <div class="readout"><div class="ro"><span>Tőzeg</span><b id="stP">–</b></div><div class="ro"><span>Homok (30 MPa)</span><b id="stSand">–</b></div><div class="ro"><span>Arány</span><b id="stRatio">–</b></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Lassan és sokáig <span class="tag">konszolidáció + másodlagos kompresszió</span></h3>
+        <p>A vízáteresztő képesség (k) kicsi, ezért a konszolidáció lassú. A szerves anyag bomlása miatt hosszan tart a másodlagos kompresszió. A szerves talaj ráadásul hőhatásra érzékeny, kiszáradáskor zsugorodik, és változó vastagságú.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Süllyedés az idő függvényében (log t)</h4></div>
+          <div class="widget-body">
+            <div class="svgbox" id="timeChart"></div>
+            <div class="cols">
+              <div class="slider"><label for="tK">Vízáteresztés (konszolidáció gyorsasága) <output id="tKo"></output></label><input type="range" id="tK" min="0" max="100" value="35"></div>
+              <div class="slider"><label for="tCa">Másodlagos kompresszió mértéke <output id="tCao"></output></label><input type="range" id="tCa" min="0" max="100" value="55"></div>
+            </div>
+            <p class="small muted">Szemléltető görbe: elsődleges konszolidáció (Terzaghi-féle S-görbe log t-ben) és utána egyenes szakaszú másodlagos kompresszió.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Ha jó a fedőréteg: keskeny, sekély síkalap <span class="tag">3. ábra</span></h3>
+        <p>A szerves réteget sok esetben jó állapotú fedőréteg (gyakran homok vagy iszapos homok) takarja. Ilyenkor először a kis mélységű síkalapozás lehetőségét kell megvizsgálni. A fedőréteg teherbírását minél jobban ki kell használni: minél kisebb szélességű legyen az alaptest, mert így a feszültségi határmélység lecsökken, és kisebb feszültség jut a szerves rétegre. A teljes süllyedés nem haladhatja meg a megengedettet.</p>
+        <div class="widget">
+          <div class="widget-head"><h4>Feszültség-hagyma sávalap alatt</h4><span class="hint">σ<sub>z</sub>/q izobárok (Boussinesq)</span></div>
+          <div class="widget-body wgrid">
+            <canvas class="cv" id="bulbCv" width="820" height="520" aria-label="Feszültség-hagyma"></canvas>
+            <div class="ctl">
+              <div class="slider"><label for="bB">Alapszélesség B <output id="bBo"></output></label><input type="range" id="bB" min="0.4" max="3" step="0.05" value="0.6"></div>
+              <div class="slider"><label for="bC">Homok fedőréteg vastagsága <output id="bCo"></output></label><input type="range" id="bC" min="1.0" max="4" step="0.1" value="2.8"></div>
+              <div class="readout"><div class="ro"><span>Alapsík (fagyhatár)</span><b>0,90 m</b></div><div class="ro"><span>σ<sub>z</sub>/q a tőzeg tetején</span><b id="bOut">–</b></div><div class="ro"><span>0,2 q izobár mélysége</span><b id="bDepth">–</b></div></div>
+              <div id="bVerdict"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Alapozási döntés <span class="tag">válaszolj a kérdésekre</span></h3>
+        <div class="widget"><div class="widget-head"><h4>Mit tegyünk szerves talajon?</h4></div><div class="widget-body"><div class="tree" id="peatTree"></div></div></div>
+      </div>
+
+      <div class="sub" id="sim-peat">
+        <h3>3D talajlabor: ház tőzeglencsén <span class="tag">szimulátor</span></h3>
+        <p>Állítsd a tőzeg és a fedőréteg vastagságát, az alapszélességet, a talpfeszültséget, a tőzeg modulusát és a talajvízszint süllyedését. A szelvényen a feszültség-hagyma is látszik.</p>
+        <div class="sim" data-soil="peat"></div>
+      </div>
+
+      <div class="sub">
+        <h3>További szabályok</h3>
+        <div class="cols">
+          <div class="card"><span class="k">felszínközelben</span><h4>Talajcsere vagy mélyített síkalap</h4><p>Ha a tőzeg a felszín közelében van, igen gyakran (részleges) talajcserét alkalmazunk, vagy a szerves réteg alatti, megfelelő teherbírású talajra alapozunk mélyített síkalappal.</p></div>
+          <div class="card"><span class="k">vékony réteg</span><h4>Merev, érzéketlen szerkezet</h4><p>Ha az alapozási sík alatt vékony a szerves réteg, kellő merevségű és szilárdságú, a süllyedéskülönbségekre nem érzékeny építmény építhető.</p></div>
+          <div class="card"><span class="k">veszélyes</span><h4>Rezgés és vízszintingadozás</h4><p>A szerves talajokra veszélyesek a dinamikus hatások és a talajvízszint-ingadozás: kiszáradás hatására a tőzeg jelentősen zsugorodik.</p></div>
+          <div class="card"><span class="k">szerkezet</span><h4>Zárt alaprajz, rugalmas közmű</h4><p>A közműcsatlakozásoknál gondolni kell az épület nagyobb süllyedésére. Kerülni kell a részleges alápincézést és a melléépítést. Zárt alaprajzú, térbelileg merevített épületet tervezzünk.</p></div>
+        </div>
+      </div>
+
+      <div class="sub">
+        <h3>Ellenőrizd magad <span class="tag">kvíz</span></h3>
+        <div class="quiz" data-quiz="4"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ COMPARE -->
+    <section class="sec" id="osszevetes">
+      <div class="sec-head">
+        <div class="sec-num">∑</div>
+        <div>
+          <div class="eyebrow">Összevetés</div>
+          <h2>Négy talaj egymás mellett</h2>
+          <p class="lede">Foglaljuk össze, mi váltja ki a mozgást, mikor jelentkezik, és mi a legfontosabb teendő.</p>
+        </div>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Talaj</th><th>Felismerés</th><th>Kiváltó ok</th><th>Mozgás jellege</th><th>Kulcsszabály</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dot" style="background:var(--c1s)"></span><b>Térfogatváltozó agyag</b></td><td>I<sub>p</sub> &gt; 30–35%, montmorillonit, száraz időben mozaikosan repedezett felszín</td><td>víztartalom-változás: aszály, fák, csapadék</td><td>ciklikus: duzzadás és zsugorodás, évről évre</td><td>alapsík ≥ 2–2,5 m, nagy talpfeszültség, teljes alápincézés</td></tr>
+            <tr><td><span class="dot" style="background:var(--c2s)"></span><b>Roskadékony talaj</b></td><td>lösz, laza finomhomok, friss feltöltés; i<sub>r</sub> &gt; 0,01</td><td>átázás terhelés alatt</td><td>hirtelen, egyszeri, visszafordíthatatlan</td><td>vizet távol, merev szerkezet, vasalt alap</td></tr>
+            <tr><td><span class="dot" style="background:var(--c3s)"></span><b>Feltöltés</b></td><td>törmelék, salak, szemét; ismeretlen kor és tömörség</td><td>összenyomódás, átázás, bomlás</td><td>egyenlőtlen, a vastagságot követi</td><td>σ ≤ 150–200 kPa, azonos vastagság, javítás</td></tr>
+            <tr><td><span class="dot" style="background:var(--c4s)"></span><b>Szerves talaj</b></td><td>sötét, könnyű, rostos, w &gt; 50–70%</td><td>terhelés, talajvízszint-süllyedés, hő</td><td>nagy, lassú, évtizedekig tartó</td><td>keskeny sekély alap a fedőrétegben, talajcsere, mélyített alap</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="sub">
+        <h3>Talajdetektív <span class="tag">melyik talajról van szó?</span></h3>
+        <p>Olvasd el a helyszíni leírást, és tippeld meg, melyik kedvezőtlen talaj okozza a bajt.</p>
+        <div class="det" id="detGame"></div>
+        <div class="quiz-score" id="detScore"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ TRUE/FALSE -->
+    <section class="sec" id="teszt">
+      <div class="sec-head">
+        <div class="sec-num">?</div>
+        <div>
+          <div class="eyebrow">Tudáspróba</div>
+          <h2>Igaz vagy hamis?</h2>
+          <p class="lede">Állítások mind a négy talajról. Minden válasz után megmutatjuk a magyarázatot. A végén látod, hány pontot értél el.</p>
+        </div>
+      </div>
+      <div class="tf" id="tfGame"></div>
+    </section>
+
+    <!-- ============================================================ DEFENSE LINK -->
+    <section class="sec" id="tovabb">
+      <div class="eyebrow">Hogyan tovább?</div>
+      <h2 style="font-size:clamp(26px,3.2vw,38px);font-weight:800;margin-top:8px">Védekezés a káros süllyedések ellen</h2>
+      <p class="muted" style="max-width:70ch;margin-top:10px">A kisebb talpnyomás, az alapsík mélyítése, a talajcsere, a talajszilárdítás, az előterhelés, a rugalmas szerkezet, a helyes építési sorrend és a mélyalapozás részletesen a külön oldalon szerepel.</p>
+      <a class="linkcard" id="vedekezesLink" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 4l14 6v9c0 9-6 15-14 19C13 34 7 28 7 19v-9z"/><path d="M15 21l4 4 8-9"/></svg>
+        <div><b>Védekezés a káros süllyedések ellen</b><span>Interaktív segédanyag a 8 alapvető módszerről</span></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div class="fin">
+    <b style="color:var(--ink)">Alapozás kedvezőtlen altalajon · BME Építőmérnöki Kar, Geotechnika és Mérnökgeológia Tanszék</b>
+    <span>Alapanyag: „Alapozás kedvezőtlen altalajon” jegyzet (1.1–1.4) és előadás. A szimulátorok tájékoztató, szemléltető modellek, nem helyettesítik a geotechnikai tervezést.</span>
+    <div class="sources" id="sourcesList">
+      <b style="color:var(--ink)">Webes források</b>
+      <span><a href="https://covea.com/en/analysis/drought-how-prevent-shrinkage-and-swelling-clay-soils" target="_blank" rel="noopener">Covéa: Drought and shrink-swell clay (CCR 2022 adat)</a></span>
+      <span><a href="https://geology.com/articles/expansive-soil.shtml" target="_blank" rel="noopener">Geology.com: Expansive Soil and Expansive Clay</a></span>
+      <span><a href="https://www.milton-keynes.gov.uk/sites/default/files/2022-03/Trees_and_buildings.pdf" target="_blank" rel="noopener">NHBC / Milton Keynes: Trees and buildings</a></span>
+      <span><a href="https://en.wikipedia.org/wiki/Loess" target="_blank" rel="noopener">Wikipedia: Loess</a></span>
+      <span><a href="https://www.atsdr.cdc.gov/hac/landfill/html/ch2.html" target="_blank" rel="noopener">ATSDR: Landfill Gas Primer, 2. fejezet</a></span>
+      <span><a href="https://www.legalfutures.co.uk/associate-news/ground-gas-the-lessons-from-loscoe" target="_blank" rel="noopener">Ground Gas: The Lessons from Loscoe</a></span>
+      <span><a href="https://en.wikipedia.org/wiki/Holme_Fen" target="_blank" rel="noopener">Wikipedia: Holme Fen</a></span>
+      <span><a href="https://www.matec-conferences.org/articles/matecconf/pdf/2019/15/matecconf_iconbee2019_04002.pdf" target="_blank" rel="noopener">MATEC Web of Conferences (2019): peat properties</a></span>
+    </div>
+  </div>
+</footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <pattern id="hatch-clay" width="22" height="14" patternUnits="userSpaceOnUse"><rect width="22" height="14" fill="#c98a4b"/><path d="M2 4h9M13 4h7M6 10h10" stroke="#7a4a20" stroke-width="1.6"/></pattern>
+    <pattern id="hatch-loess" width="12" height="16" patternUnits="userSpaceOnUse"><rect width="12" height="16" fill="#e2c37a"/><circle cx="3" cy="4" r="1.1" fill="#8a6a2a"/><circle cx="9" cy="11" r="1.1" fill="#8a6a2a"/><path d="M6 1v6" stroke="#a5843f" stroke-width="1"/></pattern>
+    <pattern id="hatch-fill" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#a59cc8"/><path d="M0 0l24 24M24 0L0 24" stroke="#5c4f8c" stroke-width="1.2"/><rect x="8" y="3" width="7" height="4" fill="#9a4b33"/></pattern>
+    <pattern id="hatch-peat" width="16" height="14" patternUnits="userSpaceOnUse"><rect width="16" height="14" fill="#3e3326"/><path d="M3 10l2-6M5 10l0-6M7 10l-2-6M11 6l1-4M12 6v-4M13 6l-1-4" stroke="#9bd8c3" stroke-width="1"/></pattern>
+  </defs>
+</svg>

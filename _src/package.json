@@ -1,0 +1,9 @@
+{
+  "name": "kedvezotlen-altalaj-src",
+  "private": true,
+  "description": "Forráskód: python3 build.py → dist/index.html (utána a gyökérbe másolandó)",
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "three": "0.169.0"
+  }
+}

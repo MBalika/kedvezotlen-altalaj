@@ -14,3 +14,19 @@ Tartalom: részletes magyarázatok, ábrák, interaktív kísérletek (ödométe
 - `videok/` – a négy animációs videó önálló HTML-ként
 
 Építés nélküli statikus oldal; a Vercel közvetlenül a repo gyökeréből szolgálja ki.
+
+## Forrás és újraépítés
+
+A szerkeszthető forrás a `_src/` mappában van (a Vercel nem teszi ki):
+
+```
+cd _src
+npm install
+python3 build.py          # → _src/dist/index.html
+cp dist/index.html ../index.html
+```
+
+- `src/body.html` – az oldal szövege és szerkezete
+- `src/style.css` – megjelenés (világos/sötét téma)
+- `src/js/` – interaktív elemek (`widgets1.js`, `widgets2.js`), 3D szimulátor (`sim3d.js`), kvízek (`data.js`, `quiz.js`)
+- A „Védekezés” oldal címe a `src/js/main.js` elején (`VEDEKEZES_URL`).
