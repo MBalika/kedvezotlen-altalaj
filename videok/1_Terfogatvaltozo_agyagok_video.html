@@ -24442,8 +24442,8 @@ float boxm(vec2 p, vec2 a, vec2 b){ return step(a.x,p.x)*step(p.x,b.x)*step(a.y,
     O.title(t - 12.4, win(t, 12.2, 19.6, 0.6, 0.7), 1, "T\xE9rfogatv\xE1ltoz\xF3\nagyagok", "duzzad\xF3 \u2013 zsugorod\xF3 \u201Ek\xF6v\xE9r\u201D agyag", ["T\xE9rfogatv\xE1ltoz\xF3", "Roskad\xE9kony", "Felt\xF6lt\xE9s", "Szerves talaj"]);
     if (t > 21 && t < 31.2) {
       const x = 1250, w = 580;
-      const c1 = { kicker: "Franciaorsz\xE1g", value: "55", unit: "% a ter\xFCletb\u0151l", text: "k\xF6zepes\u2013er\u0151s kitetts\xE9g \xB7 12,1 milli\xF3 h\xE1z \xB7 2022-ben 3,5 Mrd \u20AC k\xE1r", src: "Forr\xE1s: Futura-Sciences / CCR, 2026" };
-      const c2 = { kicker: "USA", value: "Mrd $", unit: "/ \xE9v", text: "a becsl\xE9sek szerint t\xF6bb k\xE1r, mint \xE1rv\xEDz, hurrik\xE1n \xE9s torn\xE1d\xF3 egy\xFCtt", src: "Forr\xE1s: Colorado Geological Survey", color: C.water };
+      const c1 = { kicker: "Franciaorsz\xE1g", value: "55", unit: "% a ter\xFCletb\u0151l", text: "k\xF6zepes\u2013er\u0151s kitetts\xE9g \xB7 12,1 milli\xF3 h\xE1z \xB7 2022-ben 3,5 Mrd \u20AC k\xE1r" };
+      const c2 = { kicker: "USA", value: "Mrd $", unit: "/ \xE9v", text: "a becsl\xE9sek szerint t\xF6bb k\xE1r, mint \xE1rv\xEDz, hurrik\xE1n \xE9s torn\xE1d\xF3 egy\xFCtt", color: C.water };
       const c3 = { kicker: "Magyarorsz\xE1g", text: "asz\xE1lyos \xE9vekben t\xF6megesen repednek a h\xE1zak \u2014 Alf\xF6ld, Szolnok, Eger", color: C.red };
       const h1 = O.cardHeight(w, c1), h2 = O.cardHeight(w, c2), h3 = O.cardHeight(w, c3);
       const y1 = 70, y2 = y1 + h1 + 18, y3 = y2 + h2 + 18;
@@ -24705,7 +24705,7 @@ float boxm(vec2 p, vec2 a, vec2 b){ return step(a.x,p.x)*step(p.x,b.x)*step(a.y,
       if (ta > 0) {
         let p = proj(-8, -1.4, 0);
         O.label(p.x, p.y, "A GY\xD6K\xC9RZ\xD3NA KISZ\xC1R\xCDTJA", ta, { dx: 160, dy: -60, color: C.red, sub: "egyenl\u0151tlen s\xFCllyed\xE9s" });
-        O.tag(1270, 230, "t\xE1vols\xE1g \u2248 1\u20131,25 \xD7 famagass\xE1g (NHBC)", ta * win(t, 157, 160.2, 0.4, 0.4) / Math.max(ta, 1e-3), C.green, 28);
+        O.tag(1270, 230, "t\xE1vols\xE1g \u2248 1\u20131,25 \xD7 famagass\xE1g", ta * win(t, 157, 160.2, 0.4, 0.4) / Math.max(ta, 1e-3), C.green, 28);
       }
       const ua = win(t, 161, 166, 0.5, 0.4);
       if (ua > 0) {

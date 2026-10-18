@@ -157,8 +157,7 @@ main { min-width: 0; padding-bottom: 80px; }
 .note.good { border-color: var(--good); background: var(--goodbg); }
 .note.web { border-color: var(--water); }
 .note b.lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; display: block; color: var(--muted); margin-bottom: 3px; font-weight: 500; }
-.src { font-size: 13px; color: var(--faint); margin-top: 6px; }
-.src a { color: var(--muted); }
+.cap { font-size: 13px; color: var(--faint); margin-top: 6px; }
 ul.list { margin: 12px 0 0; padding-left: 0; list-style: none; display: grid; gap: 8px; max-width: 74ch; }
 ul.list li { position: relative; padding-left: 26px; }
 ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.6em; width: 9px; height: 9px; border-radius: 2px; background: var(--acc); transform: rotate(45deg); }
@@ -335,8 +334,6 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 /* footer */
 footer { border-top: 1px solid var(--line); margin-top: 40px; padding-block: 34px 50px; color: var(--muted); font-size: 14px; }
 footer .fin { max-width: 1400px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 10px; }
-.sources { font-size: 13.5px; color: var(--muted); display: grid; gap: 4px; margin-top: 14px; max-width: 90ch; }
-.sources a { color: var(--ink); }
 
 .linkcard { margin-top: 18px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 20px 22px; border-radius: 18px; background: var(--ink); color: var(--bg); text-decoration: none; }
 .linkcard b { font-family: var(--f-display); font-size: 22px; font-weight: 800; display: block; }

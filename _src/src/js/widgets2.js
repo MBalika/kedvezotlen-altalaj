@@ -70,7 +70,7 @@ export function sortGame() {
   const box = $('#sortGame'); if (!box) return;
   const cats = [['no', 'Nagyon veszélyes'], ['mid', 'Óvatosan, vizsgálni kell'], ['ok', 'Kedvezőbb']];
   const items = [
-    ['Kommunális hulladéklerakó, 25 éve lezárva', 'no', 'A házi szemét (kommunális hulladék) a jegyzet szerint mindig nagyon veszélyes: bomlik, gázt termel, sokáig süllyed.'],
+    ['Kommunális hulladéklerakó, 25 éve lezárva', 'no', 'A házi szemét (kommunális hulladék) mindig nagyon veszélyes: bomlik, gázt termel, sokáig süllyed.'],
     ['Tömörítetlen építési törmelék, 5 éves', 'no', 'A 8–10 évnél frissebb, tömörítetlen feltöltés nagyon veszélyes, és roskadhat is.'],
     ['Meddőhányó anyaga, 15% szervesanyag-tartalommal', 'no', 'A 10%-nál nagyobb szerves tartalmú anyag bomlik, a süllyedése hosszú ideig tart.'],
     ['Salak és hamu, 40 éves, ismeretlen tömörség', 'mid', 'Égési termék: kora miatt kevésbé aktív, de tömörsége és összenyomhatósága tág határok között változhat.'],
@@ -132,9 +132,9 @@ export function gas() {
   const box = $('#gasGauge'); if (!box) return;
   const W = 620, H = 330; const svg = svgRoot(W, H); box.append(svg);
   const mix = $('#gasMix'); const svg2 = svgRoot(360, 90); mix.append(svg2);
-  // composition bar (ATSDR: ~45–60% CH4, ~40–60% CO2)
+  // composition bar (~45–60% CH4, ~40–60% CO2)
   const comp = [['CH₄ 45–60%', 52, 'var(--c4s)'], ['CO₂ 40–60%', 44, '#9aa3a8'], ['egyéb', 4, 'var(--warn)']];
-  let x = 0; svg2.append(s('text', { x: 0, y: 14, 'font-size': 13, fill: 'var(--muted)', text: 'Hulladéklerakó-gáz jellemző összetétele (ATSDR)' }));
+  let x = 0; svg2.append(s('text', { x: 0, y: 14, 'font-size': 13, fill: 'var(--muted)', text: 'Hulladéklerakó-gáz jellemző összetétele' }));
   comp.forEach(([t, v, c]) => { svg2.append(s('rect', { x: x * 3.5, y: 24, width: v * 3.5 - 2, height: 30, rx: 4, fill: c })); svg2.append(s('text', { x: x * 3.5 + 6, y: 74, 'font-size': 12, fill: 'var(--ink)', text: t })); x += v; });
   let c = 3, tt = 0, visible = false;
   bindRange('gasC', (v) => { c = v; upd(); }, (v) => fmt(v, 1) + ' tf%');
@@ -285,7 +285,7 @@ export function peatGame() {
     ['A', '#d9bf7f', 'Sárgásbarna, porózus, mészkonkréciós; függőleges falban megáll', 'γ ≈ 15–17 kN/m³ (száraz, laza)', 'w ≈ 12%', false, 'Ez lösz: roskadékony, de nem szerves talaj.'],
     ['B', '#1f1a14', 'Fekete, szálas-rostos, növényi maradványokkal; kinyomva víz folyik belőle', 'γ ≈ 10–11 kN/m³', 'w ≈ 450%', true, 'Tőzeg: sötét, könnyű, rostos, óriási víztartalmú.'],
     ['C', '#6d6a64', 'Szürke, kövér, plasztikus; száradáskor mozaikosan repedezik', 'γ ≈ 19–20 kN/m³', 'w ≈ 32%', false, 'Kövér agyag: térfogatváltozó lehet, de nem szerves.'],
-    ['D', '#3a3934', 'Sötétszürke, finomszemcsés, szerves szagú; kézben kenhető', 'γ ≈ 14–15 kN/m³', 'w ≈ 95%', true, 'Szerves iszap: a jegyzet szerint szintén kedvezőtlen.'],
+    ['D', '#3a3934', 'Sötétszürke, finomszemcsés, szerves szagú; kézben kenhető', 'γ ≈ 14–15 kN/m³', 'w ≈ 95%', true, 'Szerves iszap: szintén kedvezőtlen.'],
   ];
   const picked = new Set(); let checked = false;
   S.forEach(([id, col, desc, gam, w, org]) => {
@@ -315,7 +315,7 @@ export function peatBars() {
   const X = (v) => 170 + v / 2000 * (W - 190);
   rows.forEach(([n, lo, hi, c], i) => { const y = 16 + i * 44; svg.append(s('text', { x: 0, y: y + 16, 'font-size': 13.5, fill: 'var(--ink)', text: n })); svg.append(s('rect', { x: X(0), y: y + 4, width: W - 190, height: 16, rx: 4, fill: 'var(--line)' })); svg.append(s('rect', { x: X(lo), y: y + 4, width: Math.max(3, X(hi) - X(lo)), height: 16, rx: 4, fill: c })); svg.append(s('text', { x: X(0), y: y + 36, 'font-size': 12, 'font-family': 'IBM Plex Mono, monospace', fill: 'var(--muted)', text: lo + '–' + hi + '%' })); });
   const b = $('#eBars'); const svg2 = svgRoot(W, H); b.append(svg2);
-  const r2 = [['Tőzeg (jegyzet)', 300, 2000, 'var(--c4s)'], ['Közepesen tömör homok', 20000, 50000, 'var(--c2s)'], ['Tömör homokos kavics', 50000, 150000, '#9aa3a8']];
+  const r2 = [['Tőzeg', 300, 2000, 'var(--c4s)'], ['Közepesen tömör homok', 20000, 50000, 'var(--c2s)'], ['Tömör homokos kavics', 50000, 150000, '#9aa3a8']];
   const lx = (v) => 170 + (Math.log10(v) - 2) / 3.3 * (W - 190);
   [100, 1000, 10000, 100000].forEach(v => { svg2.append(s('line', { x1: lx(v), x2: lx(v), y1: 10, y2: 170, stroke: 'var(--line)' })); svg2.append(s('text', { x: lx(v), y: 188, 'text-anchor': 'middle', 'font-size': 11, fill: 'var(--faint)', 'font-family': 'IBM Plex Mono, monospace', text: v >= 1000 ? v / 1000 + ' MPa' : v + ' kPa' })); });
   r2.forEach(([n, lo, hi, c], i) => { const y = 20 + i * 52; svg2.append(s('text', { x: 0, y: y + 16, 'font-size': 13.5, fill: 'var(--ink)', text: n })); svg2.append(s('rect', { x: lx(lo), y: y + 4, width: lx(hi) - lx(lo), height: 18, rx: 4, fill: c })); });

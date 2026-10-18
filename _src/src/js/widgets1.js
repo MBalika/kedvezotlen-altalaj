@@ -148,7 +148,7 @@ export function criteria() {
   }
 }
 
-// ------------------------------------------------------------------ seasonal movement chart (1. ábra)
+// ------------------------------------------------------------------ seasonal movement chart
 export function season() {
   const box = $('#seasonChart'); if (!box) return;
   const W = 900, H = 330, L = 92, R = 210, T = 26, B = 46;

@@ -25148,7 +25148,7 @@ vec3 debris(vec2 p, float layer, vec3 matrix, vec4 nz){
       L(proj(-8, -1.8, 0.2), "SZERVES ANYAG BOMLIK", la * sub(la, win(t, 88.6, 98.8, 0.5, 0.5)), { dx: -100, dy: -200, color: C.accent });
       const ca = win(t, 88.4, 98.8, 0.5, 0.5);
       if (ca > 0) {
-        const c = { kicker: "Hullad\xE9klerak\xF3-g\xE1z", value: "~50", unit: "% met\xE1n", text: "40\u201360 % sz\xE9n-dioxid, kev\xE9s egy\xE9b g\xE1z. Robban\xF3elegy: 5\u201315 t\xE9rfogat% met\xE1n.", color: GAS, src: "Forr\xE1s: ATSDR \u2013 Landfill Gas Primer" };
+        const c = { kicker: "Hullad\xE9klerak\xF3-g\xE1z", value: "~50", unit: "% met\xE1n", text: "40\u201360 % sz\xE9n-dioxid, kev\xE9s egy\xE9b g\xE1z. Robban\xF3elegy: 5\u201315 t\xE9rfogat% met\xE1n.", color: GAS };
         const h = O.cardHeight(580, c);
         O.card(1250, 80, 580, h, ca, clamp2((t - 88.4) / 0.6), c);
       }
