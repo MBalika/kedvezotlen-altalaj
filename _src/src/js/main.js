@@ -31,13 +31,20 @@ function openVideo(v) {
   const inner = h('div', { class: 'modal-in' });
   const msg = h('div', { class: 'modal-msg' }, 'Animáció betöltése…');
   inner.append(msg);
-  const frame = h('iframe', { src: v.file + '#autoplay', title: v.title, allow: 'fullscreen; autoplay', allowfullscreen: true });
+  const frame = h('iframe', { src: v.file + '#autoplay', title: v.title, allow: 'fullscreen; autoplay', allowfullscreen: true, webkitallowfullscreen: true });
   frame.addEventListener('load', () => msg.remove());
   inner.append(frame);
   const modal = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': v.title }, inner, close);
   const shut = () => { modal.remove(); document.removeEventListener('keydown', esc); removeEventListener('message', onMsg); };
   const esc = (e) => { if (e.key === 'Escape') shut(); };
-  const onMsg = (e) => { if (e.data === 'ka-close-video') shut(); };
+  // a videó teljes képernyő gombja: valódi teljes képernyő, vagy (iPhone) a modális ablak tölti ki a képernyőt
+  const toggleMax = () => { const fe = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fe) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    if (modal.classList.contains('max')) { modal.classList.remove('max'); return; }
+    const req = frame.requestFullscreen || frame.webkitRequestFullscreen;
+    if (!req) { modal.classList.add('max'); return; }
+    try { const pr = req.call(frame); if (pr && pr.catch) pr.catch(() => modal.classList.add('max')); } catch (e) { modal.classList.add('max'); } };
+  const onMsg = (e) => { if (e.data === 'ka-close-video') shut(); else if (e.data === 'vfs') toggleMax(); };
   addEventListener('message', onMsg);
   close.addEventListener('click', shut); modal.addEventListener('click', (e) => { if (e.target === modal) shut(); });
   document.addEventListener('keydown', esc);

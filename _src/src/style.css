@@ -253,6 +253,8 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .modal { position: fixed; inset: 0; z-index: 100; background: rgba(5, 8, 7, 0.86); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
 .modal-in { width: min(1280px, 100%); aspect-ratio: 16 / 9; max-height: 100%; position: relative; background: #000; border-radius: 12px; overflow: hidden; }
 .modal-in iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.modal.max { padding: 0; background: #000; }
+.modal.max .modal-in { width: 100vw; height: 100vh; height: 100dvh; aspect-ratio: auto; max-height: none; border-radius: 0; }
 .modal-close { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); z-index: 101; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: #111; font-size: 22px; cursor: pointer; }
 .modal-msg { position: absolute; inset: 0; display: grid; place-items: center; color: #dfe6e2; text-align: center; padding: 24px; font-size: 15px; }
 
