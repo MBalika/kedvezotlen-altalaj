@@ -76,7 +76,7 @@ export const RAG = (() => {
     const fs = parseFloat(cs.fontSize); const all = document.createRange(); all.selectNodeContents(el); const rs = all.getClientRects(); if (rs.length < 2) return;
     const lastTop = Math.max(...Array.from(rs).map(r => r.top)); let big = 0, mid = 0;
     const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n;
-    while ((n = w.nextNode())) { const t = n.nodeValue; for (let i = 0; i < t.length; i++) { if (t[i] !== ' ') continue; const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect(); if (!b.width || b.top >= lastTop - 2) continue; if (b.width > fs * 1.15) big++; else if (b.width > fs * 0.9) mid++; } }
+    while ((n = w.nextNode())) { const t = n.nodeValue; for (let i = 0; i < t.length; i++) { if (t[i] !== ' ' && t[i] !== '\u00A0') continue; const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect(); if (!b.width || b.top >= lastTop - 2) continue; if (b.width > fs * 1.15) big++; else if (b.width > fs * 0.9) mid++; } }
     if (big || mid >= 2) el.classList.add('rag');
   }
   const run = () => $$(SEL).forEach(e => { if (e.offsetParent) check(e); });
