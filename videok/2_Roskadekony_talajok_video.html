@@ -3,6 +3,21 @@
 canvas{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block}</style></head>
 <body><div id="wrap"><canvas id="c3d" width="1920" height="1080"></canvas><canvas id="c2d" width="1920" height="1080"></canvas></div>
 <script>(() => {
+  var __stripRich = (s) => String(s).replace(/_\{([^}]*)\}/g, "$1").replace(/_(.)/g, "$1");
+  function __richCtx(ctx) {
+    if (ctx.__rich) return ctx; ctx.__rich = true;
+    const ofill = ctx.fillText.bind(ctx), ostroke = ctx.strokeText.bind(ctx), omeas = ctx.measureText.bind(ctx);
+    const parse = (s) => { const out = []; let i = 0, buf = ""; while (i < s.length) { const ch = s[i]; if (ch === "_" && i + 1 < s.length) { if (buf) { out.push({ t: buf, k: 0 }); buf = ""; } if (s[i + 1] === "{") { const j = s.indexOf("}", i + 2); out.push({ t: s.slice(i + 2, j < 0 ? s.length : j), k: 1 }); i = j < 0 ? s.length : j + 1; } else { out.push({ t: s[i + 1], k: 1 }); i += 2; } continue; } buf += ch; i++; } if (buf) out.push({ t: buf, k: 0 }); return out; };
+    const fsize = () => { const m = /(\d+(?:\.\d+)?)px/.exec(ctx.font); return m ? +m[1] : 16; };
+    const subFont = (f, sz) => f.replace(/(\d+(?:\.\d+)?)px/, (sz * 0.64).toFixed(2) + "px");
+    const width = (parts, f, sz) => { let w = 0; for (const p of parts) { if (p.k) { ctx.font = subFont(f, sz); w += omeas(p.t).width + 1; ctx.font = f; } else w += omeas(p.t).width; } return w; };
+    const draw = (fn, s, x, y) => { const parts = parse(s), f = ctx.font, sz = fsize(), W = width(parts, f, sz), al = ctx.textAlign, bl = ctx.textBaseline; let cx = al === "center" ? x - W / 2 : (al === "right" || al === "end") ? x - W : x; const dy = bl === "top" || bl === "hanging" ? sz * 0.5 : bl === "middle" ? sz * 0.3 : sz * 0.2; ctx.textAlign = "left"; for (const p of parts) { if (p.k) { ctx.font = subFont(f, sz); fn(p.t, cx + 0.5, y + dy); cx += omeas(p.t).width + 1; ctx.font = f; } else { fn(p.t, cx, y); cx += omeas(p.t).width; } } ctx.textAlign = al; return W; };
+    ctx.fillText = (s, x, y, mw) => { s = String(s); if (s.indexOf("_") < 0) return ofill(s, x, y, mw); draw(ofill, s, x, y); };
+    ctx.strokeText = (s, x, y, mw) => { s = String(s); if (s.indexOf("_") < 0) return ostroke(s, x, y, mw); draw(ostroke, s, x, y); };
+    ctx.measureText = (s) => { s = String(s); if (s.indexOf("_") < 0) return omeas(s); const m = omeas(__stripRich(s)); const w = width(parse(s), ctx.font, fsize()); return { width: w, actualBoundingBoxLeft: m.actualBoundingBoxLeft, actualBoundingBoxRight: w, actualBoundingBoxAscent: m.actualBoundingBoxAscent, actualBoundingBoxDescent: m.actualBoundingBoxDescent, fontBoundingBoxAscent: m.fontBoundingBoxAscent, fontBoundingBoxDescent: m.fontBoundingBoxDescent }; };
+    return ctx;
+  }
+
   // ../v1/node_modules/three/build/three.module.js
   var REVISION = "169";
   var CullFaceNone = 0;
@@ -24779,7 +24794,7 @@ vec2 voro(vec2 x){
   var Overlay = class {
     constructor(canvas2) {
       this.c = canvas2;
-      this.g = canvas2.getContext("2d");
+      this.g = __richCtx(canvas2.getContext("2d"));
       this.W = canvas2.width;
       this.H = canvas2.height;
       const gc = document.createElement("canvas");
@@ -25275,27 +25290,27 @@ vec2 voro(vec2 x){
   var TOTAL = 187;
   var CHAPTERS = [[0, "Jelens\xE9g"], [33, "Mi\xE9rt?"], [51, "Felt\xE9telek"], [61, "K\xE1r"], [87, "Vizsg\xE1lat"], [116, "V\xE9dekez\xE9s"], [152, "Talajjav\xEDt\xE1s"], [177, "\xD6sszefoglal\xE1s"]];
   var CAPS = [
-    [20.8, 26.4, "Mekkora a ter\xFClet?", ["Haz\xE1nk ter\xFClet\xE9nek kb. *1/3*-\xE1t l\xF6sz bor\xEDtja."]],
-    [26.6, 32.4, "Sz\xE1razon szil\xE1rd", ["A sz\xE1raz l\xF6szfal f\xFCgg\u0151legesen is meg\xE1ll \u2014", "ez\xE9rt v\xE1jhattak bele pinc\xE9ket."]],
-    [34.6, 41.8, "Mi a l\xF6sz?", ["Sz\xE9l hordta, laza v\xE1z\xFA k\u0151zetliszt:", "*nagy* *p\xF3rusok*, gyenge m\xE9sz- \xE9s agyagk\xF6t\xE9sek."]],
-    [42.4, 50.6, "Mi\xE9rt roskad?", ["A v\xEDz meggyeng\xEDti a k\xF6t\xE9seket, a szemcs\xE9k a p\xF3rusokba cs\xFAsznak:", "*hirtelen* t\xE9rfogatcs\xF6kken\xE9s \u2014 ak\xE1r a saj\xE1t s\xFAlya alatt is."], { kc: C.water, hc: C.water }],
-    [51.6, 56, "H\xE1rom felt\xE9tel", ["A roskad\xE1shoz *mindh\xE1rom* kell egyszerre:", "roskad\xE9kony talaj + terhel\xE9s + v\xEDz."]],
-    [56.2, 60.8, "Fontos", ["\xC1t\xE1zott l\xF6sz m\xE1r a *saj\xE1t* *s\xFAlya* alatt is roskad \u2014", "\xE9s az alap sz\xE9les\xEDt\xE9se sem v\xE9d ellene."], { kc: C.red, hc: C.red }],
-    [61.6, 67, "Honnan j\xF6n a v\xEDz?", ["Cs\u0151t\xF6r\xE9s, csatorna, besziv\xE1rg\xF3 tet\u0151v\xEDz,", "pang\xF3 felsz\xEDni v\xEDz\u2026"], { kc: C.water, hc: C.water }],
-    [74.6, 80.4, "Roskad\xE1s", ["Amikor a v\xEDz el\xE9ri az alap alatti l\xF6szt: *hirtelen*, *nagy* s\xFCllyed\xE9s.", "A szerkezet megreped, a sarok megbillen."], { kc: C.red, hc: C.red }],
-    [80.6, 86.6, "Nem ciklikus", ["A duzzad\xF3 agyaggal szemben itt nincs vissza\xE1ll\xE1s:", "a roskad\xE1s egyszeri \xE9s *visszaford\xEDthatatlan*."]],
-    [88.4, 95.6, "\xD6dom\xE9teres vizsg\xE1lat", ["Terhel\xE9s term\xE9szetes v\xEDztartalom mellett,", "majd *el\xE1raszt\xE1s* \u2192 hirtelen t\xF6bblet\xF6sszenyom\xF3d\xE1s."], { kc: C.water, hc: C.water }],
-    [106.4, 115.6, "Roskad\xE1svesz\xE9lyes talajok", ["Nem csak a l\xF6sz: a laza, sz\xE1raz finomhomok", "\xE9s a friss, t\xF6m\xF6r\xEDtetlen felt\xF6lt\xE9s is roskadhat."]],
-    [116.4, 122, "1  \xB7  Felsz\xEDni v\xEDz", ["Tartsuk t\xE1vol a felsz\xEDni vizeket: tereprendez\xE9s,", "ne legyen v\xEDzgy\u0171jt\u0151 m\xE9lyed\xE9s az \xE9p\xFClet mellett."], { kc: C.water, hc: C.water }],
-    [122.2, 128, "2  \xB7  Tet\u0151v\xEDz", ["A tet\u0151vizet *z\xE1rt* *csatorn\xE1ban* vezess\xFCk el", "az \xE9p\xFClett\u0151l."], { kc: C.water, hc: C.water }],
-    [128.2, 134, "3  \xB7  K\xF6zm\u0171vek", ["K\xF6zm\u0171vezet\xE9kek gondos tervez\xE9se \xE9s kivitelez\xE9se \u2014", "*v\xE9d\u0151cs\u0151ben*, hogy a sziv\xE1rg\xE1s ne \xE1ztassa a l\xF6szt."]],
-    [134.2, 140, "4  \xB7  Als\xF3 szint", ["Nedves \xFCzem\u0171 als\xF3 szinti helyis\xE9gbe", "*v\xEDzz\xE1r\xF3* *padozat* kell."], { kc: C.water, hc: C.water }],
-    [140.2, 146, "5  \xB7  Merev\xEDt\xE9s", ["Emeletenk\xE9nt fals\xFCllyed\xE9sre m\xE9retezett", "*monolit* *vasbeton* *koszor\xFA* \xE9s f\xF6d\xE9m."]],
-    [146.2, 152, "6  \xB7  Alap", ["Vasalt s\xE1v-, szalag- vagy *gerendar\xE1cs* alap.", "Az alapsz\xE9les\xEDt\xE9s \xF6nmag\xE1ban nem v\xE9d!"]],
-    [152.4, 160, "Nagy fel\xFClet\u0171 terhel\xE9sn\xE9l (pl. csarnok)", ["Talajjav\xEDt\xE1s: felsz\xEDni t\xF6m\xF6r\xEDt\xE9s ejtett d\xF6ng\xF6l\u0151lappal", "(3\u20135 t, 3\u20135 m-r\u0151l), m\xE9lyt\xF6m\xF6r\xEDt\xE9s (vibroflot\xE1ci\xF3)."]],
-    [160.2, 168, "Tov\xE1bbi m\xF3dszerek", ["Talajszil\xE1rd\xEDt\xE1s (pl. v\xEDz\xFCveg), talaj\xE9get\xE9s (ma m\xE1r ritka),", "*el\xE1raszt\xE1s* *+* *el\u0151terhel\xE9s*: el\u0151re kik\xE9nyszer\xEDtj\xFCk a roskad\xE1st."], { kc: C.water, hc: C.water }],
+    [20.8, 26.4, "Mekkora a ter\xFClet?", ["Haz\xE1nk kb. *1/3*-\xE1t l\xF6sz bor\xEDtja"]],
+    [26.6, 32.4, "Sz\xE1razon szil\xE1rd", ["A sz\xE1raz l\xF6szfal f\xFCgg\u0151legesen is meg\xE1ll"]],
+    [34.6, 41.8, "Mi a l\xF6sz?", ["Sz\xE9l hordta k\u0151zetliszt, *nagy* *p\xF3rusokkal*"]],
+    [42.4, 50.6, "Mi\xE9rt roskad?", ["A v\xEDz gyeng\xEDti a k\xF6t\xE9seket \u2192 *hirtelen* roskad\xE1s"], { kc: C.water, hc: C.water }],
+    [51.6, 56, "H\xE1rom felt\xE9tel", ["*Mindh\xE1rom* kell"]],
+    [56.2, 60.8, "Fontos", ["\xC1t\xE1zva a *saj\xE1t* *s\xFAlya* alatt is roskad"], { kc: C.red, hc: C.red }],
+    [61.6, 67, "Honnan j\xF6n a v\xEDz?", ["Cs\u0151t\xF6r\xE9s, csatorna, tet\u0151v\xEDz, pang\xF3 v\xEDz"], { kc: C.water, hc: C.water }],
+    [74.6, 80.4, "Roskad\xE1s", ["*Hirtelen*, *nagy* s\xFCllyed\xE9s"], { kc: C.red, hc: C.red }],
+    [80.6, 86.6, "Nem ciklikus", ["A roskad\xE1s egyszeri \xE9s *visszaford\xEDthatatlan*"]],
+    
+    [106.4, 115.6, "Roskad\xE1svesz\xE9lyes talajok", ["Nem csak a l\xF6sz roskadhat"]],
+    [116.4, 122, "1  \xB7  Felsz\xEDni v\xEDz", ["Ne gy\u0171lj\xF6n v\xEDz a h\xE1z mellett"], { kc: C.water, hc: C.water }],
+    [122.2, 128, "2  \xB7  Tet\u0151v\xEDz", ["Tet\u0151v\xEDz *z\xE1rt* *csatorn\xE1ban*, el a h\xE1zt\xF3l"], { kc: C.water, hc: C.water }],
+    [128.2, 134, "3  \xB7  K\xF6zm\u0171vek", ["K\xF6zm\u0171 *v\xE9d\u0151cs\u0151ben*, hogy ne \xE1ztassa a l\xF6szt"]],
+    [134.2, 140, "4  \xB7  Als\xF3 szint", ["Nedves helyis\xE9gbe *v\xEDzz\xE1r\xF3* *padozat*"], { kc: C.water, hc: C.water }],
+    [140.2, 146, "5  \xB7  Merev\xEDt\xE9s", ["Emeletenk\xE9nt *vb.* *koszor\xFA* \xE9s f\xF6d\xE9m"]],
+    [146.2, 152, "6  \xB7  Alap", ["Vasalt s\xE1v- vagy *gerendar\xE1cs* alap"]],
+    [152.4, 160, "Csarnokn\xE1l: talajjav\xEDt\xE1s", ["D\xF6ng\xF6l\xE9s ejtett lappal, m\xE9lyt\xF6m\xF6r\xEDt\xE9s"]],
+    [160.2, 168, "Tov\xE1bbi m\xF3dszerek", ["*El\xE1raszt\xE1s* *+* *el\u0151terhel\xE9s*: el\u0151re roskad"], { kc: C.water, hc: C.water }],
     [168.4, 172.6, "Kivitelez\xE9skor", ["Az alap\xE1rok *ne* *\xE1zzon* *\xE1t*!"], { kc: C.red, hc: C.red }],
-    [172.9, 176.8, "Kivitelez\xE9skor", ["Es\u0151ben a f\xF6ldkiemel\xE9s ut\xE1n azonnal betonozzunk \u2014", "vagy t\xE1vol\xEDtsuk el az \xE1t\xE1zott talajr\xE9teget."], { kc: C.green, hc: C.green }]
+    [172.9, 176.8, "Kivitelez\xE9skor", ["Kiemel\xE9s ut\xE1n azonnal betonozzunk"], { kc: C.green, hc: C.green }]
   ];
   var rel = (base, x, y, z) => [base.x + x, base.y + y, base.z + z];
   function drawOverlay(O, t, ctx) {
@@ -25306,28 +25321,28 @@ vec2 voro(vec2 x){
     };
     if (t < 13.2) {
       O.tag(120, 90, "L\xD6SZVID\xC9K \xB7 M\xC9LY\xDAT \xC9S PINCESOR", win(t, 0.4, 6.2, 0.6, 0.5), C.accent, 28);
-      O.bigLine("Sz\xE1razon falk\xE9nt meg\xE1ll.", t - 1, win(t, 1, 6.2, 0.5, 0.5), 470, 96);
+      O.bigLine("Sz\xE1razon falk\xE9nt meg\xE1ll", t - 1, win(t, 1, 6.2, 0.5, 0.5), 470, 96);
       O.tag(120, 90, "EGY CS\u0150T\xD6R\xC9S UT\xC1N", win(t, 6.8, 12.8, 0.5, 0.5), C.water, 28);
       O.bigLine("El\xE9g egy kis v\xEDz\u2026", t - 7, win(t, 7, 9.7, 0.4, 0.3), 470, 92, C.white);
-      O.bigLine("\u2026\xE9s a talaj \xF6sszeroskad.", t - 9.8, win(t, 9.8, 12.9, 0.2, 0.5), 820, 100, C.white, { under: C.red });
+      O.bigLine("\u2026\xE9s a talaj \xF6sszeroskad", t - 9.8, win(t, 9.8, 12.9, 0.2, 0.5), 820, 100, C.white, { under: C.red });
     }
-    O.title(t - 13.4, win(t, 13.2, 20.6, 0.6, 0.7), 2, "Roskad\xE9kony\ntalajok", "l\xF6sz \u2014 ami a v\xEDzt\u0151l \xF6sszeroskad", ["T\xE9rfogatv\xE1ltoz\xF3", "Roskad\xE9kony", "Felt\xF6lt\xE9s", "Szerves talaj"]);
+    O.title(t - 13.4, win(t, 13.2, 20.6, 0.6, 0.7), 2, "Roskad\xE9kony\ntalajok", "", []);
     if (t > 21 && t < 26.8) {
       const x = 1250, w = 580;
       const c1 = { kicker: "Vil\xE1g", value: "~10", unit: "% a sz\xE1razf\xF6ldekb\u0151l", text: "l\xF6sz vagy hasonl\xF3 \xFCled\xE9k bor\xEDtja" };
       const c2 = { kicker: "K\xEDna", value: "640 000", unit: "km\xB2", text: "a L\xF6szfenns\xEDk kiterjed\xE9se", color: C.accent2 };
-      const c3 = { kicker: "Magyarorsz\xE1g", text: "pl. Mez\u0151f\xF6ld, Tolnai- \xE9s Szeksz\xE1rdi-dombs\xE1g, G\xF6d\xF6ll\u0151i-dombs\xE1g, Hajd\xFAs\xE1g, B\xE1cskai-l\xF6szh\xE1t, Duna menti magaspartok", color: C.green };
+      const c3 = { kicker: "Magyarorsz\xE1g", text: "Mez\u0151f\xF6ld, Hajd\xFAs\xE1g", color: C.green };
       const h1 = O.cardHeight(w, c1), h2 = O.cardHeight(w, c2), h3 = O.cardHeight(w, c3);
       const y1 = 70, y2 = y1 + h1 + 18, y3 = y2 + h2 + 18;
-      O.card(x, y1, w, h1, win(t, 21.2, 26.6, 0.5, 0.5), clamp2((t - 21.2) / 0.6), c1);
-      O.card(x, y2, w, h2, win(t, 22.8, 26.6, 0.5, 0.5), clamp2((t - 22.8) / 0.6), c2);
-      O.card(x, y3, w, h3, win(t, 24.4, 26.6, 0.5, 0.5), clamp2((t - 24.4) / 0.6), c3);
+      
+      
+      O.card(x, y1, w, h3, win(t, 21.6, 26.6, 0.5, 0.5), clamp2((t - 21.6) / 0.6), c3);
     }
     {
       const a = win(t, 27, 32.4, 0.5, 0.5);
       if (a > 0) {
-        L(proj(...rel(LL, -16, 5, -3.9)), "L\xD6SZFAL", a, { dx: -60, dy: -150, sub: "f\xFCgg\u0151legesen meg\xE1ll" });
-        L(proj(...rel(LL, 2, 1.6, -3.4)), "PINC\xC9K A L\xD6SZBEN", a * win(t, 27.6, 32.4, 0.5, 0.5) / Math.max(a, 1e-3), { dx: 150, dy: -120 });
+        L(proj(...rel(LL, -16, 5, -3.9)), "L\xD6SZFAL", a, { dx: -60, dy: -150 });
+        
       }
     }
     if (t > 31.8 && t < 34.2) {
@@ -25338,9 +25353,9 @@ vec2 voro(vec2 x){
     if (t >= 33 && t < 51) {
       const la = win(t, 34.6, 41.8, 0.6, 0.6);
       if (la > 0) {
-        L(proj(...rel(GR, -4.2, 2.6, 1.9)), "K\u0150ZETLISZT-SZEMCS\xC9K", la, { dx: -40, dy: -170, sub: "kvarc, f\xF6ldp\xE1t, csill\xE1m \xB7 0,02\u20130,05 mm" });
-        L(proj(...rel(GR, 4.4, 0.4, 1.9)), "M\xC9SZ- \xC9S AGYAGHIDAK", la * win(t, 35.4, 41.8, 0.5, 0.6) / Math.max(la, 1e-3), { dx: 120, dy: -150, sub: "gyenge cement\xE1ci\xF3" });
-        L(proj(...rel(GR, 0.1, 0.6, 2.2)), "MAKROP\xD3RUS", la * win(t, 36.2, 41.8, 0.5, 0.6) / Math.max(la, 1e-3), { dx: 160, dy: 150, color: C.accent, sub: "nagy, nyitott p\xF3rus" });
+        L(proj(...rel(GR, -4.2, 2.6, 1.9)), "K\u0150ZETLISZT-SZEMCS\xC9K", la, { dx: -40, dy: -170 });
+        L(proj(...rel(GR, 4.4, 0.4, 1.9)), "K\xD6T\u0150HIDAK", la * win(t, 35.4, 41.8, 0.5, 0.6) / Math.max(la, 1e-3), { dx: 120, dy: -150 });
+        L(proj(...rel(GR, 0.1, 0.6, 2.2)), "MAKROP\xD3RUS", la * win(t, 36.2, 41.8, 0.5, 0.6) / Math.max(la, 1e-3), { dx: 160, dy: 150, color: C.accent });
       }
       if (st.top !== void 0) {
         const a = win(t, 41.5, 51, 0.6, 0.4);
@@ -25368,7 +25383,7 @@ vec2 voro(vec2 x){
           const dv = clamp2((p0.y - pt.y) / Math.max(1, pb.y - p0.y) * -1);
           if (pt.y - p0.y > 30) {
             O.arrow(p0.x + 50, p0.y + 6, p0.x + 50, pt.y - 6, a, C.red, 7, 20);
-            O.tag(pt.x + 24, (pt.y + pb.y) / 2 + 30, "t\xE9rfogatcs\xF6kken\xE9s (nagy\xEDtva)", a, C.red, 22);
+            O.tag(pt.x + 24, (pt.y + pb.y) / 2 + 30, "t\xE9rfogatcs\xF6kken\xE9s", a, C.red, 22);
           }
         }
         const wa = win(t, 42.6, 47.8, 0.4, 0.5);
@@ -25382,14 +25397,14 @@ vec2 voro(vec2 x){
       const a = win(t, 51.4, 60.9, 0.5, 0.5);
       drawVenn(O, 1490, 330, t - 51.4, a);
       const la = win(t, 52.2, 60.6, 0.5, 0.5);
-      L(proj(7.8, -2.4, 0), "L\xD6SZ", la, { dx: 70, dy: 110, sub: "s\xE1rg\xE1s, por\xF3zus, m\xE9szkonkr\xE9ci\xF3kkal" });
+      L(proj(7.8, -2.4, 0), "L\xD6SZ", la, { dx: 70, dy: 110 });
     }
     if (t >= 61 && t < 87.2) {
       const la = win(t, 64, 73.6, 0.5, 0.5);
       L(proj(-6.4, -0.9, 0.12), "CS\u0150T\xD6R\xC9S", la, { dx: -60, dy: -170, color: C.water });
       const R2 = SU2.uWetR.value;
       const fa2 = win(t, 67, 74, 0.5, 0.4);
-      if (fa2 > 0 && R2 > 0.5) L(proj(-6.2 + R2 * 0.72, -(1.15 + R2 * 0.6), 0), "\xC1T\xC1Z\xC1SI FRONT", fa2, { dx: 150, dy: 60, color: C.water, sub: "napok alatt terjed" });
+      if (fa2 > 0 && R2 > 0.5) L(proj(-6.2 + R2 * 0.72, -(1.15 + R2 * 0.6), 0), "\xC1T\xC1Z\xC1SI FRONT", fa2, { dx: 150, dy: 60, color: C.water });
       const ta = win(t, 64.6, 74, 0.4, 0.4);
       if (ta > 0) {
         O.tag(120, 80, "id\u0151 telik\u2026", ta, "rgba(255,255,255,0.6)", 26);
@@ -25423,7 +25438,7 @@ vec2 voro(vec2 x){
       g.fillText("LABORVIZSG\xC1LAT", 120, 110);
       O.font(58, 800, FH);
       g.fillStyle = C.white;
-      g.fillText("Roskad\xE1s az \xF6dom\xE9terben", 120, 172);
+      
       g.restore();
       drawOedGraph(O, 1010, 230, 830, 470, t, a, st);
       const la = win(t, 88.8, 94.6, 0.5, 0.5);
@@ -25434,7 +25449,7 @@ vec2 voro(vec2 x){
     }
     if (t >= 106 && t < 116.2) {
       const a = win(t, 106.3, 115.9, 0.5, 0.5);
-      [["L\xD6SZ", "makrop\xF3rusos szerkezet", -3.2, C.accent], ["LAZA FINOMHOMOK", "sz\xE1raz; \xE1tmeneti talaj is", 0, C.accent2], ["FRISS FELT\xD6LT\xC9S", "t\xF6m\xF6r\xEDtetlen, 8\u201310 \xE9vn\xE9l fiatalabb", 3.2, C.red]].forEach(([h, s, x, c], i) => {
+      [["L\xD6SZ", "makrop\xF3rusos", -3.2, C.accent], ["LAZA FINOMHOMOK", "sz\xE1raz", 0, C.accent2], ["FRISS FELT\xD6LT\xC9S", "t\xF6m\xF6r\xEDtetlen", 3.2, C.red]].forEach(([h, s, x, c], i) => {
         const p = proj(...rel(OE, x, 1.62, 0));
         const aa = a * win(t, 106.5 + i * 0.6, 115.9, 0.5, 0.5) / Math.max(a, 1e-3);
         if (aa > 0) {
@@ -25469,24 +25484,24 @@ vec2 voro(vec2 x){
       g.fillText("T\xE1vol a v\xEDz, merev a szerkezet", 120, 158);
       g.restore();
       L(proj(-7.6, -0.2, 0), "V\xCDZGY\u0170JT\u0150 M\xC9LYED\xC9S", win(t, 116.8, 119.4, 0.4, 0.4), { dx: 60, dy: -160, color: C.red });
-      L(proj(-7.6, 0, 0), "RENDEZETT, KIFEL\xC9 LEJT\u0150 TEREP", win(t, 120.2, 122, 0.4, 0.3), { dx: 60, dy: -160, color: C.green });
+      L(proj(-7.6, 0, 0), "KIFEL\xC9 LEJT\u0150 TEREP", win(t, 120.2, 122, 0.4, 0.3), { dx: 60, dy: -160, color: C.green });
       const da = win(t, 123, 128, 0.5, 0.4);
       if (da > 0) {
-        L(proj(10.5, -0.72, 0.1), "Z\xC1RT CSATORNA", da, { dx: 60, dy: 120, color: C.water, sub: "el az \xE9p\xFClett\u0151l" });
+        L(proj(10.5, -0.72, 0.1), "Z\xC1RT CSATORNA", da, { dx: 60, dy: 120, color: C.water });
         const p0 = proj(6.6, -0.6, 0.1), p1 = proj(12.8, -0.78, 0.1);
         O.arrow(p0.x, p0.y - 30, p1.x, p1.y - 30, da, C.water, 7, 22);
         L(proj(5.66, 2.2, -0.1), "LEFOLY\xD3", da * win(t, 123.6, 128, 0.4, 0.4) / Math.max(da, 1e-3), { dx: -150, dy: -90, color: C.water });
       }
       const ua = win(t, 129, 134, 0.5, 0.4);
-      L(proj(-4.85, -0.55, 0.05), "V\xC9D\u0150CS\u0150", ua, { dx: 140, dy: -130, sub: "sziv\xE1rg\xE1s eset\xE9n is v\xE9d" });
+      L(proj(-4.85, -0.55, 0.05), "V\xC9D\u0150CS\u0150", ua, { dx: 140, dy: -130 });
       L(proj(-9, -0.55, 0.08), "K\xD6ZM\u0170", ua * win(t, 129.6, 134, 0.4, 0.4) / Math.max(ua, 1e-3), { dx: -40, dy: 130, color: C.water });
-      L(proj(5.03, -2, 0), "V\xCDZZ\xC1R\xD3 R\xC9TEG", win(t, 136.4, 140, 0.4, 0.4), { dx: 120, dy: -60, color: C.water, sub: "v\xEDzz\xE1r\xF3 padozat, falak" });
+      L(proj(5.03, -2, 0), "V\xCDZZ\xC1R\xD3 R\xC9TEG", win(t, 136.4, 140, 0.4, 0.4), { dx: 120, dy: -60, color: C.water });
       const ra = win(t, 140.8, 146, 0.5, 0.4);
-      L(proj(-4.85, 3.02, 0), "MONOLIT VB. KOSZOR\xDA", ra, { dx: -60, dy: -150, color: "#ff8a3a", sub: "emeletenk\xE9nt, fals\xFCllyed\xE9sre m\xE9retezve" });
+      L(proj(-4.85, 3.02, 0), "MONOLIT VB. KOSZOR\xDA", ra, { dx: -60, dy: -150, color: "#ff8a3a" });
       L(proj(1.5, 3.1, 0), "VB. F\xD6D\xC9M", ra * win(t, 141.4, 146, 0.4, 0.4) / Math.max(ra, 1e-3), { dx: 120, dy: -120, color: "#ff8a3a" });
       const fa2 = win(t, 147, 152, 0.4, 0.4);
       L(proj(4.85, -0.45, 0), "VASALT ALAP", fa2, { dx: 150, dy: -60, color: "#ff8a4a" });
-      L(proj(0.6, -0.45, 0), "GERENDAR\xC1CS", fa2 * win(t, 147.6, 152, 0.4, 0.4) / Math.max(fa2, 1e-3), { dx: -80, dy: 150, color: "#ff8a4a", sub: "\xF6sszef\xFCgg\u0151 alapr\xE1cs" });
+      L(proj(0.6, -0.45, 0), "GERENDAR\xC1CS", fa2 * win(t, 147.6, 152, 0.4, 0.4) / Math.max(fa2, 1e-3), { dx: -80, dy: 150, color: "#ff8a4a" });
     }
     if (t >= 152 && t < 168.2) {
       L(proj(...rel(IND, -1.6, 8.5, 4)), "EJTETT D\xD6NG\xD6L\u0150", win(t, 153, 159.8, 0.5, 0.4), { dx: 150, dy: -60, sub: "3\u20135 t, 3\u20135 m-r\u0151l" });
@@ -25494,8 +25509,8 @@ vec2 voro(vec2 x){
       L(proj(...rel(IND, 26, 3, 14)), "EL\u0150TERHEL\xC9S", win(t, 163.6, 167.8, 0.5, 0.4), { dx: 120, dy: -140, color: C.accent });
     }
     if (t >= 168 && t < 177.2) {
-      O.tag(1360, 110, "\u2715  \xC1T\xC1ZOTT ALAP\xC1ROK", win(t, 169.4, 172.6, 0.4, 0.3), C.red, 36);
-      O.tag(1360, 110, "\u2713  AZONNALI BETONOZ\xC1S", win(t, 173.6, 176.9, 0.4, 0.3), C.green, 36);
+      
+      
     }
     if (t >= 177) {
       const a = win(t, 177.3, TOTAL + 5, 0.6, 0.5);
@@ -25511,11 +25526,11 @@ vec2 voro(vec2 x){
       g.fillStyle = C.accent;
       g.fillText("\xD6SSZEFOGLALVA", 140, 190);
       const items = [
-        ["Roskad\xE1s = talaj + terhel\xE9s + v\xEDz", "mindh\xE1rom kell egyszerre"],
-        ["L\xF6sz: makrop\xF3rusos, gyenge k\xF6t\xE9sek", "v\xEDz hat\xE1s\xE1ra hirtelen \xF6sszeroskad"],
-        ["Roskad\xE1svesz\xE9lyes, ha ir > 0,01", "\xF6dom\xE9ter: el\xE1raszt\xE1sos vizsg\xE1lat"],
-        ["Vizet t\xE1vol: terep, tet\u0151v\xEDz, k\xF6zm\u0171", "v\xEDzz\xE1r\xF3 padozat; az alap\xE1rok ne \xE1zzon \xE1t"],
-        ["Merev szerkezet: vb. koszor\xFA, f\xF6d\xE9m", "vasalt s\xE1v-, szalag-, gerendar\xE1cs alap"]
+        ["Talaj + terhel\xE9s + v\xEDz", ""],
+        
+        ["i_r > 0,01: vesz\xE9lyes", ""],
+        ["Vizet t\xE1vol a l\xF6szb\u0151l", ""],
+        ["Merev szerkezet", ""]
       ];
       items.forEach(([h, s], i) => {
         const k = easeOut(clamp2((t - 177.8 - i * 0.45) / 0.6));
@@ -25532,9 +25547,9 @@ vec2 voro(vec2 x){
         g.fillText(s, 195, y + 36 + (1 - k) * 20);
       });
       g.restore();
-      O.bigLine("Sz\xE1razon fal \u2014 v\xEDzzel \xF6sszeroskad.", t - 181.6, win(t, 181.6, TOTAL + 5, 0.5, 0.5), 880, 66, C.white, { under: C.accent });
+      
       const na = win(t, 182.8, TOTAL + 5, 0.5, 0.5);
-      if (na > 0) O.tag(1240, 970, "K\xD6VETKEZIK: 3. R\xC9SZ \u2014 FELT\xD6LT\xC9SEK", na, C.accent, 28);
+      if (na > 0) O.tag(1240, 970, "K\xD6VETKEZIK: FELT\xD6LT\xC9SEK", na, C.accent, 28);
     }
     for (const [t0, t1, kick, lines, opts] of CAPS) {
       const a = win(t, t0, t1, 0.45, 0.45);
@@ -25736,7 +25751,7 @@ vec2 voro(vec2 x){
       g.fillStyle = "rgba(255,255,255,0.7)";
       g.fillText("sz\xE1raz l\xF6sz", px2 + 10, py2 + f(0.3) - 12);
     }, 1);
-    panel(x + 30 + half + 20, "SZ\xC1RAZ \xC9S NEDVES L\xD6SZ", (px2, py2, pw, ph) => {
+    panel(x + 30 + half + 20, "", (px2, py2, pw, ph) => {
       const k = smooth(seg(t, 99, 101));
       const fd = (u) => ph * 0.4 * (1 - Math.exp(-u * 2.2)), fw = (u) => ph * 0.78 * (1 - Math.exp(-u * 3.2));
       g.strokeStyle = C.accent;
@@ -25789,10 +25804,10 @@ vec2 voro(vec2 x){
     g.fillText("= \u0394h / h", x + 70 + iw, y + 104);
     O.font(22, 600, FB);
     g.fillStyle = C.dim;
-    g.fillText("\u0394h: el\xE1raszt\xE1skor bek\xF6vetkez\u0151 t\xF6bblet\xF6sszenyom\xF3d\xE1s,  h: mintamagass\xE1g", x + 36, y + 150);
+    g.fillText("\u0394h: roskad\xE1s,  h: mintamagass\xE1g", x + 36, y + 150);
     O.font(34, 800, FH);
     g.fillStyle = C.red;
-    g.fillText("Roskad\xE1svesz\xE9lyes, ha ir > 0,01 (1 %)", x + 36, y + 206);
+    g.fillText("Roskad\xE1svesz\xE9lyes, ha i_r > 0,01", x + 36, y + 206);
     g.restore();
   }
 

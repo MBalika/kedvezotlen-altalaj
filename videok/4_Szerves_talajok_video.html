@@ -3,6 +3,21 @@
 canvas{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block}</style></head>
 <body><div id="wrap"><canvas id="c3d" width="1920" height="1080"></canvas><canvas id="c2d" width="1920" height="1080"></canvas></div>
 <script>(() => {
+  var __stripRich = (s) => String(s).replace(/_\{([^}]*)\}/g, "$1").replace(/_(.)/g, "$1");
+  function __richCtx(ctx) {
+    if (ctx.__rich) return ctx; ctx.__rich = true;
+    const ofill = ctx.fillText.bind(ctx), ostroke = ctx.strokeText.bind(ctx), omeas = ctx.measureText.bind(ctx);
+    const parse = (s) => { const out = []; let i = 0, buf = ""; while (i < s.length) { const ch = s[i]; if (ch === "_" && i + 1 < s.length) { if (buf) { out.push({ t: buf, k: 0 }); buf = ""; } if (s[i + 1] === "{") { const j = s.indexOf("}", i + 2); out.push({ t: s.slice(i + 2, j < 0 ? s.length : j), k: 1 }); i = j < 0 ? s.length : j + 1; } else { out.push({ t: s[i + 1], k: 1 }); i += 2; } continue; } buf += ch; i++; } if (buf) out.push({ t: buf, k: 0 }); return out; };
+    const fsize = () => { const m = /(\d+(?:\.\d+)?)px/.exec(ctx.font); return m ? +m[1] : 16; };
+    const subFont = (f, sz) => f.replace(/(\d+(?:\.\d+)?)px/, (sz * 0.64).toFixed(2) + "px");
+    const width = (parts, f, sz) => { let w = 0; for (const p of parts) { if (p.k) { ctx.font = subFont(f, sz); w += omeas(p.t).width + 1; ctx.font = f; } else w += omeas(p.t).width; } return w; };
+    const draw = (fn, s, x, y) => { const parts = parse(s), f = ctx.font, sz = fsize(), W = width(parts, f, sz), al = ctx.textAlign, bl = ctx.textBaseline; let cx = al === "center" ? x - W / 2 : (al === "right" || al === "end") ? x - W : x; const dy = bl === "top" || bl === "hanging" ? sz * 0.5 : bl === "middle" ? sz * 0.3 : sz * 0.2; ctx.textAlign = "left"; for (const p of parts) { if (p.k) { ctx.font = subFont(f, sz); fn(p.t, cx + 0.5, y + dy); cx += omeas(p.t).width + 1; ctx.font = f; } else { fn(p.t, cx, y); cx += omeas(p.t).width; } } ctx.textAlign = al; return W; };
+    ctx.fillText = (s, x, y, mw) => { s = String(s); if (s.indexOf("_") < 0) return ofill(s, x, y, mw); draw(ofill, s, x, y); };
+    ctx.strokeText = (s, x, y, mw) => { s = String(s); if (s.indexOf("_") < 0) return ostroke(s, x, y, mw); draw(ostroke, s, x, y); };
+    ctx.measureText = (s) => { s = String(s); if (s.indexOf("_") < 0) return omeas(s); const m = omeas(__stripRich(s)); const w = width(parse(s), ctx.font, fsize()); return { width: w, actualBoundingBoxLeft: m.actualBoundingBoxLeft, actualBoundingBoxRight: w, actualBoundingBoxAscent: m.actualBoundingBoxAscent, actualBoundingBoxDescent: m.actualBoundingBoxDescent, fontBoundingBoxAscent: m.fontBoundingBoxAscent, fontBoundingBoxDescent: m.fontBoundingBoxDescent }; };
+    return ctx;
+  }
+
   // ../v1/node_modules/three/build/three.module.js
   var REVISION = "169";
   var CullFaceNone = 0;
@@ -24483,7 +24498,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
   var Overlay = class {
     constructor(canvas2) {
       this.c = canvas2;
-      this.g = canvas2.getContext("2d");
+      this.g = __richCtx(canvas2.getContext("2d"));
       this.W = canvas2.width;
       this.H = canvas2.height;
       const gc = document.createElement("canvas");
@@ -24979,36 +24994,36 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
   var TOTAL = 171;
   var CHAPTERS = [[0, "Jelens\xE9g"], [20, "Eredet"], [34, "Felismer\xE9s"], [52, "Tulajdons\xE1gok"], [72, "K\xE1rok"], [96, "Alapoz\xE1s"], [142, "Ir\xE1nyelvek"], [160, "\xD6sszefoglal\xE1s"]];
   var CAPS = [
-    [0.6, 5.2, "Holme Fen, Anglia, 1851", ["A l\xE1p lecsapol\xE1sa ut\xE1n egy oszlopot vertek a t\u0151zegen \xE1t az agyagba \u2014", "a teteje *pontosan* a terepszinttel volt egy magass\xE1gban."]],
-    [5.6, 10.4, "Az\xF3ta", ["A kisz\xE1rad\xF3 t\u0151zeg *zsugorodik* \xE9s *lebomlik*:", "a terep t\xF6bb mint *4 m\xE9tert* s\xFCllyedt."]],
-    [20.4, 25, "Hogyan keletkezik?", ["Tavakban, holt\xE1gakban, l\xE1pokban a v\xEDz alatti n\xF6v\xE9nyi maradv\xE1nyok", "oxig\xE9n h\xEDj\xE1n *nem* *bomlanak* *le* \u2014 r\xE9tegr\u0151l r\xE9tegre t\u0151zeg lesz bel\u0151l\xFCk."]],
-    [25.2, 29.6, "Haz\xE1nkban", ["Viszonylag sok helyen, kisebb-nagyobb vastags\xE1gban,", "pl. Hans\xE1g, Ecsedi-l\xE1p, Kis-Balaton, Nagyberek, foly\xF3v\xF6lgyek holt\xE1gai."]],
-    [29.8, 33.8, "A legt\xF6bb k\xE1r", ["A felt\xF6lt\xE9s mellett a *szerves* *talajok* okozz\xE1k a legt\xF6bb k\xE1rosod\xE1st.", "Legvesz\xE9lyesebb a *t\u0151zeg*; kedvez\u0151tlen a szerves iszap \xE9s agyag is."], { kc: C.red, hc: C.red }],
-    [34.4, 37.9, "Felismer\xE9s: sz\xEDn \xE9s szerkezet", ["*S\xF6t\xE9t* sz\xEDn\u0171 \u2014 fekete, s\xF6t\xE9tbarna, s\xF6t\xE9tsz\xFCrke \u2014", "\xE9s sok esetben *sz\xE1las*, *rostos* szerkezet\u0171."]],
-    [38.4, 42.8, "Kis t\xE9rfogats\xFAly", ["Azonos t\xE9rfogat mellett j\xF3val *k\xF6nnyebb* a homokn\xE1l:", "tel\xEDtetten alig nehezebb a v\xEDzn\xE9l."]],
-    [43.2, 47.8, "Nagy v\xEDztartalom", ["w > 50\u201370 %, de *t\xF6bb* *sz\xE1z* *%* is lehet \u2014", "rostos t\u0151zegn\xE9l a szakirodalom ak\xE1r 2000 %-ot is eml\xEDt."], { kc: C.water, hc: C.water }],
-    [48.2, 51.8, "Kisz\xE1rad\xE1skor zsugorodik", ["Ha elvesz\xEDti a viz\xE9t, a t\xE9rfogata *jelent\u0151sen* cs\xF6kken", "\xE9s megreped (a k\xE9pen nagy\xEDtva)."]],
-    [52.4, 57.6, "Kicsi \xF6sszenyom\xF3d\xE1si modulus", ["Eoed = *300\u20132000* *kPa* \u2014 egy k\xF6zepesen t\xF6m\xF6r homok\xE9", "ennek t\xEDzszerese-sz\xE1zszorosa."]],
-    [57.8, 62.6, "Mennyit s\xFCllyed?", ["2 m vastag r\xE9teg, 100 kPa t\xF6bbletfesz\xFClts\xE9g, s = \u0394\u03C3\xB7h / Eoed:", "homok (30 MPa) *\u2248 0,7 cm* \u2014 t\u0151zeg (500 kPa) *\u2248 40 cm*!"], { kc: C.red, hc: C.red }],
-    [63, 67.4, "Lassan \xE9s sok\xE1ig", ["Kicsi a v\xEDz\xE1tereszt\u0151 k\xE9pess\xE9g (k), lass\xFA a konszolid\xE1ci\xF3;", "a szerves boml\xE1s miatt *hosszan* tart a m\xE1sodlagos kompresszi\xF3."]],
-    [67.6, 71.8, "\xC9rz\xE9keny", ["*H\u0151hat\xE1sra* \xE9rz\xE9keny, kisz\xE1rad\xE1skor *zsugorodik*,", "\xE9s a r\xE9tegvastags\xE1ga is *v\xE1ltoz\xF3*."]],
-    [72.4, 77.8, "V\xE1ltoz\xF3 vastags\xE1g", ["A t\u0151zeglencse a h\xE1z bal oldala alatt vastagabb:", "ott *nagyobb* a s\xFCllyed\xE9s \u2014 a h\xE1z megbillen, megreped."], { kc: C.red, hc: C.red }],
-    [78.4, 85.6, "Talajv\xEDzszint-s\xFCllyed\xE9s", ["Sz\xE1razs\xE1g vagy szivatty\xFAz\xE1s miatt s\xFCllyed a talajv\xEDz: a t\u0151zeg *kisz\xE1rad*,", "*zsugorodik* \xE9s *lebomlik* \u2014 a terep \xE9s a h\xE1z tov\xE1bb s\xFCllyed."], { kc: C.water, hc: C.water }],
-    [86.2, 89.8, "H\u0151hat\xE1s", ["F\u0171t\xF6tt pince, kaz\xE1nh\xE1z, t\xE1vh\u0151vezet\xE9k: a meleg", "kisz\xE1r\xEDtja a t\u0151zeget \u2014 *helyi* s\xFCllyed\xE9s."], { kc: C.red, hc: C.red }],
-    [90.2, 95.8, "Rezg\xE9s, k\xF6zm\u0171vek", ["A *rezg\xE9s* (forgalom, g\xE9pek) tov\xE1bb t\xF6m\xF6r\xEDti a t\u0151zeget;", "a merev k\xF6zm\u0171csatlakoz\xE1s a s\xFCllyed\u0151 h\xE1zn\xE1l *elt\xF6rik*."], { kc: C.red, hc: C.red }],
-    [96.4, 101, "Kis m\xE9lys\xE9g\u0171 s\xEDkalap", ["J\xF3 \xE1llapot\xFA fed\u0151r\xE9teg eset\xE9n el\u0151sz\xF6r a *kis* *m\xE9lys\xE9g\u0171* *s\xEDkalapot* vizsg\xE1ljuk:", "az alap a fagyhat\xE1r al\xE1 ker\xFCl, de a homokr\xE9tegben marad."]],
-    [101.2, 106.6, "Min\xE9l keskenyebb az alap", ["A sz\xE9les alap fesz\xFClts\xE9g-hagym\xE1ja *m\xE9lyre* hatol, eg\xE9szen a t\u0151zegig;", "a keskeny alap\xE9 a homokban marad \u2014 *kisebb* *fesz\xFClts\xE9g* jut a t\u0151zegre."]],
-    [106.8, 111.8, "Felt\xE9tel", ["A fed\u0151r\xE9teg teherb\xEDr\xE1s\xE1t a lehet\u0151 legjobban kihaszn\xE1ljuk,", "\xE9s a *teljes* *s\xFCllyed\xE9s* nem haladhatja meg a megengedettet."]],
-    [112.4, 117.2, "Felsz\xEDnk\xF6zeli t\u0151zeg: talajcsere", ["Ha a t\u0151zeg a felsz\xEDn k\xF6zel\xE9ben van, igen gyakran", "*(r\xE9szleges)* *talajcser\xE9t* alkalmazunk: a t\u0151zeget kiemelj\xFCk\u2026"]],
-    [117.4, 121.8, "Csereanyag", ["\u2026\xE9s j\xF3l t\xF6m\xF6r\xEDthet\u0151 szemcs\xE9s anyaggal, *r\xE9tegenk\xE9nt* *t\xF6m\xF6r\xEDtve*", "p\xF3toljuk, a teherb\xEDr\xF3 r\xE9tegig."]],
-    [122.4, 127.4, "Vagy: m\xE9ly\xEDtett s\xEDkalap", ["A szerves r\xE9teg *alatti*, megfelel\u0151 teherb\xEDr\xE1s\xFA talajra alapozunk \u2014", "pill\xE9rekkel \xE1tny\xFAlva a t\u0151zegen."]],
-    [127.6, 131.8, "Gerenda a pill\xE9reken", ["A falat a pill\xE9rekre t\xE1maszkod\xF3 gerenda hordja:", "a t\u0151zegre *nem* jut terhel\xE9s."]],
-    [132.4, 137.2, "V\xE9kony szerves r\xE9teg", ["Ha az alapoz\xE1si s\xEDk alatt csak *v\xE9kony* a szerves r\xE9teg,", "kell\u0151 merevs\xE9g\u0171 \xE9s szil\xE1rds\xE1g\xFA \xE9p\xEDtm\xE9ny \xE9p\xEDthet\u0151\u2026"]],
-    [137.4, 141.8, "S\xFCllyed\xE9sre nem \xE9rz\xE9keny", ["\u2026amely a s\xFCllyed\xE9sk\xFCl\xF6nbs\xE9gekre *nem* \xE9rz\xE9keny:", "egyenletesen, egy t\xF6mbk\xE9nt s\xFCllyed."]],
-    [142.4, 146.8, "K\xF6zm\u0171csatlakoz\xE1s", ["Gondoljunk az \xE9p\xFClet *nagyobb* *s\xFCllyed\xE9s\xE9re*:", "*rugalmas* k\xF6zm\u0171csatlakoz\xE1s, amely k\xF6vetni tudja."], { kc: C.green, hc: C.green }],
-    [147.2, 151.8, "Ker\xFClend\u0151", ["*R\xE9szleges* *al\xE1pinc\xE9z\xE9s* \xE9s *mell\xE9\xE9p\xEDt\xE9s*: elt\xE9r\u0151en s\xFCllyednek,", "a csatlakoz\xE1sn\xE1l elv\xE1lnak, megrepednek."], { kc: C.red, hc: C.red }],
-    [152.2, 155.8, "Z\xE1rt alaprajz, merev\xEDt\xE9s", ["*Z\xE1rt* *alaprajz\xFA*, *t\xE9rbelileg* *merev\xEDtett* \xE9p\xFCletet tervezz\xFCnk:", "vasbeton koszor\xFAk, f\xF6d\xE9mt\xE1rcs\xE1k."], { kc: C.green, hc: C.green }],
-    [156.2, 159.8, "K\xFCl\xF6n\xF6sen vesz\xE9lyes", ["A szerves talajokra k\xFCl\xF6n\xF6sen vesz\xE9lyes a *dinamikus* *hat\xE1s*", "\xE9s a *talajv\xEDzszint-ingadoz\xE1s*."], { kc: C.red, hc: C.red }]
+    
+    [5.6, 10.4, "Az\xF3ta", ["*4 m*-n\xE9l t\xF6bbet s\xFCllyedt"]],
+    [20.4, 25, "Hogyan keletkezik?", ["V\xEDz alatt *nem* *bomlik* *le*: t\u0151zeg lesz"]],
+    [25.2, 29.6, "Haz\xE1nkban", ["Hans\xE1g, Ecsedi-l\xE1p, Kis-Balaton"]],
+    
+    [34.4, 37.9, "Felismer\xE9s", ["*S\xF6t\xE9t*, sokszor *rostos*"]],
+    
+    
+    [48.2, 51.8, "", ["Kisz\xE1radva *zsugorodik*"]],
+    
+    
+    
+    
+    [72.4, 77.8, "V\xE1ltoz\xF3 vastags\xE1g", ["Vastagabb t\u0151zeg, *nagyobb* s\xFCllyed\xE9s"], { kc: C.red, hc: C.red }],
+    [78.4, 85.6, "Talajv\xEDzszint-s\xFCllyed\xE9s", ["A t\u0151zeg *kisz\xE1rad*, *lebomlik*"], { kc: C.water, hc: C.water }],
+    [86.2, 89.8, "H\u0151hat\xE1s", ["*Helyi* kisz\xE1rad\xE1s"], { kc: C.red, hc: C.red }],
+    [90.2, 95.8, "Rezg\xE9s, k\xF6zm\u0171vek", ["A merev k\xF6zm\u0171 *elt\xF6rik*"], { kc: C.red, hc: C.red }],
+    
+    [101.2, 106.6, "", ["Keskeny alap: *kevesebb* jut a t\u0151zegre"]],
+    [106.8, 111.8, "Felt\xE9tel", ["A *teljes* s\xFCllyed\xE9s is kicsi"]],
+    [112.4, 117.2, "", ["Fels\u0151 t\u0151zeg: *kiemelj\xFCk*\u2026"]],
+    [117.4, 121.8, "", ["\u2026\xE9s *t\xF6m\xF6r\xEDtett* anyaggal p\xF3toljuk"]],
+    [122.4, 127.4, "M\xE9ly\xEDtett s\xEDkalap", ["Pill\xE9r a t\u0151zeg *alatti* r\xE9tegig"]],
+    [127.6, 131.8, "Gerenda a pill\xE9reken", ["A t\u0151zegre *nem* jut terhel\xE9s"]],
+    [132.4, 137.2, "", ["*Merev* \xE9p\xEDtm\xE9ny"]],
+    [137.4, 141.8, "", ["*Egy* *t\xF6mbk\xE9nt*, egyenletesen s\xFCllyed"]],
+    [142.4, 146.8, "K\xF6zm\u0171csatlakoz\xE1s", ["*Rugalmas* bek\xF6t\xE9s"], { kc: C.green, hc: C.green }],
+    
+    
+    [156.2, 159.8, "", ["*K\xFCl\xF6n\xF6sen* vesz\xE9lyes"], { kc: C.red, hc: C.red }]
   ];
   var rel = (base, x, y, z) => [base.x + x, base.y + y, base.z + z];
   var fmt = (v, d = 1) => v.toFixed(d).replace(".", ",");
@@ -25038,7 +25053,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         g.restore();
       }
       const top = proj(...rel(FEN, 0, 0.05, -0.42));
-      L(top, "AZ OSZLOP TETEJE", win(t, 1, 5, 0.5, 0.4), { dx: 140, dy: -120, sub: "1851: a terepszinttel egy magass\xE1gban" });
+      L(top, "HOLME FEN OSZLOP", win(t, 1, 5, 0.5, 0.4), { dx: 140, dy: -120 });
       const ga = win(t, 4.4, 12.8, 0.5, 0.5);
       {
         const la = win(t, 3.2, 19.8, 0.5, 0.5);
@@ -25076,24 +25091,24 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         O.tag(pa.x + 22, (pa.y + pb.y) / 2 - 26, (t > 10.6 ? "> 4" : fmt(drop, 1)) + " m", da, C.accent, 40);
       }
       const sa = win(t, 1.5, 19.8, 0.5, 0.5);
-      L(proj(...rel(FEN, -6.5, -(drop + (5.5 - drop) * 0.5), 0)), "T\u0150ZEG", sa, { dx: -150, dy: 20, color: C.accent, sub: drop > 1 ? "zsugorodik, lebomlik" : "v\xEDzzel tel\xEDtett" });
+      L(proj(...rel(FEN, -6.5, -(drop + (5.5 - drop) * 0.5), 0)), "T\u0150ZEG", sa, { dx: -150, dy: 20, color: C.accent, sub: "" });
       L(proj(...rel(FEN, -6.5, -6.6, 0)), "AGYAG", sa * sub(sa, win(t, 2, 19.8, 0.5, 0.5)), { dx: -150, dy: 40, color: "#b8c4cc" });
-      if (drop > 0.4) L(proj(...rel(FEN, 5.5, -(drop + 0.9), 0)), "TALAJV\xCDZ", win(t, 4, 12.6, 0.5, 0.5), { dx: 140, dy: 70, color: C.water, sub: "a lecsapol\xE1s \xF3ta m\xE9lyen" });
-      O.bigLine("A talaj sz\xF3 szerint elt\u0171nik.", t - 10.8, win(t, 10.8, 13, 0.4, 0.4), 880, 84, C.white, { under: C.accent });
+      if (drop > 0.4) L(proj(...rel(FEN, 5.5, -(drop + 0.9), 0)), "TALAJV\xCDZ", win(t, 4, 12.6, 0.5, 0.5), { dx: 140, dy: 70, color: C.water });
+      O.bigLine("A talaj sz\xF3 szerint elt\u0171nik", t - 10.8, win(t, 10.8, 13, 0.4, 0.4), 880, 84, C.white, { under: C.accent });
     }
-    O.title(t - 13.4, win(t, 13.2, 20.2, 0.6, 0.7), 4, "Szerves\ntalajok", "t\u0151zeg, szerves iszap \xE9s agyag", ["T\xE9rfogatv\xE1ltoz\xF3", "Roskad\xE9kony", "Felt\xF6lt\xE9s", "Szerves talaj"]);
+    O.title(t - 13.4, win(t, 13.2, 20.2, 0.6, 0.7), 4, "Szerves\ntalajok", "", []);
     if (t >= 20 && t < 34.2) {
       const a = win(t, 20.3, 33.9, 0.5, 0.5);
       const h = SU2.uHist.value;
       drawStages(O, 120, 70, t, a, h);
       L(proj(-6, -1.5, 0), "T\xD3", win(t, 20.8, 23.4, 0.4, 0.3), { dx: -100, dy: -140, color: C.water });
-      L(proj(-6, -3.4, 0), "T\u0150ZEG", win(t, 24.6, 33.6, 0.5, 0.4), { dx: -140, dy: 60, color: C.accent, sub: "fel nem bomlott n\xF6v\xE9nyi maradv\xE1nyok" });
-      L(proj(5.5, -1, 0), "HOMOK FED\u0150R\xC9TEG", win(t, 29, 33.6, 0.4, 0.4), { dx: 120, dy: -120, color: "#e8c67a" });
-      L(proj(7, -5.6, 0), "TEHERB\xCDR\xD3 R\xC9TEG", win(t, 29.6, 33.6, 0.4, 0.4), { dx: 130, dy: 20, color: "#c9c2b4", sub: "homokos kavics" });
+      L(proj(-6, -3.4, 0), "T\u0150ZEG", win(t, 24.6, 33.6, 0.5, 0.4), { dx: -140, dy: 60, color: C.accent });
+      
+      
     }
     if (t >= 34 && t < 52.2) {
-      L(proj(...rel(LB, 0.2, 0.55, 0.39)), "S\xD6T\xC9T SZ\xCDN", win(t, 34.6, 37.8, 0.4, 0.4), { dx: 160, dy: -150, color: C.accent, sub: "fekete, s\xF6t\xE9tbarna, s\xF6t\xE9tsz\xFCrke" });
-      L(proj(...rel(LB, -0.48, 0.3, 0.3)), "ROSTOK, N\xD6V\xC9NYI MARADV\xC1NYOK", win(t, 35.4, 37.8, 0.4, 0.4), { dx: -120, dy: 150, color: C.accent });
+      
+      
       const ba = win(t, 38.6, 42.8, 0.4, 0.4);
       if (ba > 0) {
         const ang = 0.17 * easeOut(seg(t, 38.8, 40.4));
@@ -25103,13 +25118,13 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       }
       drawWater(O, 1180, 80, 660, 330, t, win(t, 43.4, 47.8, 0.5, 0.4));
       const da = win(t, 48.6, 51.8, 0.4, 0.4);
-      L(proj(...rel(LB, 0.3, 0.42, 0.3)), "KISZ\xC1RADVA: ZSUGORODIK, REPEDEZIK", da, { dx: 120, dy: -170, color: C.red });
+      
     }
     if (t >= 52 && t < 72.2) {
       const a1 = win(t, 52.6, 57.6, 0.5, 0.4);
       const H3 = 1.6 * smooth(seg(t, 54.2, 58));
-      L(proj(...rel(LB, 2.6, 1.95, 0.32)), "HOMOK", a1, { dx: -150, dy: -100, color: "#e8c67a", sub: "Eoed \u2248 20\u201350 MPa" });
-      L(proj(...rel(LB, 4.1, 1.95 - H3 * 0.2, 0.32)), "T\u0150ZEG", a1, { dx: 150, dy: -100, color: C.accent, sub: "Eoed \u2248 0,3\u20132 MPa" });
+      L(proj(...rel(LB, 2.6, 1.95, 0.32)), "HOMOK", a1, { dx: -150, dy: -100, color: "#e8c67a", sub: "E_{oed} \u2248 20\u201350 MPa" });
+      L(proj(...rel(LB, 4.1, 1.95 - H3 * 0.2, 0.32)), "T\u0150ZEG", a1, { dx: 150, dy: -100, color: C.accent, sub: "E_{oed} \u2248 0,3\u20132 MPa" });
       drawCalc(O, 80, 70, t, win(t, 57.8, 62.6, 0.5, 0.4));
       if (t > 62.8) {
         g.save();
@@ -25118,13 +25133,13 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         g.fillRect(0, 0, 1920, 1080);
         g.restore();
         drawTimeCurve(O, 960, 100, 880, 520, t, win(t, 63, 71.9, 0.5, 0.5));
-        drawProps(O, 120, 120, t, win(t, 63.4, 71.9, 0.5, 0.5));
+        
       }
     }
     if (t >= 72 && t < 96.2) {
       const la = win(t, 72.5, 77.9, 0.5, 0.4);
-      L(proj(-9.5, -3.2, 0), "T\u0150ZEG", la, { dx: -120, dy: -40, color: C.accent, sub: "v\xE1ltoz\xF3 vastags\xE1g" });
-      L(proj(9, -0.9, 0), "HOMOK FED\u0150R\xC9TEG", la * sub(la, win(t, 73, 77.9, 0.5, 0.4)), { dx: 110, dy: -150, color: "#e8c67a" });
+      L(proj(-9.5, -3.2, 0), "T\u0150ZEG", la, { dx: -120, dy: -40, color: C.accent });
+      
       const ta = win(t, 73.4, 77.9, 0.5, 0.4);
       if (ta > 0) {
         const thL = peatGeo2.thick(-4.85), thR = peatGeo2.thick(4.85);
@@ -25135,12 +25150,12 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       drawSettle(O, 1380, 70, 460, 230, t, win(t, 74, 95.8, 0.5, 0.5), st);
       const wa = win(t, 79, 85.8, 0.5, 0.4);
       L(proj(13, 0.4, -2.5), "SZIVATTY\xDAZ\xC1S", wa, { dx: -60, dy: -140, color: C.water });
-      L(proj(9, -(1.3 + 1 + 1.6 * Math.exp(-16 / 50)) * SU2.uShrink.value - 1.3 * (1 - SU2.uShrink.value), 0), "S\xDCLLYED\u0150 TALAJV\xCDZ", wa * sub(wa, win(t, 80, 85.8, 0.5, 0.4)), { dx: 80, dy: 110, color: C.water });
-      L(proj(-8.5, -2.2, 0), "KISZ\xC1RADT, ZSUGOROD\xD3 T\u0150ZEG", win(t, 82, 85.8, 0.5, 0.4), { dx: -60, dy: 170, color: C.red });
-      L(proj(2.4, -1.15, 0), "F\u0170T\xC9SI VEZET\xC9K, KAZ\xC1NH\xC1Z", win(t, 86.6, 89.8, 0.4, 0.4), { dx: 140, dy: -150, color: "#ff9a4a", sub: "a h\u0151 kisz\xE1r\xEDtja a t\u0151zeget" });
+      
+      
+      L(proj(2.4, -1.15, 0), "KAZ\xC1NH\xC1Z", win(t, 86.6, 89.8, 0.4, 0.4), { dx: 140, dy: -150, color: "#ff9a4a" });
       const pa = win(t, 90.6, 95.8, 0.4, 0.4);
       L(proj(5.15, -0.95 + SU2.uLiftR.value * 0.5, 0.1), "ELT\xD6RT CSATLAKOZ\xC1S", pa, { dx: 120, dy: 110, color: C.red });
-      L(proj(13.5, 0, 0), "REZG\xC9S (FORGALOM)", pa * sub(pa, win(t, 91, 95.8, 0.4, 0.4)), { dx: 40, dy: -160, color: "#ffd36a" });
+      L(proj(13.5, 0, 0), "REZG\xC9S", pa * sub(pa, win(t, 91, 95.8, 0.4, 0.4)), { dx: 40, dy: -160, color: "#ffd36a" });
     }
     if (t >= 96 && t < 112.2) {
       const a = win(t, 96.6, 111.8, 0.5, 0.5);
@@ -25160,7 +25175,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         g.lineTo(p1.x + 10, p1.y);
         g.stroke();
         g.restore();
-        O.tag(p0.x - 20, (p0.y + p1.y) / 2 - 24, "fagyhat\xE1r", a, C.white, 26, "right");
+        
         const q0 = proj(-4.85 - b, -0.95, 0), q1 = proj(-4.85 + b, -0.95, 0);
         g.save();
         g.globalAlpha = a;
@@ -25173,15 +25188,15 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         g.restore();
         O.tag((q0.x + q1.x) / 2 - 30, q0.y + 34, "B = " + fmt(2 * b) + " m", a, C.accent, 26);
       }
-      L(proj(-9.5, -0.9, 0), "HOMOK", a, { dx: 60, dy: -150, color: "#e8c67a", sub: "j\xF3 \xE1llapot\xFA fed\u0151r\xE9teg" });
+      L(proj(-9.5, -0.9, 0), "HOMOK", a, { dx: 60, dy: -150, color: "#e8c67a" });
       L(proj(-10.5, -3.3, 0), "T\u0150ZEG", a, { dx: -80, dy: 90, color: C.accent });
       drawIsoLegend(O, 1500, 80, a);
-      O.tag(1180, 380, b > 0.6 ? "\u2715  SZ\xC9LES ALAP: a hagyma el\xE9ri a t\u0151zeget" : "\u2713  KESKENY ALAP: a hagyma a homokban marad", a * win(t, 98, 111.8, 0.4, 0.4) * (Math.abs(b - 0.3) < 0.05 || b > 0.95 ? 1 : 0), b > 0.6 ? C.red : C.green, 30);
+      O.tag(1180, 380, b > 0.6 ? "\u2715  SZ\xC9LES ALAP" : "\u2713  KESKENY ALAP", a * win(t, 101.5, 111.8, 0.4, 0.4) * (Math.abs(b - 0.3) < 0.05 || b > 0.95 ? 1 : 0), b > 0.6 ? C.red : C.green, 30);
     }
     if (t >= 112 && t < 142.2) {
       const S = (x, y, z = 0) => proj(...rel(CS, x, y, z));
       const a = win(t, 112.2, 141.9, 0.5, 0.4);
-      const stage = t < 122 ? ["ALAPOZ\xC1S SZERVES TALAJON", "R\xE9szleges talajcsere"] : t < 132 ? ["ALAPOZ\xC1S SZERVES TALAJON", "M\xE9ly\xEDtett s\xEDkalap"] : ["ALAPOZ\xC1S SZERVES TALAJON", "Merev szerkezet v\xE9kony r\xE9tegen"];
+      const stage = t < 122 ? ["MEGOLD\xC1SOK", "R\xE9szleges talajcsere"] : t < 132 ? ["MEGOLD\xC1SOK", "M\xE9ly\xEDtett s\xEDkalap"] : ["MEGOLD\xC1SOK", "Merev szerkezet v\xE9kony r\xE9tegen"];
       g.save();
       g.globalAlpha = a * 0.9;
       g.fillStyle = "rgba(8,10,12,0.78)";
@@ -25195,13 +25210,13 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       g.fillStyle = C.white;
       g.fillText(stage[1], 120, 158);
       g.restore();
-      L(S(-19.5, -1.5), "T\u0150ZEG", win(t, 112.6, 116, 0.4, 0.4), { dx: -40, dy: -170, color: C.accent, sub: "a felsz\xEDn k\xF6zel\xE9ben" });
-      L(S(-14, -1.6), "T\xD6M\xD6R\xCDTETT CSEREANYAG", win(t, 117.6, 121.8, 0.4, 0.4), { dx: 160, dy: -120, color: "#e8c67a", sub: "r\xE9tegenk\xE9nt t\xF6m\xF6r\xEDtve" });
+      L(S(-19.5, -1.5), "T\u0150ZEG", win(t, 112.6, 116, 0.4, 0.4), { dx: -40, dy: -170, color: C.accent });
+      
       L(S(-9, -3.4), "TEHERB\xCDR\xD3 R\xC9TEG", win(t, 113.4, 121.8, 0.4, 0.4), { dx: 120, dy: 40, color: "#c9c2b4" });
-      L(S(1.6, -2.6), "PILL\xC9R", win(t, 126.4, 131.8, 0.4, 0.4), { dx: 160, dy: -60, color: "#d8d6d0", sub: "a teherb\xEDr\xF3 r\xE9tegig" });
-      L(S(0, -0.25), "GERENDA", win(t, 129.6, 131.8, 0.3, 0.4), { dx: -170, dy: -110, color: "#d8d6d0" });
-      L(S(16, -1.85), "V\xC9KONY T\u0150ZEGR\xC9TEG", win(t, 132.6, 141.8, 0.4, 0.4), { dx: 160, dy: 40, color: C.accent });
-      L(S(12, -0.25), "MEREV LEMEZ / DOBOZSZERKEZET", win(t, 134, 141.8, 0.4, 0.4), { dx: -140, dy: -120, color: "#d8d6d0", sub: "egy t\xF6mbk\xE9nt s\xFCllyed" });
+      L(S(1.6, -2.6), "PILL\xC9R", win(t, 126.4, 131.8, 0.4, 0.4), { dx: 160, dy: -60, color: "#d8d6d0" });
+      
+      
+      L(S(12, -0.25), "MEREV LEMEZ / DOBOZSZERKEZET", win(t, 134, 141.8, 0.4, 0.4), { dx: -140, dy: -120, color: "#d8d6d0" });
       const ua = win(t, 136.4, 141.8, 0.4, 0.4);
       if (ua > 0) [11, 16, 21].forEach((x) => {
         const p = S(x, 1);
@@ -25221,17 +25236,17 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       g.fillText("TERVEZ\xC9SI IR\xC1NYELVEK", 120, 100);
       O.font(52, 800, FH);
       g.fillStyle = C.white;
-      g.fillText("A szerkezet is tehet ellene", 120, 158);
+      
       g.restore();
-      L(proj(5.45, -0.95 + SU2.uLiftR.value * 0.5, 0.15), "RUGALMAS CSATLAKOZ\xC1S", win(t, 143, 146.8, 0.4, 0.4), { dx: 120, dy: -150, color: C.green });
+      
       const ma = win(t, 147.6, 151.8, 0.3, 0.3);
       if (ma > 0) {
         const p = proj(...deformJS(6.6, 0.3, 1));
-        L(p, "\u2715  MELL\xC9\xC9P\xCDT\xC9S", ma, { dx: 120, dy: -140, color: C.red, sub: "elt\xE9r\u0151 s\xFCllyed\xE9s" });
+        L(p, "\u2715  MELL\xC9\xC9P\xCDT\xC9S", ma, { dx: 120, dy: -140, color: C.red });
         O.tag(110, 215, "\u2715  R\xC9SZLEGES AL\xC1PINC\xC9Z\xC9S", ma, C.red, 34);
       }
       const ra = win(t, 152.4, 155.9, 0.5, 0.4);
-      L(proj(-4.85, 3.02, 0), "VB. KOSZOR\xDA", ra, { dx: -60, dy: -150, color: "#ff8a3a", sub: "t\xE9rbeli merev\xEDt\xE9s" });
+      L(proj(-4.85, 3.02, 0), "VB. KOSZOR\xDA", ra, { dx: -60, dy: -150, color: "#ff8a3a" });
       L(proj(1.5, 3.1, 0), "F\xD6D\xC9MT\xC1RCSA", ra * sub(ra, win(t, 153, 155.9, 0.4, 0.4)), { dx: 120, dy: -120, color: "#ff8a3a" });
       const da = win(t, 156.4, 159.8, 0.4, 0.4);
       L(proj(13.5, 0, 0), "\u2715  REZG\xC9S", da, { dx: 40, dy: -160, color: C.red });
@@ -25251,11 +25266,11 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       g.fillStyle = C.accent;
       g.fillText("\xD6SSZEFOGLALVA", 140, 180);
       const items = [
-        ["Felismer\xE9s: s\xF6t\xE9t, k\xF6nny\u0171, rostos", "v\xEDztartalom w > 50\u201370 %, ak\xE1r t\xF6bb sz\xE1z %"],
-        ["Eoed kicsi (300\u20132000 kPa), k kicsi", "lass\xFA konszolid\xE1ci\xF3, hossz\xFA m\xE1sodlagos kompresszi\xF3"],
-        ["Kisz\xE1radva zsugorodik \xE9s lebomlik", "vesz\xE9lyes: talajv\xEDzszint-ingadoz\xE1s, h\u0151, rezg\xE9s"],
-        ["J\xF3 fed\u0151r\xE9teg: keskeny, sek\xE9ly s\xEDkalap", "csak kis fesz\xFClts\xE9g jusson a t\u0151zegre"],
-        ["Felsz\xEDnk\xF6zelben: talajcsere vagy m\xE9ly\xEDtett alap", "z\xE1rt alaprajz, merev\xEDt\xE9s, rugalmas k\xF6zm\u0171"]
+        ["S\xF6t\xE9t, k\xF6nny\u0171, sok v\xEDz", ""],
+        ["Nagy, lass\xFA s\xFCllyed\xE9s", ""],
+        ["Kisz\xE1radva lebomlik", ""],
+        
+        ["Csere, m\xE9ly\xEDtett alap, merevs\xE9g", ""]
       ];
       items.forEach(([h, s], i) => {
         const k = easeOut(clamp2((t - 160.8 - i * 0.45) / 0.6));
@@ -25272,9 +25287,9 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         g.fillText(s, 195, y + 36 + (1 - k) * 20);
       });
       g.restore();
-      O.bigLine("Ami v\xEDz alatt keletkezett, v\xEDz n\xE9lk\xFCl elt\u0171nik.", t - 164.6, win(t, 164.6, TOTAL + 5, 0.5, 0.5), 880, 62, C.white, { under: C.accent });
+      
       const na = win(t, 165.8, TOTAL + 5, 0.5, 0.5);
-      if (na > 0) O.tag(1180, 970, "ALAPOZ\xC1S KEDVEZ\u0150TLEN ALTALAJON \xB7 SOROZAT V\xC9GE", na, C.accent, 28);
+      if (na > 0) O.tag(1180, 970, "A SOROZAT V\xC9GE", na, C.accent, 28);
     }
     for (const [t0, t1, kick, lines, opts] of CAPS) {
       const a = win(t, t0, t1, 0.45, 0.45);
@@ -25295,7 +25310,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     const g = O.g;
     g.save();
     g.globalAlpha = a;
-    const st = [["T\xD3", "holt\xE1g, m\xE9lyed\xE9s"], ["L\xC1P", "n\xE1d, s\xE1s, moha"], ["T\u0150ZEG", "v\xEDz alatt, leveg\u0151tlen\xFCl"], ["FED\u0150R\xC9TEG", "homok rak\xF3dik r\xE1"]];
+    const st = [["T\xD3", ""], ["L\xC1P", ""], ["T\u0150ZEG", ""], ["FED\u0150R\xC9TEG", ""]];
     const idx = h < 1 ? 0 : h < 1.7 ? 1 : h < 2.05 ? 2 : 3;
     g.fillStyle = "rgba(8,10,12,0.72)";
     O.rr(x - 30, y - 22, 1060, 112, 14);
@@ -25328,8 +25343,8 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     g.fill();
     O.font(26, 700, FH);
     g.fillStyle = C.water;
-    g.fillText("V\xCDZTARTALOM  w = m(v\xEDz) / m(szil\xE1rd)", x + 30, y + 46);
-    const rows = [["homok", 20, "~20 %"], ["t\u0151zeg (als\xF3 hat\xE1r)", 70, "> 50\u201370 %"], ["t\u0151zeg (gyakori)", 500, "t\xF6bb sz\xE1z %"], ["rostos t\u0151zeg", 2e3, "ak\xE1r 2000 %"]];
+    g.fillText("V\xCDZTARTALOM", x + 30, y + 46);
+    const rows = [["homok", 20, "~20 %"], ["t\u0151zeg", 500, "t\xF6bb sz\xE1z %"], ["rostos", 2e3, "ak\xE1r 2000 %"]];
     const sc = (w - 260) / 2e3;
     rows.forEach(([n, v, s], i) => {
       const k = easeOut(clamp2((t - 43.6 - i * 0.5) / 1));
@@ -25347,7 +25362,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     });
     O.font(17, 500, FB);
     g.fillStyle = C.dim;
-    g.fillText("\u25A0 barna: szil\xE1rd r\xE9sz (1 egys\xE9g)   \u25A0 k\xE9k: v\xEDz", x + 30, y + h - 18);
+    
     g.restore();
   }
   function drawCalc(O, x, y, t, a) {
@@ -25362,7 +25377,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     g.fillRect(x, y + 20, 6, 260);
     O.font(26, 700, FH);
     g.fillStyle = C.accent;
-    g.fillText("BECSL\xC9S:  s = \u0394\u03C3 \xB7 h / Eoed", x + 36, y + 52);
+    g.fillText("s = \u0394\u03C3 \xB7 h / E_{oed}", x + 36, y + 52);
     O.font(22, 500, FB);
     g.fillStyle = C.dim;
     g.fillText("h = 2 m,  \u0394\u03C3 = 100 kPa", x + 36, y + 92);
@@ -25372,16 +25387,16 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     g.fillStyle = "#e8c67a";
     g.fillText("HOMOK", x + 36, y + 150);
     g.fillStyle = C.white;
-    g.fillText("100 \xB7 2 / 30 000  \u2248  0,007 m  =  0,7 cm", x + 170, y + 150);
+    g.fillText("\u2248 0,7 cm", x + 170, y + 150);
     g.globalAlpha = a * k2;
     g.fillStyle = C.accent;
     g.fillText("T\u0150ZEG", x + 36, y + 210);
     g.fillStyle = C.white;
-    g.fillText("100 \xB7 2 / 500  =  0,40 m  =  40 cm", x + 170, y + 210);
+    g.fillText("\u2248 40 cm", x + 170, y + 210);
     g.globalAlpha = a * k2;
     O.font(22, 600, FB);
     g.fillStyle = C.red;
-    g.fillText("\u2248 60-szoros k\xFCl\xF6nbs\xE9g ugyanarra a terhel\xE9sre", x + 36, y + 262);
+    g.fillText("60\xD7 k\xFCl\xF6nbs\xE9g", x + 36, y + 262);
     g.restore();
   }
   function drawTimeCurve(O, x, y, w, h, t, a) {
@@ -25433,10 +25448,10 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     if (k > 0.98) {
       O.font(20, 700, FH);
       g.fillStyle = "#e8c67a";
-      g.fillText("homok: gyors, kicsi", px2 + pw * 0.62, py2 + sand(0.6) * ph + 28);
+      
       g.fillStyle = C.accent;
-      g.fillText("els\u0151dleges konszolid\xE1ci\xF3 (lass\xFA)", px2 + pw * 0.08, py2 + peat(0.38) * ph + 40);
-      g.fillText("m\xE1sodlagos kompresszi\xF3 \u2014 \xE9vtizedekig", px2 + pw * 0.46, py2 + peat(0.85) * ph + 34);
+      g.fillText("konszolid\xE1ci\xF3", px2 + pw * 0.08, py2 + peat(0.38) * ph + 40);
+      g.fillText("m\xE1sodlagos: \xE9vtizedekig", px2 + pw * 0.46, py2 + peat(0.85) * ph + 34);
     }
     g.restore();
   }
@@ -25482,7 +25497,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     g.fillStyle = C.accent;
     g.fillText("S\xDCLLYED\xC9S (nagy\xEDtva)", x + 26, y + 42);
     const sL = 0.12 * st.cons + 0.3 * st.shrink + 0.02 * st.heat, sR = 0.05 * st.cons + 0.17 * st.shrink + 0.1 * st.heat;
-    [["bal oldal (vastag t\u0151zeg)", sL, C.red], ["jobb oldal (v\xE9konyabb t\u0151zeg)", sR, "#ff9a5a"]].forEach(([n, v, c], i) => {
+    [["vastag t\u0151zeg", sL, C.red], ["v\xE9kony t\u0151zeg", sR, "#ff9a5a"]].forEach(([n, v, c], i) => {
       const by = y + 86 + i * 72;
       O.font(20, 600, FB);
       g.fillStyle = "rgba(255,255,255,0.85)";
@@ -25506,7 +25521,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     g.fill();
     O.font(22, 700, FH);
     g.fillStyle = C.accent;
-    g.fillText("FESZ\xDCLTS\xC9G-HAGYMA  \u03C3z / q", x + 22, y + 38);
+    g.fillText("FESZ\xDCLTS\xC9G  \u03C3_z / q", x + 22, y + 38);
     [["> 0,6", "#ff4026"], ["0,4\u20130,6", "#ff8c33"], ["0,2\u20130,4", "#ffd94d"], ["0,1\u20130,2", "#4de6cc"]].forEach(([s, c], i) => {
       g.fillStyle = c;
       g.fillRect(x + 22, y + 62 + i * 40, 40, 24);
@@ -25516,7 +25531,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     });
     O.font(17, 500, FB);
     g.fillStyle = C.dim;
-    g.fillText("feh\xE9r vonal: 0,2 q", x + 22, y + 236);
+    
     g.restore();
   }
 

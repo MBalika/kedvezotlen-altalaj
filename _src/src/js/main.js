@@ -10,10 +10,10 @@ import { startFormatting } from './guard.js';
 const VEDEKEZES_URL = window.VEDEKEZES_URL || 'https://vedekezesakarossullyedesekellen.vercel.app';
 
 const VIDEOS = {
-  1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html', poster: 'assets/p1.jpg', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
-  2: { file: 'videok/2_Roskadekony_talajok_video.html', poster: 'assets/p2.jpg', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
-  3: { file: 'videok/3_Feltoltesek_video.html', poster: 'assets/p3.jpg', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
-  4: { file: 'videok/4_Szerves_talajok_video.html', poster: 'assets/p4.jpg', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
+  1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261028', poster: 'assets/p1.jpg?v=20261028', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
+  2: { file: 'videok/2_Roskadekony_talajok_video.html?v=20261028', poster: 'assets/p2.jpg?v=20261028', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
+  3: { file: 'videok/3_Feltoltesek_video.html?v=20261028', poster: 'assets/p3.jpg?v=20261028', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
+  4: { file: 'videok/4_Szerves_talajok_video.html?v=20261028', poster: 'assets/p4.jpg?v=20261028', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
 };
 
 function videos() {
