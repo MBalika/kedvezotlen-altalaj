@@ -214,7 +214,7 @@ export function season() {
 // ------------------------------------------------------------------ storeys vs swelling pressure
 export function storeys() {
   const box = $('#storeyChart'); if (!box) return;
-  const W = 520, H = 250; const svg = svgRoot(W, H); box.append(svg);
+  const W = 600, H = 250; const svg = svgRoot(W, H); box.append(svg);
   const q = [0, 50, 95, 140], share = [0, 83, 13, 4];
   function render(n) {
     svg.innerHTML = '';

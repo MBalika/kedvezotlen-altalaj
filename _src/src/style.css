@@ -108,7 +108,7 @@ main { min-width: 0; padding-bottom: 80px; }
 .eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); font-weight: 500; }
 .hero h1 { font-size: clamp(42px, 7vw, 92px); font-weight: 900; font-stretch: 118%; letter-spacing: -0.035em; line-height: 0.92; margin-top: 14px; }
 .hero h1 em { font-style: normal; color: transparent; -webkit-text-stroke: 1.6px var(--ink); }
-.hero .lede { font-size: clamp(17px, 1.6vw, 20px); color: var(--muted); max-width: 58ch; margin-top: 22px; }
+.hero .lede { font-size: clamp(17px, 1.6vw, 20px); color: var(--muted); margin-top: 22px; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .btn { display: inline-flex; align-items: center; gap: 9px; border-radius: 11px; padding: 11px 17px; font-weight: 700; font-size: 15px; text-decoration: none; cursor: pointer; border: 1.5px solid var(--line2); background: var(--surface); color: var(--ink); transition: transform 0.12s, background 0.15s, border-color 0.15s; }
 .btn:hover { transform: translateY(-1px); border-color: var(--acc); }
@@ -136,11 +136,11 @@ main { min-width: 0; padding-bottom: 80px; }
 .sec-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: start; margin-bottom: 28px; }
 .sec-num { font-family: var(--f-display); font-weight: 900; font-stretch: 125%; font-size: clamp(54px, 8vw, 104px); line-height: 0.8; color: var(--acc); }
 .sec-head h2 { font-size: clamp(32px, 4.6vw, 58px); font-weight: 900; font-stretch: 112%; letter-spacing: -0.03em; }
-.sec-head .lede { font-size: 18px; color: var(--muted); max-width: 64ch; margin-top: 12px; }
+.sec-head .lede { font-size: 18px; color: var(--muted); margin-top: 12px; }
 .sub { margin-top: 56px; }
 .sub > h3 { font-size: clamp(22px, 2.6vw, 30px); font-weight: 800; font-stretch: 108%; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .sub > h3 .tag { font-family: var(--f-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acc); border: 1px solid var(--acc); padding: 2px 8px; border-radius: 99px; }
-.sub > p, .prose p { max-width: 70ch; margin-top: 12px; color: var(--ink); }
+.sub > p, .prose p { margin-top: 12px; color: var(--ink); }
 .prose p + p { margin-top: 12px; }
 .muted { color: var(--muted); }
 .small { font-size: 14px; }
@@ -152,13 +152,13 @@ main { min-width: 0; padding-bottom: 80px; }
 .card h4 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
 .card p { font-size: 15.5px; color: var(--muted); }
 .card .k { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acc); margin-bottom: 6px; display: block; }
-.note { border-left: 4px solid var(--acc); background: var(--surface); padding: 14px 18px; border-radius: 0 12px 12px 0; margin-top: 18px; max-width: 78ch; font-size: 16px; }
+.note { border-left: 4px solid var(--acc); background: var(--surface); padding: 14px 18px; border-radius: 0 12px 12px 0; margin-top: 18px; font-size: 16px; }
 .note.bad { border-color: var(--bad); background: var(--badbg); }
 .note.good { border-color: var(--good); background: var(--goodbg); }
 .note.web { border-color: var(--water); }
 .note b.lbl { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; display: block; color: var(--muted); margin-bottom: 3px; font-weight: 500; }
 .cap { font-size: 13px; color: var(--faint); margin-top: 6px; }
-ul.list { margin: 12px 0 0; padding-left: 0; list-style: none; display: grid; gap: 8px; max-width: 74ch; }
+ul.list { margin: 12px 0 0; padding-left: 0; list-style: none; display: grid; gap: 8px; }
 ul.list li { position: relative; padding-left: 26px; }
 ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.6em; width: 9px; height: 9px; border-radius: 2px; background: var(--acc); transform: rotate(45deg); }
 
@@ -175,7 +175,7 @@ ul.list li::before { content: ""; position: absolute; left: 4px; top: 0.6em; wid
 .widget-head h4::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--acc); }
 .widget-head .hint { font-size: 13px; color: var(--muted); }
 .widget-body { padding: 18px; }
-.wgrid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.wgrid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 20px; align-items: center; }
 @media (max-width: 860px) { .wgrid { grid-template-columns: minmax(0, 1fr); } }
 .svgbox { width: 100%; overflow-x: auto; }
 .svgbox svg, .svgbox canvas { display: block; width: 100%; height: auto; }
@@ -322,7 +322,9 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .rule.on { border-color: var(--good); background: var(--goodbg); }
 
 /* classify game */
-.sort { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin-top: 16px; }
+.sort { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+@media (max-width: 1000px) { .sort { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .sort { grid-template-columns: minmax(0, 1fr); } }
 .sort-item { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 13px 15px; display: grid; gap: 8px; }
 .sort-item b { font-size: 15px; }
 .sort-item .det-opts button { font-size: 12.5px; }
@@ -343,3 +345,24 @@ footer .fin { max-width: 1400px; margin: 0 auto; padding-left: max(16px, env(saf
 .linkcard svg { width: 42px; height: 42px; }
 @media (max-width: 600px) { .linkcard { grid-template-columns: minmax(0, 1fr); } }
 .reveal { opacity: 1; transform: none; }
+
+/* ---------------------------------------------------------------- formázás (sorkizárás + magyar elválasztás + nem törő egységek) */
+main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede {
+  text-align: justify; text-justify: inter-word; hyphens: manual; -webkit-hyphens: manual; text-wrap: pretty;
+}
+h1, h2, h3, h4, .btn, .chip, label, button, td, th, .eyebrow, .mono { hyphens: none; -webkit-hyphens: none; }
+.nw { white-space: nowrap; hyphens: none; }
+main .rag, footer .rag { text-align: left !important; }
+
+/* ---------------------------------------------------------------- elrendezés: kitöltött, kiegyensúlyozott blokkok (formázás skill 5.) */
+.two-mid { align-items: center; }
+.two-cards { align-items: stretch; }
+.two-cards > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; }
+.two-cards > div > ul.list { margin-top: 10px; }
+.cols5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.wg-rules { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
+.wg-rules .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.rules3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .cols5 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .rules3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .wg-rules { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { .cols5, .rules3, .wg-rules .rules { grid-template-columns: minmax(0, 1fr); } }

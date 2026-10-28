@@ -20,6 +20,8 @@ full = f'''<!doctype html>
 <meta property="og:description" content="{DESC}">
 <meta property="og:image" content="assets/p2.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Crect x='7' y='1' width='12' height='24' rx='3' fill='%23222'/%3E%3Crect x='8.5' y='2.5' width='9' height='5' fill='%23f0a33a'/%3E%3Crect x='8.5' y='7.5' width='9' height='5' fill='%23ebc25c'/%3E%3Crect x='8.5' y='12.5' width='9' height='5' fill='%23b4a6ff'/%3E%3Crect x='8.5' y='17.5' width='9' height='6' fill='%2345d6b4'/%3E%3C/svg%3E">
+<script src="vendor/hyphenopoly/Hyphenopoly_Loader.js"></script>
+<script>Hyphenopoly.config({{ require: {{ "hu": "FORCEHYPHENOPOLY" }}, setup: {{ hide: "none", selectors: {{ ".hyphenate": {{ minWordLength: 6, compound: "auto" }} }} }} }});</script>
 {head_common}</head>
 <body>
 {body}

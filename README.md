@@ -12,6 +12,7 @@ Tartalom: részletes magyarázatok, ábrák, interaktív kísérletek (ödométe
 - `index.html` – a teljes oldal (CSS és JS beágyazva, a three.js r169 is)
 - `assets/` – videóposzterek
 - `videok/` – a négy animációs videó önálló HTML-ként
+- `vendor/hyphenopoly/` – magyar elválasztás (Hyphenopoly, saját tárhelyről)
 
 Építés nélküli statikus oldal; a Vercel közvetlenül a repo gyökeréből szolgálja ki.
 
@@ -30,3 +31,4 @@ cp dist/index.html ../index.html
 - `src/style.css` – megjelenés (világos/sötét téma)
 - `src/js/` – interaktív elemek (`widgets1.js`, `widgets2.js`), 3D szimulátor (`sim3d.js`), kvízek (`data.js`, `quiz.js`)
 - A „Védekezés” oldal címe a `src/js/main.js` elején (`VEDEKEZES_URL`).
+- `src/js/guard.js` – formázás: sorkizárás, magyar elválasztás, nem törő egységek (szám + mértékegység, névelő, szakkifejezés), lyukas sorkizárásnál balra zárt tartalék (`.rag`)

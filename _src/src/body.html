@@ -146,16 +146,16 @@
 
       <div class="sub">
         <h3>Miért a kis házak sérülnek? <span class="tag">83 / 13 / 4 %</span></h3>
-        <div class="two">
+        <div class="two two-mid">
           <div class="prose">
             <p>A károk <b>83%-a egyszintes</b>, 13%-a kétszintes, és csak 4%-a háromszintes épületnél jelentkezik. A nagyobb épület nagyobb talpfeszültséggel nyomja az altalajt, és ez ellensúlyozza a duzzadási nyomást, amely ezeknél az agyagoknál 100 kPa fölött van.</p>
             <p>Ezért a szabály: a talaj teherbírását minél jobban ki kell használni. Minél nagyobb a talpfeszültség, annál kevésbé tudja megemelni az épületet a duzzadó agyag.</p>
+            <div class="slider" style="margin-top:18px"><label for="storeyN">Szintek száma <output id="storeyNo"></output></label><input type="range" id="storeyN" min="1" max="3" step="1" value="1"></div>
           </div>
           <div class="widget" style="margin-top:0">
             <div class="widget-head"><h4>Talpfeszültség kontra duzzadási nyomás</h4></div>
             <div class="widget-body">
               <div class="svgbox" id="storeyChart"></div>
-              <div class="slider" style="margin-top:8px"><label for="storeyN">Szintek száma <output id="storeyNo"></output></label><input type="range" id="storeyN" min="1" max="3" step="1" value="1"></div>
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@
         <p>A térfogatváltozásból származó károk elkerülhetők, ha betartjuk az alábbi tapasztalati szabályokat. Pipáld ki, amit a terved teljesít, és figyeld, hogyan csökken a kockázat.</p>
         <div class="widget">
           <div class="widget-head"><h4>Megtervezted jól a házat?</h4><span class="hint" id="rulesHint"></span></div>
-          <div class="widget-body wgrid">
+          <div class="widget-body wgrid wg-rules">
             <div class="svgbox" id="rulesHouse"></div>
             <div><div class="rules" id="rulesList"></div></div>
           </div>
@@ -210,13 +210,12 @@
         <div class="widget">
           <div class="widget-head"><h4>Lösz szemcseszinten</h4><span class="hint">Kapcsold a feltételeket</span></div>
           <div class="widget-body wgrid">
-            <canvas class="cv" id="loessMicro" width="760" height="440" aria-label="Lösz makropórusos szerkezete"></canvas>
+            <div><canvas class="cv" id="loessMicro" width="760" height="440" aria-label="Lösz makropórusos szerkezete"></canvas><div id="lcVerdict" style="margin-top:14px"></div></div>
             <div class="ctl">
               <label class="toggle"><input type="checkbox" id="lcSoil" checked> Roskadékony talaj (makropórusos lösz)</label>
               <label class="toggle"><input type="checkbox" id="lcLoad" checked> Terhelés (épület, önsúly)</label>
               <label class="toggle"><input type="checkbox" id="lcWater"> Víz (csőtörés, beszivárgás)</label>
               <div class="svgbox" id="vennBox"></div>
-              <div id="lcVerdict"></div>
             </div>
           </div>
         </div>
@@ -257,7 +256,7 @@
 
       <div class="sub">
         <h3>Hogyan védekezzünk? <span class="tag">6 + 5 + 1</span></h3>
-        <div class="two">
+        <div class="two two-cards">
           <div>
             <h4 style="font-size:17px">A károk elleni védekezés</h4>
             <ul class="list">
@@ -362,7 +361,7 @@
       <div class="sub">
         <h3>Tervezési irányelvek</h3>
         <p>Sokban hasonlítanak a roskadékony talajoknál látottakhoz.</p>
-        <div class="cols">
+        <div class="cols cols5">
           <div class="card"><span class="k">1</span><h4>Korlátozott talpfeszültség</h4><p>A talpfeszültség a feltöltés állapotától függően ne haladja meg a 150–200 kPa értéket.</p></div>
           <div class="card"><span class="k">2</span><h4>Vizet távol</h4><p>A vizet távol kell tartani az épülettől: tetővíz, közművek, felszíni víz.</p></div>
           <div class="card"><span class="k">3</span><h4>Azonos vastagság</h4><p>Az alapok alatt közel azonos vastagságú feltöltés maradjon.</p></div>
@@ -376,14 +375,16 @@
         <p>A feltöltések állapotán a roskadékony talajokhoz hasonlóan lehet javítani. Add meg, milyen mélységig kell javítani és hol a talajvíz, és megmutatjuk, melyik módszer jöhet szóba.</p>
         <div class="widget">
           <div class="widget-head"><h4>Javítási módszerek hatásmélysége</h4></div>
-          <div class="widget-body wgrid">
+          <div class="widget-body">
+           <div class="wgrid">
             <div class="svgbox" id="impChart"></div>
             <div class="ctl">
               <div class="slider"><label for="impD">Javítandó vastagság <output id="impDo"></output></label><input type="range" id="impD" min="0.1" max="8" step="0.1" value="2.5"></div>
               <div class="slider"><label for="impGW">Talajvízszint mélysége <output id="impGWo"></output></label><input type="range" id="impGW" min="0.5" max="10" step="0.1" value="3"></div>
               <div class="seg" id="impSeg"></div>
-              <div id="impList" class="rules"></div>
             </div>
+           </div>
+           <div id="impList" class="rules rules3" style="margin-top:18px"></div>
           </div>
         </div>
       </div>
@@ -557,13 +558,13 @@
     <section class="sec" id="tovabb">
       <div class="eyebrow">Hogyan tovább?</div>
       <h2 style="font-size:clamp(26px,3.2vw,38px);font-weight:800;margin-top:8px">Védekezés a káros süllyedések ellen</h2>
-      <p class="muted" style="max-width:70ch;margin-top:10px">A kisebb talpnyomás, az alapsík mélyítése, a talajcsere, a talajszilárdítás, az előterhelés, a rugalmas szerkezet, a helyes építési sorrend és a mélyalapozás részletesen a külön oldalon szerepel.</p>
+      <p class="muted" style="margin-top:10px">A kisebb talpnyomás, az alapsík mélyítése, a talajcsere, a talajszilárdítás, az előterhelés, a rugalmas szerkezet, a helyes építési sorrend és a mélyalapozás részletesen a külön oldalon szerepel.</p>
       <a class="linkcard" id="vedekezesLink" href="#" target="_blank" rel="noopener">
         <svg viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 4l14 6v9c0 9-6 15-14 19C13 34 7 28 7 19v-9z"/><path d="M15 21l4 4 8-9"/></svg>
         <div><b>Védekezés a káros süllyedések ellen</b><span>Interaktív segédanyag a 8 alapvető módszerről</span></div>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8"/></svg>
       </a>
-      <p class="muted" style="max-width:70ch;margin-top:26px">A síkalapokat érő további hatások – rezgés, földrengés, üregnyitás, kimosás és fagy – külön oldalon szerepelnek; ott a duzzadó-zsugorodó agyag is rokon hatásként jelenik meg.</p>
+      <p class="muted" style="margin-top:26px">A síkalapokat érő további hatások – rezgés, földrengés, üregnyitás, kimosás és fagy – külön oldalon szerepelnek; ott a duzzadó-zsugorodó agyag is rokon hatásként jelenik meg.</p>
       <a class="linkcard" href="https://sikalapokaterohatasok.vercel.app" target="_blank" rel="noopener">
         <svg viewBox="0 0 42 42" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 21h6l3-8 5 18 5-24 5 22 4-12 3 4h5"/></svg>
         <div><b>Síkalapokat érő hatások</b><span>Rezgés, földrengés, üregek, kimosás és fagy – interaktív segédanyag</span></div>

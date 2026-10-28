@@ -4,6 +4,7 @@ import { history, sortGame, stats, gas, improve, holme, peatGame, peatBars, sett
 import { quizzes, detective, trueFalse } from './quiz.js';
 import { QUIZ, DETECTIVE, TF } from './data.js';
 import { initSims } from './sim3d.js';
+import { startFormatting } from './guard.js';
 
 // Link of the separate "Védekezés a káros süllyedések ellen" page (set when it is deployed)
 const VEDEKEZES_URL = window.VEDEKEZES_URL || 'https://vedekezesakarossullyedesekellen.vercel.app';
@@ -101,4 +102,5 @@ theme();
   ['loessMicro', loessMicro], ['oedometer', oedometer], ['history', history], ['sortGame', sortGame], ['stats', stats], ['gas', gas], ['improve', improve],
   ['holme', holme], ['peatGame', peatGame], ['peatBars', peatBars], ['settle', settle], ['timeCurve', timeCurve], ['bulb', bulb], ['peatTree', peatTree],
   ['quizzes', quizzes], ['detective', detective], ['trueFalse', trueFalse], ['sims', initSims], ['nav', navigation], ['counts', counts], ['vedekezes', vedekezes]].forEach(([n, f]) => safe(f, n));
+startFormatting();   // sorkizárás + magyar elválasztás + nem törő egységek (formázás skill)
 window.__ready = true;
