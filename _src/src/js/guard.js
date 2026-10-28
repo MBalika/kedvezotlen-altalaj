@@ -2,8 +2,8 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 export const GUARD = (() => {
   const NB = '\u00A0', WJ = '\u2060', NNB = '\u202F', NBH = '\u2011';
   const SKIP = new Set(['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'CODE', 'PRE', 'svg', 'SVG', 'CANVAS', 'SELECT', 'OPTION']);
-  const BLOCK = 'main p, main li, main .note, main .verdict, main .cap, main .tf-stmt, main figcaption, main .fig span, main td, main h3, main h4, footer p, footer li, .hero .lede';
-  const HYPH = 'main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede';
+  const BLOCK = 'main .q-exp, main p, main li, main .note, main .verdict, main .cap, main .tf-stmt, main figcaption, main .fig span, main td, main h3, main h4, footer p, footer li, .hero .lede';
+  const HYPH = 'main .q-head p, main .q-exp, main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede';
   const NOHY = 'sub, sup, code, button, label, output, td, th, .nw, h1, h2, h3, h4, h5, .chip, .mono, .eyebrow, .k, .tag, .pill';
   const TERMS = ['térfogatváltozó agyag', 'térfogatváltozó agyagok', 'térfogatváltozó talaj', 'roskadékony talaj', 'roskadékony lösz', 'roskadékony talajok', 'szerves talaj', 'szerves talajok', 'szerves iszap', 'meteorológiai határmélység', 'duzzadási nyomás', 'plasztikus index', 'plasztikussági index', 'lineáris zsugorodás', 'fajlagos duzzadás', 'roskadási tényező', 'egyenlőtlen süllyedés', 'egyenlőtlen süllyedések', 'kövér agyag', 'teljes alápincézés', 'részleges alápincézés', 'talajvízszint', 'teherbíró réteg', 'mélyalapozás', 'talajcsere', 'előterhelés', 'másodlagos konszolidáció', 'konszolidációs idő', 'nagy víztartalom', 'Holme Fen', 'Védekezés a káros süllyedések ellen'];
   const termRx = new RegExp('(' + TERMS.sort((a, b) => b.length - a.length).map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '[ \\u00A0]')).join('|') + ')', 'giu');
@@ -51,7 +51,7 @@ export const GUARD = (() => {
     const full = nodes.map(n => n.nodeValue).join(''); const fs = parseFloat(getComputedStyle(el).fontSize) || 16; const cpl = el.clientWidth > 40 ? el.clientWidth / (fs * 0.52) : 70;
     const bind = bindPositions(full, cpl);
     if (bind.size) { let off = 0; for (const n of nodes) { const v = n.nodeValue; let o = '', ch = false; for (let i = 0; i < v.length; i++) { if (v[i] === ' ' && bind.has(off + i)) { o += NB + WJ; ch = true; } else o += v[i]; } off += v.length; if (ch) n.nodeValue = o; } }
-    if (hyph && el.matches(HYPH)) { for (const n of textNodes(el)) { if (n.parentElement && n.parentElement.closest(NOHY) && n.parentElement.closest(NOHY) !== el) continue; const parts = n.nodeValue.split(/( )/); let ch = false;
+    if (hyph && el.matches(HYPH)) { for (const n of textNodes(el)) { const nh = n.parentElement && n.parentElement.closest(NOHY); if (nh && nh !== el && el.contains(nh)) continue; const parts = n.nodeValue.split(/( )/); let ch = false;
       for (let i = 0; i < parts.length; i += 2) { const t = parts[i]; if (!t || !/\p{L}{6,}/u.test(t)) continue; const clean = t.replace(/[\u00AD\u200B]/g, ''); let hh;
         if (t.includes(WJ)) { const vis = clean.replace(/[\u2060]/g, ''); if (vis.length <= 16 || /^\(.*\)[.,;:!?]*$/.test(vis)) continue; const k = Math.max(clean.lastIndexOf('\u00A0'), clean.lastIndexOf(WJ)); const tail = clean.slice(k + 1); if (!/\p{L}{6,}/u.test(tail)) continue; hh = clean.slice(0, k + 1) + hyph(tail); } else hh = hyph(clean);
         hh = hh.replace(/\u200B/g, ''); if (hh !== t) { parts[i] = hh; ch = true; } } if (ch) n.nodeValue = parts.join(''); } }
@@ -67,17 +67,22 @@ export const GUARD = (() => {
 })();
 
 /* lyukas sorkizárt blokk → balra zárt tartalék (.rag): keskeny dobozban, ha a szóközök túl szélesek */
-
-/* lyukas sorkizárt blokk → balra zárt tartalék (.rag): keskeny dobozban, ha a szóközök túl szélesek */
 export const RAG = (() => {
-  const SEL = 'main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede';
-  function check(el) {
-    el.classList.remove('rag'); const cs = getComputedStyle(el); if (cs.textAlign !== 'justify' || cs.display === 'none') return;
-    const fs = parseFloat(cs.fontSize); const all = document.createRange(); all.selectNodeContents(el); const rs = all.getClientRects(); if (rs.length < 2) return;
+  const SEL = 'main .q-head p, main .q-exp, main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede';
+  function holey(el, fs) {
+    const all = document.createRange(); all.selectNodeContents(el); const rs = all.getClientRects(); if (rs.length < 2) return false;
     const lastTop = Math.max(...Array.from(rs).map(r => r.top)); let big = 0, mid = 0;
     const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n;
-    while ((n = w.nextNode())) { const t = n.nodeValue; for (let i = 0; i < t.length; i++) { if (t[i] !== ' ' && t[i] !== '\u00A0') continue; const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect(); if (!b.width || b.top >= lastTop - 2) continue; if (b.width > fs * 1.15) big++; else if (b.width > fs * 0.9) mid++; } }
-    if (big || mid >= 2) el.classList.add('rag');
+    while ((n = w.nextNode())) { const t = n.nodeValue; for (let i = 0; i < t.length; i++) { if (t[i] !== ' ' && t[i] !== '\u00A0') continue; const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect(); if (!b.width || b.top >= lastTop - 2) continue; if (b.width > fs * 1.15) big++; else if (b.width > fs * 1.0) mid++; } }
+    return big > 0 || mid >= 2;   /* egy 1,15 em-nél szélesebb vagy két 1 em-nél szélesebb szóköz = lyuk */
+  }
+  /* 1. lépés: text-wrap: pretty (szép utolsó sor); ha lyukas, 2. lépés: sima tördelés (.twr) – sorkizárt marad;
+     csak ha így is lyukas, 3. lépés: balra zárt tartalék (.rag) */
+  function check(el) {
+    el.classList.remove('rag', 'twr'); const cs = getComputedStyle(el); if (cs.textAlign !== 'justify' || cs.display === 'none') return;
+    const fs = parseFloat(cs.fontSize); if (!holey(el, fs)) return;
+    el.classList.add('twr'); if (!holey(el, fs)) return;
+    el.classList.remove('twr'); el.classList.add('rag');
   }
   const run = () => $$(SEL).forEach(e => { if (e.offsetParent) check(e); });
   let tm = 0; const later = (d) => { clearTimeout(tm); tm = setTimeout(run, d); };
@@ -88,5 +93,6 @@ export const RAG = (() => {
 export function startFormatting() {
   try { GUARD.start(); } catch (e) { console.error('Formázás-őr hiba', e); }
   setTimeout(() => RAG.run(), 500);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => RAG.later(60));   /* a webfont betöltése után a sorok újratördelődnek */
   const iv = setInterval(() => { if (window.__fmtHyphReady) { clearInterval(iv); requestAnimationFrame(() => RAG.run()); } }, 100); setTimeout(() => clearInterval(iv), 10000);
 }

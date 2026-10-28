@@ -21,7 +21,7 @@ function buildQuiz(box) {
   });
   const reset = h('button', { class: 'btn small', type: 'button' }, 'Újrakezdés');
   reset.addEventListener('click', () => buildQuiz(box));
-  function upd() { score.innerHTML = ''; score.append(h('span', {}, `${right} / ${qs.length} helyes${done === qs.length && right === qs.length ? ' · Hibátlan!' : ''}`), h('div', { class: 'bar' }, h('i', { style: `width:${right / qs.length * 100}%` })), done === qs.length ? reset : null); }
+  function upd() { score.innerHTML = ''; score.append(h('span', {}, `${right} / ${qs.length} helyes${done === qs.length && right === qs.length ? ' · Hibátlan!' : ''}`), h('div', { class: 'bar' }, h('i', { style: `width:${right / qs.length * 100}%` })), ...(done === qs.length ? [reset] : [])); }
   upd(); box.append(score);
 }
 

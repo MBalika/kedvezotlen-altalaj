@@ -264,7 +264,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .q + .q { margin-top: 12px; }
 .q-head { display: flex; gap: 10px; align-items: baseline; }
 .q-head .n { font-family: var(--f-mono); font-size: 12px; color: var(--acc); flex: none; }
-.q-head p { font-weight: 700; font-size: 16.5px; }
+.q-head p { font-weight: 700; font-size: 16.5px; flex: 1 1 auto; min-width: 0; }
 .q-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 12px; }
 .q-opts button { text-align: left; border: 1.5px solid var(--line2); background: var(--surface); border-radius: 11px; padding: 10px 13px; font-size: 15px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
 .q-opts button:hover:not(:disabled) { border-color: var(--acc); }
@@ -347,11 +347,15 @@ footer .fin { max-width: 1400px; margin: 0 auto; padding-left: max(16px, env(saf
 .reveal { opacity: 1; transform: none; }
 
 /* ---------------------------------------------------------------- formázás (sorkizárás + magyar elválasztás + nem törő egységek) */
-main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede {
+main .q-head p, main .q-exp, main .sub > p, main .prose p, main .sec-head .lede, main ul.list li, main .note, main .card p, main .det-card p, main .verdict, main .video-info p, main .cap, main .tf-stmt, main .tree-step p, main p.muted, main .widget-body > p, main .sim-side p, footer p, .hero .lede {
   text-align: justify; text-justify: inter-word; hyphens: manual; -webkit-hyphens: manual; text-wrap: pretty;
 }
 h1, h2, h3, h4, .btn, .chip, label, button, td, th, .eyebrow, .mono { hyphens: none; -webkit-hyphens: none; }
 .nw { white-space: nowrap; hyphens: none; }
+main .card p.mono { text-align: left; }
+#peatGame > button.card { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; }   /* a minták egy vonalban kezdődnek */
+#peatGame > button.card > p.mono { margin-top: auto !important; padding-top: 8px; }   /* a γ/w sor a kártyák alján, egy vonalban */   /* számkijelző-sor (γ, w), nem folyószöveg */
+main .twr, footer .twr { text-wrap: wrap !important; }
 main .rag, footer .rag { text-align: left !important; }
 
 /* ---------------------------------------------------------------- elrendezés: kitöltött, kiegyensúlyozott blokkok (formázás skill 5.) */
@@ -360,9 +364,16 @@ main .rag, footer .rag { text-align: left !important; }
 .two-cards > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 20px; }
 .two-cards > div > ul.list { margin-top: 10px; }
 .cols5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.cols-loess { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.1fr) minmax(0, 1fr); }   /* a hosszabb leírás szélesebb oszlopot kap */
+@media (max-width: 860px) { .cols-loess { grid-template-columns: minmax(0, 1fr); } }
 .wg-rules { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); }
 .wg-rules .rules { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .rules3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 1100px) { .cols5 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .rules3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1100px) { .cols5 { grid-template-columns: repeat(6, minmax(0, 1fr)); } .cols5 > * { grid-column: span 2; } .cols5 > :nth-child(n+4) { grid-column: span 3; }   /* 3 + 2, teli sorok */
+  .rules3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rules3 > :last-child:nth-child(odd) { grid-column: 1 / -1; } }
 @media (max-width: 860px) { .wg-rules { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 640px) { .cols5, .rules3, .wg-rules .rules { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { .cols5, .rules3, .wg-rules .rules { grid-template-columns: minmax(0, 1fr); } .cols5 > *, .cols5 > :nth-child(n+4) { grid-column: auto; }
+  /* mobilon a fejezetszám a cím mellett marad, a bevezető (lede) a teljes szélességet kapja */
+  .sec-head { row-gap: 0; } .sec-head > div:last-child { display: contents; } .sec-head > div:last-child > * { grid-column: 2; } .sec-head .sec-num { grid-row: 1 / span 2; } .sec-head > div:last-child > .lede { grid-column: 1 / -1; }
+  /* kvízkérdés: a sorszám úszik, a kérdés a teljes kártyaszélességet kapja */
+  .q-head { display: block; } .q-head .n { float: left; margin: 3px 10px 0 0; } .q-head p { display: block; } }
