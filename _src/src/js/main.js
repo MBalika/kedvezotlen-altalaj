@@ -13,6 +13,7 @@ const VIDEOS = {
   1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261028', poster: 'assets/p1.jpg?v=20261028', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
   2: { file: 'videok/2_Roskadekony_talajok_video.html?v=20261028', poster: 'assets/p2.jpg?v=20261028', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
   3: { file: 'videok/3_Feltoltesek_video.html?v=20261028', poster: 'assets/p3.jpg?v=20261028', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
+  5: { file: 'videok/5_Alapmegerosites_terfogatvaltozo_agyagon_video.html?v=20261029', poster: 'assets/p5.jpg?v=20261029', dur: '3:50', title: 'Alapmegerősítés térfogatváltozó agyagon', kicker: 'Animáció · kiegészítő rész', parts: ['Mi történik a ház alatt?', 'Az elv: a teher az aktív zóna alá', 'Szakaszos alábetonozás', 'Mikrocölöp tűgerendával', 'Sajtolt acélcsöves cölöp', 'Vízelvezetés, gyökérgát'] },
   4: { file: 'videok/4_Szerves_talajok_video.html?v=20261028', poster: 'assets/p4.jpg?v=20261028', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
 };
 
@@ -22,7 +23,7 @@ function videos() {
     const poster = h('button', { class: 'video-poster', type: 'button', 'aria-label': 'Animáció lejátszása: ' + v.title, style: `background-image:url('${v.poster}')` },
       h('span', { class: 'play', html: '<svg viewBox="0 0 24 24" fill="#111"><path d="M6 4l14 8-14 8z"/></svg>' }), h('span', { class: 'dur' }, v.dur));
     poster.addEventListener('click', () => openVideo(v));
-    const info = h('div', { class: 'video-info' }, h('span', { class: 'k' }, 'Animáció · ' + el.dataset.video + '. rész'), h('h4', {}, v.title),
+    const info = h('div', { class: 'video-info' }, h('span', { class: 'k' }, v.kicker || ('Animáció · ' + el.dataset.video + '. rész')), h('h4', {}, v.title),
       h('p', {}, '3D animációs magyarázó videó narrációs feliratokkal. Teljes képernyőn is nézhető.'), h('ol', {}, ...v.parts.map(p => h('li', {}, p))));
     el.append(poster, info);
   });
