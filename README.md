@@ -32,3 +32,8 @@ cp dist/index.html ../index.html
 - `src/js/` – interaktív elemek (`widgets1.js`, `widgets2.js`), 3D szimulátor (`sim3d.js`), kvízek (`data.js`, `quiz.js`)
 - A „Védekezés” oldal címe a `src/js/main.js` elején (`VEDEKEZES_URL`).
 - `src/js/guard.js` – formázás: sorkizárás, magyar elválasztás, nem törő egységek (szám + mértékegység, névelő, szakkifejezés), lyukas sorkizárásnál balra zárt tartalék (`.rag`)
+
+
+## Videók zenéje
+
+A videók zenéje (2026-11) valódi hangszerek felvett mintáiból készült – zongora, vonósok, akusztikus és elektromos gitár, basszusgitár, fúvósok, akusztikus dob –, ütemre igazítva a képhez; a gép- és effekthangok a korábbi hangkönyvtárból vannak. Hangminták: Salamander Grand Piano (Alexander Holm, CC BY 3.0); tonejs-instruments (nbrosowsky; VSCO2, Karoryfer, Iowa, Freesound – CC BY 3.0); Tone.js dobminták.
