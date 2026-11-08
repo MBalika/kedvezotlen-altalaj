@@ -1,0 +1,87 @@
+{
+ "key": 53,
+ "seed": 12,
+ "sections": [
+  [
+   0,
+   6,
+   "intro"
+  ],
+  [
+   6,
+   9,
+   "title"
+  ],
+  [
+   9,
+   15,
+   "half"
+  ],
+  [
+   15,
+   23,
+   "grooveA"
+  ],
+  [
+   23,
+   32,
+   "grooveA2"
+  ],
+  [
+   32,
+   43,
+   "drive"
+  ],
+  [
+   43,
+   50,
+   "grooveB"
+  ],
+  [
+   50,
+   63,
+   "drive"
+  ],
+  [
+   63,
+   71,
+   "grooveA"
+  ],
+  [
+   71,
+   74,
+   "title"
+  ],
+  [
+   74,
+   77,
+   "outro"
+  ]
+ ],
+ "transitions": {
+  "risers": [
+   [
+    3.75,
+    1
+   ],
+   [
+    40.0,
+    1
+   ]
+  ],
+  "impacts": [
+   4.75,
+   6.0,
+   41.0,
+   59.0
+  ],
+  "downs": [],
+  "revcym": []
+ },
+ "live": {
+  "style": "brassy",
+  "seed": 12,
+  "lead": "trumpet",
+  "key": 53
+ }
+}

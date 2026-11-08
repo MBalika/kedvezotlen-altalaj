@@ -28242,7 +28242,10 @@ If you want to offset all timestamps of a track such that the first one is zero,
       const b = new Mesh(new CylinderGeometry(0.08, 0.08, 1.9, 20), pipeMat);
       b.rotation.z = Math.PI / 2;
       b.position.set(-5.05, -0.9, 0);
-      leakPipe.add(a, b);
+      const c = new Mesh(new CylinderGeometry(0.08, 0.08, 0.82, 20), pipeMat);
+      c.rotation.z = Math.PI / 2;
+      c.position.set(-6.4, -0.9, 0);
+      leakPipe.add(a, b, c);
     }
     leakPipe.visible = false;
     scene.add(leakPipe);
@@ -28493,6 +28496,7 @@ If you want to offset all timestamps of a track such that the first one is zero,
     SU.uMid.value = inDef ? smooth(seg(t, 146.6, 147.2)) : 0;
     R.houseB.parts.gutters.visible = inDef && t > 122.2;
     R.leakPipe.visible = inn(t, "field") && t > 61.5;
+    R.leakPipe.children[2].visible = t < 64;
     R.puddle.group.visible = inn(t, "hookB");
     if (inn(t, "hookB")) {
       const pk = smooth(seg(t, 6.6, 9.5));

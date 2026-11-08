@@ -51,6 +51,10 @@ s = rep(s, 'L(proj(10.5, -0.72, 0.1), "Z\\xC1RT CSATORNA", da, { dx: 60, dy: 120
         'L(proj(10.5, -0.66, 0.1), "Z\\xC1RT CSATORNA", da, { dx: 60, dy: 120, color: C.water });')
 s = rep(s, 'const p0 = proj(6.6, -0.6, 0.1), p1 = proj(12.8, -0.78, 0.1);', 'const p0 = proj(6.6, -0.6, 0.1), p1 = proj(12.8, -0.69, 0.1);')
 s = rep(s, 'L(proj(5.66, 2.2, -0.1), "LEFOLY\\xD3",', 'L(proj(5.1, 1.7, 0.06), "LEFOLY\\xD3",')
+
+# ---------------- 1:01–1:04 a bekötő cső a csőtörés előtt folyamatos
+s = rep(s, "leakPipe.add(a, b);", "const c = new Mesh(new CylinderGeometry(0.08, 0.08, 0.82, 20), pipeMat);\n      c.rotation.z = Math.PI / 2;\n      c.position.set(-6.4, -0.9, 0);\n      leakPipe.add(a, b, c);")
+s = rep(s, 'R.leakPipe.visible = inn(t, "field") && t > 61.5;', 'R.leakPipe.visible = inn(t, "field") && t > 61.5;\n    R.leakPipe.children[2].visible = t < 64;')
 open(out, 'w', encoding='utf-8').write(s)
 print('ok', len(s))
 
