@@ -58,7 +58,12 @@ export function compare() {
 export function clayMicro() {
   const cv = $('#clayMicro'); if (!cv) return;
   const g = cv.getContext('2d'); const W = cv.width, H = cv.height;
-  const M = { kao: { name: 'Kaolinit', d0: 0.72, dd: 0.0, sw: 0.06, col: '#c9b48e' }, ill: { name: 'Illit', d0: 1.0, dd: 0.08, sw: 0.18, col: '#b49a76' }, mon: { name: 'Montmorillonit', d0: 0.96, dd: 1.05, sw: 0.42, col: '#a7836a' } };
+  const M = {
+    kao: { name: 'Kaolinit', d0: 0.72, dd: 0.0, sw: 0.06, n: 6, tot: false, desc: 'merev, H-kötések tartják össze' },
+    ill: { name: 'Illit', d0: 1.0, dd: 0.08, sw: 0.18, n: 4, tot: true, desc: 'a K⁺ ionok összekötik a rétegeket' },
+    mon: { name: 'Montmorillonit', d0: 0.96, dd: 1.05, sw: 0.42, n: 4, tot: true, desc: 'a víz szétfeszíti a rétegeket' }
+  };
+  const TET = ['#F6CB72', '#C98E2E'], OCT = ['#49CBA8', '#1E8A6E'], OCT_B = '#17604d', WAT = '#F5454A', CAT = '#B88CFF', KION = '#FF8FB1';
   let mineral = 'mon', w = 0.35, cur = 0.35, visible = false;
   segmented($('#mineralSeg'), [['kao', 'Kaolinit'], ['ill', 'Illit'], ['mon', 'Montmorillonit']], 'mon', (k) => { mineral = k; upd(); });
   bindRange('microW', (v) => { w = v / 100; upd(); }, (v) => v + '%');
@@ -67,38 +72,85 @@ export function clayMicro() {
     $('#microD').textContent = fmt(d, 2) + ' nm';
     $('#microV').textContent = '+' + fmt(m.sw * w * 100, 0) + '%';
   }
-  const rnd = mulberry32(5); const mol = Array.from({ length: 260 }, () => [rnd(), rnd(), rnd() * 6.28]);
+  const rnd = mulberry32(5); const mol = Array.from({ length: 400 }, () => [rnd(), rnd(), rnd() * 6.28]);
+  const X0 = 60, WD = 520, TW = 20, HT = 13, HO = 16;
+  function ball(x, y, r, col) {
+    const gr = g.createRadialGradient(x - r * 0.35, y - r * 0.35, r * 0.1, x, y, r);
+    gr.addColorStop(0, '#ffffff'); gr.addColorStop(0.35, col); gr.addColorStop(1, 'rgba(0,0,0,0.5)');
+    g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+  }
+  function water(x, y, s, rot) {
+    for (const sg of [-1, 1]) { const an = rot + sg * 0.92; ball(x + Math.sin(an) * s * 1.05, y - Math.cos(an) * s * 1.05, s * 0.6, '#f4f4f4'); }
+    ball(x, y, s, WAT);
+  }
+  function tetRow(y, apexDown, shift) {
+    const gr = g.createLinearGradient(0, y, 0, y + HT); gr.addColorStop(0, apexDown ? TET[0] : TET[1]); gr.addColorStop(1, apexDown ? TET[1] : TET[0]);
+    for (let x = X0 + shift; x + TW <= X0 + WD + 0.5; x += TW) {
+      g.beginPath();
+      if (apexDown) { g.moveTo(x, y); g.lineTo(x + TW, y); g.lineTo(x + TW / 2, y + HT); }
+      else { g.moveTo(x, y + HT); g.lineTo(x + TW, y + HT); g.lineTo(x + TW / 2, y); }
+      g.closePath(); g.fillStyle = gr; g.fill();
+      g.strokeStyle = 'rgba(255,244,215,0.9)'; g.lineWidth = 1.1; g.stroke();
+      g.beginPath(); g.moveTo(x + TW / 2, apexDown ? y + HT : y); g.lineTo(x + TW * 0.62, apexDown ? y + 3 : y + HT - 3); g.strokeStyle = 'rgba(110,70,10,0.35)'; g.stroke();
+    }
+  }
+  function octRow(y) {
+    for (let pass = 0; pass < 2; pass++) {
+      const off = pass ? 0 : TW / 2;
+      for (let x = X0 + off; x + TW <= X0 + WD + 0.5; x += TW) {
+        g.beginPath(); g.moveTo(x + TW / 2, y); g.lineTo(x + TW, y + HO / 2); g.lineTo(x + TW / 2, y + HO); g.lineTo(x, y + HO / 2); g.closePath();
+        if (pass) { const gr = g.createLinearGradient(x, y, x + TW, y + HO); gr.addColorStop(0, OCT[0]); gr.addColorStop(1, OCT[1]); g.fillStyle = gr; }
+        else g.fillStyle = OCT_B;
+        g.fill();
+        g.strokeStyle = pass ? 'rgba(215,255,242,0.9)' : 'rgba(215,255,242,0.35)'; g.lineWidth = 1.1; g.stroke();
+      }
+    }
+  }
   function draw(t) {
     cur += (w - cur) * 0.08;
     const m = M[mineral];
     const ink = cssVar('--ink'), muted = cssVar('--muted');
     g.clearRect(0, 0, W, H);
-    const n = 6, plate = 16;
-    const gap = 6 + (m.dd > 0.5 ? 58 : m.dd > 0 ? 14 : 2) * cur + (mineral === 'mon' ? 6 : 0);
-    const total = n * plate + (n - 1) * gap; const y0 = (H - total) / 2 + 10;
-    // swelling envelope
-    g.fillStyle = 'rgba(92,194,242,0.08)'; g.fillRect(60, y0 - 8, W - 200, total + 16);
-    for (let i = 0; i < n; i++) {
-      const y = y0 + i * (plate + gap);
-      // tetrahedral-octahedral sheet look
-      const gr = g.createLinearGradient(0, y, 0, y + plate); gr.addColorStop(0, m.col); gr.addColorStop(0.5, '#e8dcc6'); gr.addColorStop(1, m.col);
-      g.fillStyle = gr; roundRect(g, 70, y, W - 220, plate, 6); g.fill();
-      g.strokeStyle = 'rgba(0,0,0,0.25)'; g.lineWidth = 1; g.stroke();
-      for (let k = 0; k < 26; k++) { g.fillStyle = 'rgba(0,0,0,0.18)'; g.beginPath(); g.arc(84 + k * 20, y + plate / 2, 2, 0, 7); g.fill(); }
-      if (i < n - 1 && gap > 4) {
-        // water molecules in the interlayer
-        const cnt = Math.floor(gap * 1.6);
-        for (let k = 0; k < cnt; k++) { const mm = mol[(k + i * 37) % mol.length]; const x = 74 + mm[0] * (W - 228); const yy = y + plate + 3 + mm[1] * (gap - 6) + Math.sin(t * 0.002 + mm[2]) * 1.5;
-          g.fillStyle = '#4aa8de'; g.beginPath(); g.arc(x, yy, 3.2, 0, 7); g.fill(); g.fillStyle = '#e8f6ff'; g.beginPath(); g.arc(x - 3, yy - 2, 1.5, 0, 7); g.arc(x + 3, yy - 2, 1.5, 0, 7); g.fill(); }
+    const unit = m.tot ? 2 * HT + HO : HT + HO;
+    const gap = mineral === 'kao' ? 5 + 2 * cur : mineral === 'ill' ? 11 + 4 * cur : 9 + 46 * cur;
+    const total = m.n * unit + (m.n - 1) * gap; const y0 = (H - total) / 2 + 8;
+    g.fillStyle = 'rgba(92,194,242,0.07)'; g.fillRect(X0 - 10, y0 - 8, WD + 20, total + 16);
+    for (let i = 0; i < m.n; i++) {
+      const y = y0 + i * (unit + gap);
+      if (m.tot) { tetRow(y + HT + HO, false, 0); octRow(y + HT); tetRow(y, true, 0); }
+      else { octRow(y + HT); tetRow(y, true, 0); }
+      if (i === m.n - 1) break;
+      const yb = y + unit, ym = yb + gap / 2;
+      if (mineral === 'kao') {
+        g.strokeStyle = 'rgba(92,194,242,0.9)'; g.lineWidth = 1.4; g.setLineDash([2, 2]);
+        for (let x = X0 + 10; x < X0 + WD; x += 20) { g.beginPath(); g.moveTo(x, yb + 1); g.lineTo(x, yb + gap - 1); g.stroke(); }
+        g.setLineDash([]);
+      } else if (mineral === 'ill') {
+        for (let x = X0 + TW; x < X0 + WD; x += 2 * TW) ball(x, ym, 5, KION);
+      } else {
+        const rows = Math.max(1, Math.min(4, Math.floor((gap - 4) / 11)));
+        const fill = Math.min(1, (gap - 9) / 10 + 0.15);
+        const per = 24;
+        for (let r = 0; r < rows; r++) for (let k = 0; k < per; k++) {
+          const mm = mol[(k + r * 31 + i * 97) % mol.length];
+          if (mm[1] > fill + 0.15) continue;
+          const x = X0 + 8 + (k + 0.5 * (r % 2) + (mm[0] - 0.5) * 0.4) * (WD - 16) / per;
+          const yy = yb + (r + 0.5) * gap / rows + Math.sin(t * 0.002 + mm[2]) * 1.2;
+          if ((k + r * 5) % 6 === 3) ball(x, yy, 5, CAT); else water(x, yy, 3.6, mm[2] + t * 0.0006);
+        }
       }
     }
-    // dimension
-    g.strokeStyle = ink; g.lineWidth = 2; g.beginPath(); g.moveTo(W - 120, y0); g.lineTo(W - 120, y0 + total); g.moveTo(W - 128, y0); g.lineTo(W - 112, y0); g.moveTo(W - 128, y0 + total); g.lineTo(W - 112, y0 + total); g.stroke();
-    g.fillStyle = ink; g.font = '700 16px Archivo, sans-serif'; g.fillText('térfogat', W - 104, y0 + total / 2);
-    g.fillStyle = muted; g.font = '500 14px "IBM Plex Mono", monospace'; g.fillText(m.name.toLowerCase() + ' · ' + (m.dd > 0.5 ? 'duzzadó rácsközök' : m.dd > 0 ? 'részben kötött K⁺' : 'merev, H-kötések'), 70, H - 18);
-    g.fillStyle = '#4aa8de'; g.beginPath(); g.arc(78, 22, 4, 0, 7); g.fill(); g.fillStyle = muted; g.fillText('vízmolekula', 90, 27);
+    g.strokeStyle = ink; g.lineWidth = 2; g.beginPath(); g.moveTo(W - 118, y0); g.lineTo(W - 118, y0 + total); g.moveTo(W - 126, y0); g.lineTo(W - 110, y0); g.moveTo(W - 126, y0 + total); g.lineTo(W - 110, y0 + total); g.stroke();
+    g.fillStyle = ink; g.font = '700 16px Archivo, sans-serif'; g.fillText('térfogat', W - 102, y0 + total / 2 + 5);
+    g.font = '500 14px "IBM Plex Mono", monospace'; g.fillStyle = muted; g.fillText(m.name.toLowerCase() + ' · ' + m.desc, X0, H - 14);
+    let lx = X0; const ly = 22;
+    const leg = (draw1, txt) => { draw1(lx + 8, ly); g.fillStyle = muted; g.font = '500 13px "IBM Plex Mono", monospace'; g.fillText(txt, lx + 20, ly + 4); lx += 34 + g.measureText(txt).width; };
+    leg((x, y) => { g.beginPath(); g.moveTo(x - 7, y + 6); g.lineTo(x + 7, y + 6); g.lineTo(x, y - 7); g.closePath(); g.fillStyle = TET[0]; g.fill(); }, 'tetraéder');
+    leg((x, y) => { g.beginPath(); g.moveTo(x, y - 8); g.lineTo(x + 7, y); g.lineTo(x, y + 8); g.lineTo(x - 7, y); g.closePath(); g.fillStyle = OCT[0]; g.fill(); }, 'oktaéder');
+    if (mineral === 'mon') { leg((x, y) => water(x, y, 4, 0), 'víz'); leg((x, y) => ball(x, y, 5, CAT), 'kation'); }
+    if (mineral === 'ill') leg((x, y) => ball(x, y, 5, KION), 'K⁺ ion');
+    if (mineral === 'kao') leg((x, y) => { g.strokeStyle = 'rgba(92,194,242,0.9)'; g.setLineDash([2, 2]); g.beginPath(); g.moveTo(x, y - 7); g.lineTo(x, y + 7); g.stroke(); g.setLineDash([]); }, 'H-kötés');
   }
-  function roundRect(c, x, y, w2, h2, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w2, y, x + w2, y + h2, r); c.arcTo(x + w2, y + h2, x, y + h2, r); c.arcTo(x, y + h2, x, y, r); c.arcTo(x, y, x + w2, y, r); c.closePath(); }
   onVisible(cv, (v) => { visible = v; if (v) loop(); });
   function loop(t = 0) { if (!visible) return; draw(t); requestAnimationFrame(loop); }
   draw(0);
