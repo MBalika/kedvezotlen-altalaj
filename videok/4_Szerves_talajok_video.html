@@ -23444,7 +23444,7 @@ vec3 deformP(vec3 p){
     return g;
   }
   function foliageMaterial(tex) {
-    const m = new MeshStandardMaterial({ map: tex, alphaTest: 0.42, alphaToCoverage: true, side: DoubleSide, vertexColors: true, roughness: 0.78, metalness: 0 });
+    const m = new MeshStandardMaterial({ map: tex, alphaTest: 0.42, side: DoubleSide, vertexColors: true, roughness: 0.78, metalness: 0 });
     m.onBeforeCompile = (sh) => {
       Object.assign(sh.uniforms, TU2);
       sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nuniform float uWind, uLeafAmt; attribute float rnd; varying float vRnd;").replace("#include <begin_vertex>", `#include <begin_vertex>
@@ -23454,7 +23454,7 @@ vec3 deformP(vec3 p){
         transformed.z += cos(uWind * 1.1 + position.y * 0.31 + position.x) * 0.008 * hh;
         if (rnd > uLeafAmt) transformed *= 0.0;`);
       sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nuniform vec3 uLeaf; varying float vRnd;").replace("#include <color_fragment>", `#include <color_fragment>
-        diffuseColor.rgb *= uLeaf * 2.1 * (0.85 + 0.3 * vRnd);`).replace("#include <normal_fragment_begin>", ShaderChunk.normal_fragment_begin.replace("normal *= faceDirection;", ""));
+        diffuseColor.rgb *= uLeaf * 2.1 * (0.85 + 0.3 * vRnd);`).replace("#include <alphatest_fragment>", "#ifdef USE_MAP\n      { vec2 dd = fwidth(vMapUv) * vec2(textureSize(map, 0)); diffuseColor.a *= 1.0 + 0.25 * max(0.0, log2(max(max(dd.x, dd.y), 1e-4))); }\n      #endif\n      #include <alphatest_fragment>").replace("#include <normal_fragment_begin>", ShaderChunk.normal_fragment_begin.replace("normal *= faceDirection;", ""));
     };
     m.customProgramCacheKey = () => "leafcards";
     return m;
