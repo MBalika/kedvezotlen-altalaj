@@ -1,0 +1,74 @@
+a5ba919	Kaolinite
+f032165	Illite
+8612926	Montmorillonite
+d7773a5	Quartz
+67525d1	Because less concrete is needed
+0bc179b	Rigidly cast into the wall
+6889283	Only below freezing point
+543da08	Above 100 MPa
+2a00c45	Nothing
+4f1ac03	organic soil
+697919c	organic soils
+bfecced	organic silt
+f0d6661	plasticity index
+d6839d1	soil replacement
+0501cdf	Correct. 
+72e439e	Organic soil
+d36df9d!	${right} / ${qs.length} correct${done === qs.length && right === qs.length ? ' · Hibátlan!' : ''}
+bf5d941!	${right} / ${DETECTIVE.length} cases solved
+21f4bb4!	${right} / ${items.length} correct
+7165d69	Correct! 
+6888643	True.
+1337f76	False.
+df12966	${ok} correct so far
+2306d01	True
+e7676db	False
+6f749fd	no tree
+b136299	 storeys
+ecbc310	Material
+744cb39	Slag, ash
+4cef9a2	none
+bfd4a7c	Soil lab: 
+e15a3f9	Left corner
+cf4a5bc	Right corner
+c859805	natural ground
+eab6db6	swells · shrinks
+a6022e3	When does it appear?
+33f9a0d	How do I recognise it?
+7722067	cation
+a673553	K⁺ ion
+b848fb9	Silt
+7d4e195	critical
+2dd5252	OK
+5f56067	August
+c90ef7b	September
+982aa9d	November
+c35b072	December
+ba6d20d	mild
+4980419	high
+bfa805e	low
+cae8d76	SOIL
+42ac5c8	%.
+248a8a3	slag, ash
+175c8c5	Floors
+4fd91c4	Structural elements
+909873a	 vol%
+d979f73	basement
+cfce836	Plate compactor
+52aac88	Vibratory roller
+d1b63c0	Displacement
+ad61405	suitable
+18f4804	not suitable
+d1591f7	clay
+9f587c6	1851 ground level
+a914a89	 sample
+3e73d08	Sand
+cb21e2d	1 day
+efbaf7e	sand: fast, small
+37beb51	small
+dfe0c76	large
+307a73c	Yes
+2319ab6	No
+eb89001	Thick
+8511957	Recommendation
+7960755!	only effective down to ${fmt(b, 1)} m

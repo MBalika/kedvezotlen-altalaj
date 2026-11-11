@@ -1,0 +1,120 @@
+91d12f2	Careful design and construction of service pipes, using protective sleeves.
+c479c11	Watertight floor in wet rooms on the lowest level.
+62f9724	A cast-in-place reinforced concrete ring beam and slab at every floor, designed for wall settlement.
+a527474	Reinforced strip, continuous or grillage foundation.
+de1819a	For loads over a large area (e.g. a hall): ground improvement
+b3b3181	Surface compaction with dropped tamping plates (3–5 tonnes, dropped from 3–5 m).
+f938946	Deep compaction (vibroflotation).
+94b90dc	Soil stabilisation, for example with sodium silicate.
+a6551f0	Heat treatment, soil burning (abandoned for environmental reasons).
+985ad95	Flooding + preloading: collapse is forced in advance.
+c16e5b8	<b class="lbl">During construction</b>After excavation, foundation trenches and pits must not get soaked! In rainy weather concreting must start straight away, or the soaked soil below foundation level must be removed.
+416eccb	The waste of the past under the house
+c7183f5	Made ground
+9f55683	The growth of towns and industrial sites has created more and more filled ground. Brickworks pits, gravel and sand pits, castle moats, slag heaps, refuse tips and low-lying areas have been filled. In Budapest, a huge amount of rubble had to be disposed of after the Second World War.
+4611f9e	The history of a plot <span class="tag">layer by layer</span>
+9069fad	Fills differ in material and age, and accordingly have different properties. Click through the history of an imaginary plot.
+b8a7936	From pit to building plot
+1ddf561	Step through the decades
+d297a53	How dangerous is it? <span class="tag">classify</span>
+0c6e5e3	The material can be soil, construction and industrial rubble, material with more than 10% organic content (spoil heaps, industrial waste), combustion products (slag, ash), household refuse and waste, or a mixture of these. Household waste (municipal waste) and uncompacted fill less than 8–10 years old are very dangerous.
+c1d75de	Where and why are buildings damaged? <span class="tag">Hungarian statistics</span>
+1b448ec	Of the damaged elements in Hungary, the following stood on fill
+2c53395	87% of the damage was triggered by water
+98b22fe	The density and compressibility of made ground can vary within wide limits. Loose fills can collapse considerably when soaked. Ground-bearing floors and the partition walls standing on them load the fill directly, which is why they are damaged most often.
+677fbd2	An invisible danger: gases <span class="tag">methane · cyanide</span>
+2818290	Toxic gases (for example cyanide) and explosive gases (methane) can also form in made ground. The landfill gas produced by decaying organic matter is roughly half methane and half carbon dioxide. Methane forms an explosive mixture with air between 5 and 15 per cent by volume, and it collects in basements, under floors and at service entries.
+1ce4044	Methane concentration in the basement
+46c18c8	Drag the slider
+b406102	=
+176683c	in the air
+7432a96	<b class="lbl">Case study · Loscoe, England, 1986</b>The clay pit of a former brickworks had been partly filled with waste. Methane escaping from the tip collected in the voids under a house and was ignited by the pilot light of the gas boiler: the house was destroyed and its three occupants were seriously injured. A rapid fall in air pressure (29 millibars in 7 hours) helped the gas to escape. After the incident, the management of landfill gas in Britain was fundamentally tightened.
+0732426	3D soil lab: a house on the edge of a pit <span class="tag">simulator</span>
+dca76d4	Move the edge of the filled pit under the house, set the age and material of the fill and the contact pressure, and switch on the soaking.
+320ffe6	Design guidelines
+fb4bd93	Much like those for collapsible soils.
+511ffa0	Limited contact pressure
+dbe933b	Depending on the state of the fill, the contact pressure should not exceed 150–200 kPa.
+7538ee1	Water away
+d458313	Water must be kept away from the building: roof water, services, surface water.
+a4dc4a6	Uniform thickness
+653c838	The fill under the footings should be of roughly the same thickness.
+10225b8	Three-dimensional stiffness
+373411a	The three-dimensional stiffness of the structure must be increased (ring beams, slab diaphragms).
+ae244dc	No extensions
+a750670	Extensions should be avoided, because they settle differently.
+78e3848	How do we improve made ground? <span class="tag">method selector</span>
+65ac259	The state of made ground can be improved in a similar way to collapsible soils. Enter the depth to be improved and the groundwater level, and we show which methods could be used.
+4e55c35	Depth of effect of improvement methods
+95d9d58	Thickness to be improved
+a8467d2	Depth of the groundwater level
+6c34925	Peat, organic silt and clay
+e502dc4	Organic soils
+9d93d69	After made ground, organic soils cause the most damage. In Hungary, organic deposits of various thicknesses have formed in relatively many places. Peats are the most dangerous, but silts and clays with a higher organic content are also unfavourable.
+5ac6eba	The ground that disappears <span class="tag">Holme Fen, 1851–2024</span>
+4942e9d	At Holme Fen in England, in 1851, after the fen had been drained, a post was driven through the peat into the clay below so that its top was level with the ground surface. Since then the drying peat has been shrinking and decomposing: today the ground is more than 4 metres lower.
+e2aaf38	Time machine
+074b77f	Drag the year
+20dad65	Year
+d568bc6	The shape of the curve is illustrative (rapid at first, then slowing settlement).
+ff393ac	Recognition <span class="tag">which one is peat?</span>
+852aa20	Organic soils are easy to recognise: they are <b>dark in colour</b> (black, dark brown, dark grey), <b>have a low unit weight</b> (they are light), <b>their water content is high</b> (w &gt; 50–70%, but it can be several hundred %), and they often have a <b>fibrous</b> structure. Which sample is peat?
+9eaf7f4	In numbers <span class="tag">water content · modulus</span>
+25f35dd	Water content (w)
+8e19e7c	For fibrous peat the water content can be as high as 2000%.
+01f70f6	Oedometer modulus E<sub>oed</sub> (logarithmic)
+deee5e9	Peat: 300–2000 kPa; sand, gravel: indicative range.
+810367b	How much does it settle? <span class="tag">s = Δσ · h / E<sub>oed</sub></span>
+712a38e	The oedometer modulus is small (300–2000 kPa), so the same additional stress often causes many times more settlement in peat than in a sand layer.
+0286429	Settlement estimator
+1e16403	Set the layer and the load
+5d2c8de	Layer thickness h
+056bd90	Additional stress Δσ
+6eb564b	Peat E
+dda0108	=
+26ea724	<span>Peat</span><b id="stP">–</b>
+e9724bb	<span>Sand (30 MPa)</span><b id="stSand">–</b>
+d9ab56d	<span>Ratio</span><b id="stRatio">–</b>
+37e79e9	Slowly and for a long time <span class="tag">consolidation + secondary compression</span>
+0020a92	The permeability (k) is low, so consolidation is slow. Because of the decay of organic matter, secondary compression goes on for a long time. Organic soil is also sensitive to heat, shrinks on drying, and varies in thickness.
+22a81d8	Settlement against time (log t)
+d647ce1	Permeability (rate of consolidation)
+5cba480	Amount of secondary compression
+30993fd	Illustrative curve: primary consolidation (Terzaghi’s S-curve in log t), followed by secondary compression on a straight line.
+96ce88b	With a good cover layer: a narrow, shallow footing <span class="tag">influence depth</span>
+317889c	The organic layer is often covered by a cover layer in good condition (often sand or silty sand). Then the possibility of a shallow foundation should be examined first. The bearing resistance of the cover layer should be used as fully as possible: the footing should be as narrow as possible, because this reduces the influence depth, and less stress reaches the organic layer. The total settlement must not exceed the allowable value.
+de99842	Pressure bulb under a strip footing
+50b8abf	σ<sub>z</sub>/q isobars (Boussinesq)
+f5829cb	Pressure bulb
+b72f695	Footing width B
+31207b7	Thickness of the sand cover layer
+ee15cca	<span>Foundation level (frost depth)</span><b>0.90 m</b>
+bc96a42	<span>σ<sub>z</sub>/q at the top of the peat</span><b id="bOut">–</b>
+7ada153	<span>Depth of the 0.2 q isobar</span><b id="bDepth">–</b>
+6738ebc	Foundation decision <span class="tag">answer the questions</span>
+0064a44	What should we do on organic soil?
+8bf798e	3D soil lab: a house on a peat lens <span class="tag">simulator</span>
+3061156	Set the thickness of the peat and of the cover layer, the footing width, the contact pressure, the modulus of the peat and the lowering of the groundwater. The section also shows the pressure bulb.
+2e1c493	Further rules
+18a852a	near the surface
+fe3c87c	Soil replacement or a deepened shallow foundation
+64730b8	If the peat is near the surface, (partial) soil replacement is very often used, or the building is founded with a deepened shallow foundation on soil of adequate bearing resistance below the organic layer.
+75e138f	thin layer
+2ddacd8	A stiff, insensitive structure
+bf82b63	If the organic layer below foundation level is thin, a structure of adequate stiffness and strength that is not sensitive to differential settlement can be built.
+13fd321	dangerous
+e43493c	Vibration and groundwater fluctuation
+38023db	Dynamic actions and fluctuating groundwater are dangerous for organic soils: peat shrinks considerably when it dries out.
+916fb95	structure
+bc40275	Compact plan, flexible services
+0bf4989	At service connections, the larger settlement of the building must be allowed for. Partial basements and extensions should be avoided. Design a building with a compact plan and three-dimensional stiffening.
+1bb9bed	Comparison
+4b98e4b	Four soils side by side
+5ac75d3	Let us summarise what triggers the movement, when it appears, and what the most important thing to do is.
+55125f8	Soil
+61473f6	Recognition
+fa35a46	Trigger
+756e36a	Nature of the movement
+3999e60	Key rule
+4455636	<span class="dot" style="background:var(--c1s)"></span><b>Expansive clay</b>
+d64ae9b	I<sub>p</sub> &gt; 30–35%, montmorillonite, surface cracked into a mosaic in dry weather

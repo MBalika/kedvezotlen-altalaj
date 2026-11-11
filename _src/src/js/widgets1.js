@@ -1,4 +1,5 @@
-import { clamp, lerp, smooth, $, h, s, svgRoot, fmt, bindRange, segmented, onVisible, verdict, cssVar, onTheme, mulberry32 } from './util.js';
+import { clamp, lerp, smooth, $, h, s, svgRoot, fmt, bindRange, segmented, onVisible, verdict, cssVar, onTheme, mulberry32, EN } from './util.js';
+const YR = (n) => EN ? 'Year ' + n : n + '. év';   // évszám-felirat (angolul „Year 2”)
 
 // ------------------------------------------------------------------ hero core samples
 export function heroCores() {
@@ -226,7 +227,7 @@ export function season() {
     for (let y = 0; y < YEARS; y++) {
       svg.append(s('rect', { x: X(y * 12 + 2), y: T, width: X(5) - X(0), height: H - T - B, fill: 'var(--waters)', opacity: 0.09 }));
       svg.append(s('rect', { x: X(y * 12 + 7), y: T, width: X(4) - X(0), height: H - T - B, fill: 'var(--c1s)', opacity: 0.1 }));
-      svg.append(s('text', { x: X(y * 12 + 6), y: H - 8, 'text-anchor': 'middle', 'font-size': 13, fill: mut, 'font-family': 'IBM Plex Mono, monospace', text: y === 1 ? (dry > 0.05 ? (y + 1) + '. év · aszályos' : (y + 1) + '. év') : (y + 1) + '. év' }));
+      svg.append(s('text', { x: X(y * 12 + 6), y: H - 8, 'text-anchor': 'middle', 'font-size': 13, fill: mut, 'font-family': 'IBM Plex Mono, monospace', text: y === 1 ? (dry > 0.05 ? YR(y + 1) + ' · aszályos' : YR(y + 1)) : YR(y + 1) }));
     }
     for (let m = 0; m <= N; m++) { if (m % 12 === 0) svg.append(s('line', { x1: X(m), x2: X(m), y1: T, y2: H - B, stroke: 'var(--line2)' })); if (m < N) svg.append(s('text', { x: X(m + 0.5), y: H - B + 16, 'text-anchor': 'middle', 'font-size': 10, fill: 'var(--faint)', text: months[m % 12] })); }
     svg.append(s('line', { x1: L, x2: W - R, y1: Y(0), y2: Y(0), stroke: 'var(--line2)', 'stroke-dasharray': '4 4' }));
@@ -253,7 +254,7 @@ export function season() {
     svg.append(s('text', { x: hx + 60, y: hy + 148, 'text-anchor': 'middle', 'font-size': 13, fill: v >= 0 ? 'var(--water)' : 'var(--bad)', 'font-family': 'IBM Plex Mono, monospace', text: (v >= 0 ? '+' : '') + fmt(v, 0) + ' mm' }));
     svg.append(s('text', { x: hx + 60, y: hy + 166, 'text-anchor': 'middle', 'font-size': 12, fill: mut, text: crack > 0.2 ? 'repedések nyitva' : 'repedések zárva' }));
     if (amp() < 0.05) svg.append(s('text', { x: (L + W - R) / 2, y: T + 20, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 700, fill: 'var(--good)', text: 'Az alapsík a meteorológiai határmélység alatt van: az épület nyugalomban' }));
-    const out = $('#seasonTo'); if (out) out.textContent = (Math.floor(m / 12) + 1) + '. év, ' + monthsLong[mm];
+    const out = $('#seasonTo'); if (out) out.textContent = YR(Math.floor(m / 12) + 1) + ', ' + monthsLong[mm];
   }
   bindRange('seasonT', (v) => { t = v / 1000; render(); });
   bindRange('seasonD', (v) => { D = v / 100; render(); }, (v) => fmt(v / 100, 2) + ' m' + (v / 100 >= 2 ? ' ✓' : ''));

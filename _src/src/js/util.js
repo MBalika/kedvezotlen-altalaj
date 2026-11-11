@@ -4,12 +4,15 @@ export const smooth = (t) => { t = clamp(t); return t * t * (3 - 2 * t); };
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-// Hungarian number format: decimal comma, thin-space thousands
+// angol változat (en.html): tizedespont, angol tördelési szabályok, angol videók
+export const EN = (document.documentElement.lang || '').toLowerCase().startsWith('en');
+
+// Hungarian number format: decimal comma, thin-space thousands (angolul tizedespont, ugyanígy tagolva)
 export function fmt(v, d = 1) {
   if (!isFinite(v)) return '–';
   const s = Math.abs(v).toFixed(d).split('.');
   s[0] = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  return (v < 0 ? '−' : '') + s.join(',');
+  return (v < 0 ? '−' : '') + s.join(EN ? '.' : ',');
 }
 
 export function h(tag, attrs = {}, ...kids) {

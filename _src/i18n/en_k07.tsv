@@ -1,0 +1,150 @@
+75eedd4	shallow terrace
+109d6d8	dried-out zone under the footing
+b36c4ae	Damage risk: 
+5440c44	${R.filter(r => st[r[0]]).length} / ${R.length} rules met
+0f656ba	Collapse!
+eb13d79	All three conditions are met: water weakens the calcite and clay bridges, and the grains slip into the pores. A sudden decrease in volume.
+0ec547f	No collapse
+8c122c9	In a dense, non-macroporous soil, neither water nor load causes collapse.
+72542c8	When dry, loess is firm and stands even in a vertical face.
+b4a8443	Soaked, but unloaded
+99bef19	Collapse also needs load. In deeper layers, however, the weight of the soil above is a load too: saturated loess collapses under its bare load.
+61584dd	LOAD
+3d21de2	WATER
+7bbefb3	COLLAPSE
+e752ce7	collapsed skeleton
+66c12e3	macroporous skeleton, calcite and clay bridges
+ca2fbab	dense, granular skeleton
+6a5067f	Loess (Mezőföld)
+98b1ad9	Slightly collapsible loess
+c82e7ff	Dense, old loess
+4858931	flooded
+771546c	natural water content
+fd662f9	at natural water content
+10269b3	saturated
+ca5ce61	collapse Δh
+fd59ef8	Load the sample, then flood it
+07d57e2	The collapse coefficient is determined at the chosen load, by flooding.
+4c7a83c	At risk of collapse: iᵣ = 
+2bd0f55	On flooding, the sample collapsed by 
+c0786b1	Not at risk of collapse: iᵣ = 
+81617fa	Flooding caused only a small additional compression.
+da57b29	Clay extraction
+b5ef0a6	The brickworks extracts the clay: a deep pit is left behind. Pits like this, gravel and sand pits and castle moats were later filled.
+539fd4b	Wartime rubble
+e8efd0e	In Budapest, a huge amount of rubble had to be disposed of after the Second World War: brick, concrete, mortar and reinforcing bars went into the pit.
+512e8c8	Combustion products: slag heaps, boiler ash. Their density and composition vary from place to place.
+d164ae1	Municipal waste: plastic, glass, metal and a lot of organic matter, which decays, produces gas and keeps settling. The most dangerous fill.
+52f9ac1	Soil cover
+e7d5c9f	A thin layer of topsoil goes on top and is grassed. Nothing can be seen at the surface.
+067640b	New house
+6dd4184	The new owner sees a nice, tidy plot. One footing stands on 6 m of fill, the other on natural ground.
+6b43f07	rubble
+b393ea1	household waste
+059f47c	topsoil
+ece3bba	≈ 6 m of fill
+22c4d92	Very dangerous
+bcbe82c	Careful, needs investigation
+2ce0e2a	More favourable
+863340f	Municipal landfill, closed 25 years ago
+12492a6	Household waste (municipal waste) is always very dangerous: it decays, produces gas and keeps settling for a long time.
+3dff204	Uncompacted construction rubble, 5 years old
+a4bc0ac	Uncompacted fill less than 8–10 years old is very dangerous, and it can also collapse.
+c0234ab	Spoil heap material with 15% organic content
+dd07bb5	Material with more than 10% organic content decays, and its settlement goes on for a long time.
+e4f860a	Slag and ash, 40 years old, unknown density
+03b8bae	Combustion product: less active because of its age, but its density and compressibility can vary within wide limits.
+a964451	Mixed soil and brick fragments, 60 years old
+9213983	Old, but of unknown composition and density: it must be verified by exploration and testing.
+2b2bd18	Sandy gravel compacted in layers under control, 20 years old
+559a8bd	Granular fill compacted under control: the more favourable case, but it must still be investigated.
+ee850d6	Partition walls
+50bd0a7	broken sewer
+3aea06b	roof water
+3f8cba7	burst pressure pipe
+c758adb	surface water
+d441802	other
+6af4979	Typical composition of landfill gas
+a0e6ae8	Low concentration
+45e9af5	Below the lower explosive limit
+560e026	The gas is not yet explosive, but its presence is a warning: the concentration can rise in an enclosed space.
+480309b	Explosive mixture (5–15 vol%)
+74c8b45	A spark, a pilot light or a light switch can ignite it.
+1a062aa	Too rich a mixture (> 15 vol%)
+3e2a040	It does not explode on its own, but it is low in oxygen, and when ventilated, diluted with air, it returns to the explosive range.
+5120d46	EXPLOSION RISK
+a4259d6	explosive
+992dd2f	below the lower limit
+accef24	too rich
+bb54529	Displacement pile
+5fd48ad	Blasting
+baea3c7	Cement grouting + a little bentonite
+b078172	Sodium silicate grouting
+741b6ff	Soil replacement (partial / full)
+95f2601	Coarse, granular fill
+6b7c043	Finer, dense fill
+710021f	a ${fmt(a, 1)}–${fmt(b, 1)} m layer can be compacted
+6587ecf	in layers, or it only improves the upper part
+b43be38	for loose and thick fill
+687f353	; also a stiffening element
+b133eb5	; it induces collapse
+40e6ba0	uneconomical for thin fill
+d817046	grouted from the top downwards
+6addba2	does not penetrate fine, dense material
+1f2491a	usable in dense material
+8001ef0	cement grouting is the usual choice in coarse material
+22235f3	can be carried out above the groundwater level
+a0cbf5b	only above the groundwater level (down to ${fmt(GW, 1)} m)
+f60daa2	depth to be improved
+8372d8b	conditionally
+345be77	Yellowish brown, porous, with calcareous concretions; stands in a vertical face
+70f273a	γ ≈ 15–17 kN/m³ (dry, loose)
+4fb9eea	This is loess: collapsible, but not an organic soil.
+c7882f0	Black, fibrous, with plant remains; water runs out when it is squeezed
+cc0cbed	Peat: dark, light, fibrous, with an enormous water content.
+8634766	Grey, high-plasticity, plastic; cracks into a mosaic when it dries
+b0be4fe	High-plasticity clay: it may be expansive, but it is not organic.
+01f1dfd	Dark grey, fine-grained, organic smell; can be smeared in the hand
+58b3cba	Organic silt: also unfavourable.
+97717c7	Check: these are the organic soils
+bb2a269	Exactly: samples B and D are organic soils
+17fd652	Almost: B (peat) and D (organic silt) are the organic soils
+955362f	Organic silt and clay are unfavourable too, not only peat.
+c999111	Organic soil, lower limit
+74453e9	Peat, typical
+483eee7	Fibrous peat, up to
+a678e7f	Medium-dense sand
+a09c207	Dense sandy gravel
+ed54b04	for the same load ~10–100 times the settlement
+818bd46	1 month
+5a574dd	1 year
+2ed92f7	10 years
+6a74d33	100 years
+91b97c2	settlement ↓
+4a68d4f	time (log) →
+4ab7b24	end of primary consolidation
+e207242	secondary compression
+9f295c5	50 years
+496f7b7	 months
+8d57636	frost depth
+f806a08	The 0.2 q isobar stays in the sand
+9cbb1f6	Narrow, shallow footing: the significant stresses stay in the cover layer, and only a small stress reaches the peat.
+4cfae95	The bulb just reaches the peat
+860a4b4	It must be checked whether the total settlement resulting from the compression of the peat is acceptable.
+4a8a6f0	The pressure bulb penetrates deep into the peat
+1bc452c	A wide footing or a thin cover layer: large settlement is expected. A narrower footing, soil replacement or a deepened footing is needed.
+4bced5c	Is there a competent cover layer in good condition (e.g. sand) above the organic layer?
+6134e50	No, the peat is near the surface
+2779b03	Is the cover layer thick enough to leave sand under a narrow footing placed below the frost depth?
+ded5b16	How thick is the organic layer below foundation level?
+cda7eca	Thin
+337405c	Can we choose a stiff structure that is not sensitive to differential settlement?
+aa8aece	Shallow, narrow footing in the cover layer
+744d371	Use the bearing resistance of the cover layer as fully as possible; the footing should be as narrow as possible. Check that the total settlement stays below the allowable value.
+67ba93d	(Partial) soil replacement
+6edf935	The organic layer is dug out, and a well-compactable granular material is placed and compacted in layers, down to the bearing stratum.
+620714f	Deepened shallow foundation on the bearing stratum
+443abfa	We found on soil of adequate bearing resistance below the organic layer. If this is uneconomical, a deep foundation can be considered (see: Protection against harmful settlement).
+4fe84ee	A stiff structure not sensitive to settlement
+5676b48	With a thin organic layer, a structure of adequate stiffness and strength can be built that settles evenly, as one block.
+50b6791	In every case: a compact plan, three-dimensional stiffening, flexible service connections. Avoid partial basements, extensions, vibration and fluctuating groundwater.

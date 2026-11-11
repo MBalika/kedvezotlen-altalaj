@@ -1,0 +1,120 @@
+92a212e	Soil replacement can be carried out above the groundwater level, and in most cases the fill under the footings is only partly replaced.
+23c8240	What gases can form in made ground?
+a1a300d	Only water vapour
+28f89e8	Toxic (e.g. cyanide) and explosive (methane) gases
+f36f03b	Only oxygen
+a2b6007	Helium
+40ea8d6	It must be expected that toxic gases (e.g. cyanide) and explosive gases (methane) can also form in made ground.
+5caf44f	Which is NOT characteristic of organic soil?
+b67e2e8	Dark colour
+2004852	Low unit weight
+75ab291	High water content
+d31c716	High oedometer modulus
+061f2e8	The modulus of organic soil is small (300–2000 kPa); it is dark, light, has a high water content and is often fibrous.
+d31ed47	What is the typical oedometer modulus of organic soil?
+da072ab	Eoed = 300–2000 kPa: an extremely small value.
+86c025a	With a good cover layer, which foundation should be examined first?
+e0ac367	A deep pile foundation
+e33dcda	A shallow footing, as narrow as possible
+27daf7d	A wide raft on the peat
+f391add	A partial basement
+f62c225	With a cover layer in good condition, the possibility of a shallow foundation should be examined first.
+c75b724	Why is a narrower footing in the cover layer an advantage?
+ba7c868	Because the formwork is cheaper
+4b6e8d2	Because the influence depth decreases, and less stress reaches the organic layer
+3b0d204	Because the safety against bearing failure is greater
+a6eb91a	Because the peat consolidates faster
+b057fbb	The narrower the footing, the smaller the influence depth, and the less stress reaches the organic layer.
+c8b6b2b	What happens if the groundwater level drops permanently?
+e9268f8	The peat swells
+ef73e60	The peat dries, shrinks and decomposes: the ground and the building settle
+b20bcf7	The peat hardens
+346f988	Fluctuating groundwater is dangerous for organic soils: they shrink considerably when they dry out.
+325ee1a	What should be avoided on organic soil?
+72f2094	A compact plan
+9e3eb1a	Three-dimensional stiffening
+b2a99a0	Partial basements and extensions
+b8b859c	Flexible service connections
+d9129d3	Partial basements and extensions should be avoided; design a building with a compact plan and three-dimensional stiffening.
+d7ea8bc	Why is the consolidation of organic soil slow?
+ecb9dc6	Because its permeability is high
+1e166c2	Because its permeability (k) is low
+de27fb3	Because it contains little water
+d3bf564	Because its unit weight is high
+dc9a9aa	k is small, so consolidation is slow; in addition, organic decay makes secondary compression last a long time.
+1d0e58e	A single-storey house near Szolnok: after the dry summer of 2022, cracks rising towards the corners appeared. In spring the cracks almost closed.
+4f4f192	Seasonal opening and closing and the drought are the hallmarks of expansive clay.
+5727329	A house above a row of wine cellars in Mezőföld: it was fine for decades, then after a water pipe leak one of its corners settled 8 cm in a few days.
+7e4b17c	Sudden, one-off settlement caused by water: collapse in loess.
+14846fb	A gap site in Budapest: pieces of brick and concrete, slag and broken glass come out of the excavation, and there is a faint smell in the basement.
+f514e85	Mixed, man-made material: made ground. The smell may indicate gas formation.
+75cbe9a	A new housing estate in a river valley: in the borehole, under 1.5 m of sand, there is a black, fibrous, very light layer; its water content is 380%.
+242b2bc	Dark, fibrous, light, an enormous water content: peat, that is, organic soil.
+10960a7	Settlement is larger on the side facing the 20 m tall row of poplars next to the house, and diagonal cracks run along the wall facing the trees.
+0639edf	The thirsty tree dries out the high-plasticity clay: shrinkage, uneven settlement.
+28b2684	The floor of a hall built on an area filled 6 years ago without compaction settled in patches after a wet spring.
+6a7a018	Fresh, uncompacted fill that collapses when soaked. Fill less than 8–10 years old is very dangerous.
+a470786	Because of pumping at a nearby gravel-pit lake, the groundwater level dropped by 1.5 m; over a few years the houses and the ground in the area started to settle slowly and unevenly.
+04752fa	Drying organic soil shrinks and decomposes: fluctuating groundwater is dangerous for it.
+8eb8ae1	A plot along a high river bank: the oedometer test with flooding gave iᵣ = 0.035.
+d2a0aaf	iᵣ > 0.01: soil at risk of collapse, probably loess.
+b04c617	If the three conditions of collapse are met, widening the footing protects the building.
+5de6357	It does not: the building cannot be protected from sudden settlement even by increasing the safety against bearing failure.
+c2c8bec	Damage caused by expansive clay typically appears after a long dry summer.
+2558ea5	Especially if several dry years follow one another.
+3b1b465	A partial basement is a good compromise on expansive clay.
+2f0301a	A partial basement is the worst solution on such ground.
+c033c9a	The depth of seasonal movement is about 2–2.5 m.
+3c1b8d0	The foundation level should not be closer than this to the ground surface.
+f76a48e	Swelling clay can lift a lightly loaded building.
+bd36f50	In wetter weather the swelling clay lifts the lightly loaded building, and the cracks narrow.
+ddae544	On expansive clay it is mainly the superstructure that should be strengthened, not the foundation.
+d2e241b	The other way round: the foundation should take the bending and tension, not the superstructure – strengthen the foundation instead.
+1cb3470	A poplar near the house is favourable, because its roots stabilise the clay.
+e8a2f24	The roots of a thirsty tree (poplar, birch) draw the water from under the footings, so the clay shrinks.
+746ca1d	On expansive clay the house needs paving 1.0–1.5 m wide around it, sloping away.
+2d24cc8	This way rainwater does not soak in next to the footings.
+39d80d6	When dry, loess can stand in a vertical face.
+17696bb	This is why wine cellars could be dug into it. Soaked, however, it collapses.
+dfc1811	Collapse is cyclic: after the water is removed, the soil rises again.
+d878dea	Collapse happens once and is irreversible.
+9b9b2bc	A soil is at risk of collapse if the collapse coefficient exceeds 0.01.
+5acf803	Loose, uncompacted fill less than 8–10 years old can also collapse.
+9b1e71f	This is why it counts as a collapsible soil.
+6b6cd4b	Wet, saturated loess can collapse under its bare load alone.
+7c75fdc	Water weakens the calcite and clay bridges holding the grains together, so in saturated loess the load alone can trigger collapse.
+8e9b65f	On collapsible soil, roof water should be led into a soakaway next to the house.
+35f1c2a	Roof water must be led away from the building in a closed drain.
+3c9ff98	Soil burning has been abandoned for environmental reasons.
+05a9644	Heat treatment and soil burning are rarely used today.
+7d2b8c6	The density of made ground is typically uniform.
+6a9f647	The density and compressibility of made ground can vary within wide limits.
+24040e5	57% of the damaged partition walls in Hungary stood on fill.
+55b4333	40% of the structural elements, 57% of the partition walls, 70% of the floors.
+724fef5	Most of the damage on made ground is triggered by water.
+bd8c578	87% of the damage was triggered by water.
+a296d58	On made ground the contact pressure may safely exceed 300 kPa.
+c4fbba4	The contact pressure should not exceed 150–200 kPa.
+754b480	Explosive methane can also form in made ground.
+d1122c9	And toxic gases too, such as cyanide.
+2eb93a5	A plate compactor can compact a layer 2–4 m thick.
+24696c5	A plate compactor 10–30 cm; the 2–4 m refers to the dropped tamping plate.
+fa8c597	A dropped tamping plate can compact made ground 2–4 m thick.
+9832259	Displacement piles also act as stiffening elements.
+2fec68a	They compact the ground, and stiffening elements are placed under the structure as well.
+4bff378	Soil replacement can be carried out below the groundwater level without any problem.
+6e17b51	Soil replacement can be carried out above the groundwater level.
+f70b263	In made ground, cement grouting should be carried out from the bottom upwards.
+7ab4997	Grouting should be done from the top downwards, with a small amount of bentonite.
+866f284	Crushed concrete can be used as a replacement material.
+0523fd1	Sandy gravel, crushed stone, crushed concrete or stabilised transitional or cohesive soil.
+f9dd1be	Of the organic soils, peat is the most dangerous.
+f892a94	But silts and clays with a higher organic content are also unfavourable.
+32cff69	The water content of organic soil can be several hundred per cent.
+69f2033	w > 50–70%, but it can be several hundred %.
+dc701d9	The oedometer modulus of organic soil is high.
+1df29de	On organic soil, consolidation is slow because of the low permeability.
+9a56048	k is small, consolidation is slow.
+fba1b06	Organic soil is insensitive to heat.
+1d5b23d	It is sensitive to heat; warmth dries it out.
+77e7bc6	With a good cover layer, the footing over the peat should be as wide as possible.

@@ -1,0 +1,139 @@
+1b9758a	Contact pressure ${p.q} kPa > 200 kPa: too high for fill.
+d58f18a	The fill under the footings is of nearly the same thickness.
+4d13d01	Different fill thicknesses: ${fmt(r.HfL, 1)} m and ${fmt(r.HfR, 1)} m under the footings.
+6842bdc	Household waste: it decays, produces gas and keeps settling for a long time. Very dangerous!
+97bd63b	Uncompacted fill less than 8–10 years old: very dangerous, it collapses when soaked.
+1b11da8	Water triggers 87% of the damage: keep it away!
+fabce5c	Organic soil (peat)
+d939710	Sand cover layer
+efed5da	Peat thickness (left side)
+044761c	Peat Eoed
+9f99023	Groundwater lowering
+4d82e7d	The cover layer is thinner than the frost depth: the footing ends up in the peat! Soil replacement or a deepened shallow foundation is needed.
+3836646	The 0.2 q isobar stays in the sand: narrow, shallow footing, little stress reaches the peat.
+16ce598	The pressure bulb reaches the peat: a narrower footing or a lower contact pressure is better.
+9bef1ce	The estimated total settlement is ${fmt(r.L.tot / 10, 1)} cm (EC7 Annex H: ~5 cm is often acceptable).
+01cd042	The estimated total settlement is ${fmt(r.L.tot / 10, 1)} cm: much more than is usually acceptable.
+0d2faf4	Groundwater lowering dries out the peat: it shrinks and decomposes.
+215b6db	The 3D view loads when you scroll here.
+66d0d55	This browser does not support WebGL, so the 3D view cannot be shown. The calculated values on the right still work.
+75c3b6d	movement ×
+9154cbb	 exaggerated
+a64a9cd	Tip: drag the season to spring, then back
+c39b428	Tip: increase the soaked zone!
+2aefd45	Tip: move the edge of the pit under the house
+b7f2c8d	Tip: widen the footing, lower the groundwater
+4022e29	Rotate: drag · Zoom: wheel / pinch
+9309920	View
+ab11364	Settings
+09f13aa	New house (reset)
+ae47c14	Illustrative model with indicative values
+0264f2f	Angular distortion
+1d5f8be	severe cracking
+4ce63b8	visible cracks
+fbca298	hairline cracks
+7d4e58d	no cracks
+c96b9f5	Expected damage
+ddf6f1b	load
+f51b1b4	water under the footing
+3246c71	Left side: consolidation ${fmt(r.L.cons / 10, 1)} cm · groundwater ${fmt(r.L.gw / 10, 1)} cm · secondary (50 years) ${fmt(r.L.sec / 10, 1)} cm
+86ef3c1	Fill under the footings: left ${fmt(r.HfL, 1)} m, right ${fmt(r.HfR, 1)} m · E ≈ ${fmt(r.E / 1000, 1)} MPa
+5038c32	Contact pressure ≈ ${r.q} kPa (swelling pressure ~150 kPa) · drying zone on the side facing the tree: ${fmt(r.zt, 1)} m
+1d39a22	depth of seasonal movement ≈ 2–2.5 m
+cefc77e	groundwater deep
+a25cf28	soaked loess
+8d56e4f	water pipe
+555b2f9	burst pipe
+ce6d24c	in a sleeve
+960e40d	loess (macroporous)
+0b42153	methane
+75ab37c	fill
+0a80612	falling groundwater
+3f75bcb	groundwater
+67d073f	sand cover layer
+862cedb	peat
+1e31607	collapses when soaked
+84a643f	rubble · waste
+3bc1e52	peat · silt
+da5109b	Change in water content: drought, water uptake by trees, wet winter and spring.
+e1d4597	Soaking under load: burst pipe, roof water, surface water.
+05bbd33	High and variable compressibility, soaking, decay of organic matter.
+7fa5f90	Small modulus, slow consolidation, groundwater lowering, heat.
+fd1bbe7	Cyclic: rises in spring, settles in autumn. It repeats year after year.
+9093b77	Sudden, one-off and irreversible settlement.
+4fb0644	Differential settlement that follows the thickness of the fill.
+f662b93	Large, slow settlement lasting for decades.
+674a658	After a long dry summer, especially in a series of dry years.
+f26f8a3	Days or weeks after the water appears, even decades after construction.
+3a85838	Right after construction, and again at every soaking.
+19258fa	Continuously; it speeds up if the groundwater falls.
+dda2e29	I_p > 30–35%, montmorillonite, surface cracked into a mosaic in dry weather.
+ed9b500	Yellowish, porous loess that stands in a vertical face; i_r > 0.01.
+9e5ca7c	Brick, concrete, slag, glass and plastic in the borehole; unknown age.
+111488d	Dark, light, fibrous, w > 50–70%.
+539b86f	What triggers it?
+83b07b5	What is the movement like?
+464923d	rigid, held together by H-bonds
+995c774	K⁺ ions link the layers
+8f33fee	water forces the layers apart
+86a22a8	volume
+081d09d	tetrahedron
+4fe0061	octahedron
+b9cd182	water
+63f0a49	H-bond
+a53315d	Plasticity index Iₚ
+b529193	Linear shrinkage LS
+fe112bc	Max. specific volume change
+6948d50	Swelling pressure
+47d41ce	Free swell δ_d
+e380d48	Sample presets:
+9564ad1	High-plasticity clay
+a34641b	Medium-plasticity clay
+2e60443	borderline
+13ad38d	limit: 
+75554b0	The foundation level should be no closer than 2–2.5 m to the ground surface, and follow the design rules.
+0f5e108	Moderately expansive, suspect
+080f7c2	Several characteristics are close to the limit. It is worth founding carefully, following the rules.
+0ef00b3	Not expansive
+45bd4ef	The characteristics stay below the limit values.
+95777d4	January
+5fe11f4	February
+5674018	March
+605df3d	April
+cb79477	May
+853575a	June
+0dde30a	July
+a047360	October
+bc1217a	 · drought
+6a48b5c	heave
+4df0dd6	settlement
+9660ca4	cracks open
+a34144a	cracks closed
+7f4eb1d	The foundation level is below the depth of seasonal movement: the building is at rest
+9d418e2	moderate
+4422f4b	strong
+2c90872	swelling pressure > 100 kPa
+dae1a80	damage 
+5f224a6	contact pressure (indicative values)
+a07d95b	Foundation level at least 2–2.5 m deep
+a2b2f4a	depth of seasonal movement: below it the water content no longer changes
+7242ebe	Full basement (not partial)
+eb04251	a partial basement is the worst solution
+890ca4a	Use the bearing resistance: high contact pressure
+2f54eaf	so that the swelling pressure cannot lift it
+c283919	Reinforced, strengthened footing
+206e80e	strengthen the foundation rather than the superstructure
+f162026	Graded ground, rainwater led away
+ad23164	no water standing next to the house
+8b1943b	Careful drainage of roof water
+b6a40f7	in a closed drain, away from the house
+2973da8	Paving 1.0–1.5 m wide, sloping away
+7a1529f	around the building
+f988f94	No projecting, lightly loaded part of the building
+fe0e698	or found it at adequate depth as well
+4a557c7	No thirsty tree near the house
+b353a52	e.g. poplar, birch: their roots draw the water from under the footings
+cacad05	“Wet” services perpendicular, through an oval opening, in a sleeve
+2c06623	allowing relative movement between the pipe and the wall
+5c0b14a	partial basement
+c6cd528	=

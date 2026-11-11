@@ -1,0 +1,110 @@
+a1d2fc8	Home
+eb519e3	<b>Unfavourable ground</b><span>BME · Foundation Engineering</span>
+6bec538	Chapters
+2bd8510	<a href="#bevezeto" data-nav="bevezeto">Introduction</a>⏎      <a href="#terfogatvaltozo" data-nav="terfogatvaltozo" data-ch="1"><i></i>Expansive</a>⏎      <a href="#roskadekony" data-nav="roskadekony" data-ch="2"><i></i>Collapsible</a>⏎      <a href="#feltoltes" data-nav="feltoltes" data-ch="3"><i></i>Made ground</a>⏎      <a href="#szerves" data-nav="szerves" data-ch="4"><i></i>Organic soil</a>⏎      <a href="#osszevetes" data-nav="osszevetes">Comparison</a>⏎      <a href="#teszt" data-nav="teszt">True / false</a>
+a23fb86	Magyar változat
+f7e4d5c	<span>HU</span><b>EN</b>
+b54a672	Light / dark theme
+5d3a135	Borehole log navigation
+4884ae8	borehole log
+936752f	Clay
+32478f4	Loess
+4d2677c	Fill
+d4d3394	Peat
+dade70d	BME Faculty of Civil Engineering · Foundation Engineering · interactive module
+f833e5a	Foundations on<br>unfavourable<br><em>ground</em>
+381a78f	Four soils you cannot simply build on: swelling and shrinking clay, loess that collapses when wetted, made ground formed from the waste of the past, and compressible peat full of water. For each of them we look at why it moves, how to recognise it and how to found on it.
+ea921f1	<a class="btn primary" href="#terfogatvaltozo">Start with clay</a>⏎          <a class="btn" href="#sim-clay">3D soil lab</a>⏎          <a class="btn" href="#teszt">True / false test</a>
+8160059	<b>4</b><span>soil types, 5 animations</span>
+1c503bd	<b>4×3D</b><span>simulators with sliders</span>
+da76ab1	<b id="statInter">20+</b><span>interactive figures</span>
+92ad7ba	<b id="statQ">70+</b><span>questions and statements</span>
+2cd5cae	The four soil samples
+381cb76	Introduction
+94ba75b	What do the four soils have in common?
+fbbded6	Over a large part of Hungary, clay prone to volume change, soil prone to collapse, organic deposits and made ground are found below ground level. They may only be built on with due care and expertise.
+b8a4b65	Change of state after construction
+47f2666	Expansive clay and collapsible loess
+1aea324	Some time after the structure is completed, <b>an external effect</b> (most often a change in water content) changes their state so much that the building moves unevenly and is damaged. At first sight they look like competent soils.
+951f193	Weak soils from the start
+6cb8eca	Organic soils and made ground
+6608ae3	Their strength is low and their compressibility high, so they are <b>generally unsuitable</b> for carrying loads. They are relatively easy to recognise, as long as the ground investigation is thorough enough.
+f1b24fc	Four soils at a glance
+e9b236c	Choose an aspect
+2229c6b	<b class="lbl">Water is the common factor</b>Swelling, shrinkage, collapse, the soaking of made ground and the drying of peat are all caused by water. This is why most design rules end up being about how to keep water away from the foundations, or how to keep it at a constant level.
+da0f257	Swelling and shrinking clay
+7014a8d	Expansive soils
+cf05709	Most lightly loaded buildings founded at insufficient depth on such clay are damaged sooner or later. The damage typically appears after a long dry summer, especially if several dry years follow one another.
+2053699	What happens in the soil? <span class="tag">clay minerals</span>
+cb825a5	High-plasticity clay consists of platy clay minerals. Water enters between the layers of montmorillonite (smectite), the lattice “opens up” and the soil swells. On drying the water leaves, and the soil shrinks and cracks. Kaolinite barely swells, illite moderately and montmorillonite very strongly. A surface cracked into a mosaic in dry weather is a tell-tale sign.
+19617c0	Water uptake of clay minerals
+39a886c	Set the water content, switch the mineral
+1f1f366	Animation of water between clay layers
+9cde375	Water content
+8a8cc09	<span>dried out</span><span>saturated</span>
+0159090	<span>Layer spacing</span><b id="microD">–</b>
+610f2cc	<span>Volume change</span><b id="microV">–</b>
+7bb71ef	Illustrative model: the layer spacing and the proportions of the volume change show the character of each mineral’s behaviour, not measured values.
+3aabc06	How do we recognise it? <span class="tag">limit values</span>
+c1f184b	A clay is regarded as expansive if the characteristics below are met. Enter the laboratory results of a soil sample and see what they show.
+d674d75	Volume change checker
+90b6e0f	Laboratory results → classification
+49616fd	The building moves all year round <span class="tag">seasonal cycle</span>
+fe0fb4e	When the water content of the soil increases again (in wetter weather, mainly in winter and spring), the swelling clay lifts the lightly loaded building, and the cracks narrow and often close completely. By the end of summer and in autumn the building settles because of shrinkage, and the cracks open. Without intervention this repeats year after year.
+b52cb92	Seasonal building movement
+028acaf	Scroll through time, set the foundation depth
+f921bae	Time
+ab696ae	Foundation depth
+e34c0e9	Severity of the drought
+4123ef2	<b class="lbl">A related effect · frost heave</b><b>Frost heave</b> causes the same kind of seasonal lifting and settlement: there, water freezing in the soil and growing ice lenses lift the footing, and on thawing the soil settles back. The other effects acting on shallow foundations – vibration, earthquakes, cavities, scour and frost – are covered on the <a href="https://sikalapokaterohatasok.vercel.app/#fagy" target="_blank" rel="noopener">External effects on shallow foundations ↗</a> page (in Hungarian), with a separate chapter on frost.
+e473e4c	Why are small houses damaged? <span class="tag">83 / 13 / 4 %</span>
+1c82320	<b>83% of the damage occurs in single-storey</b> buildings, 13% in two-storey and only 4% in three-storey buildings. A larger building presses on the ground with a higher contact pressure, and this counteracts the swelling pressure, which is above 100 kPa for these clays.
+c9c47e8	Hence the rule: make the most of the bearing resistance of the ground. The higher the contact pressure, the less the swelling clay can lift the building.
+d465ee1	Number of storeys
+82838ba	Contact pressure versus swelling pressure
+bd5d7ec	3D soil lab: a house on swelling clay <span class="tag">simulator</span>
+ad4c6c8	Rotate the model with the mouse or a finger. Set the season, the distance of the tree, the foundation depth and the number of storeys, and watch how the house rises, settles, tilts and cracks.
+c7d9af4	Design rules <span class="tag">checklist</span>
+94509f7	Damage from volume change can be avoided by following the empirical rules below. Tick what your design satisfies, and watch the risk go down.
+1838314	Have you designed the house well?
+511605d	<b class="lbl">A look at the wider world</b>In France, the estimated cost of building damage caused by shrinking clay in the 2022 drought exceeded 3.5 billion euros. In the United States, in an average year, expansive soils cause more damage than earthquakes, floods, hurricanes and tornadoes combined. British experience shows that thirsty trees (oak, willow, poplar) can damage a building from as far as 25 m away.
+bcc7967	If the house has already cracked: underpinning in sections <span class="tag">one possible solution</span>
+0dfd245	For a damaged house the aim is the same as in design: the load must be taken down below the active zone, into clay that no longer moves. One possible solution is underpinning in sections. First, a site investigation has to establish which layers are present and how deep the ground moves. The wall is divided into 1 m sections, and the excavation goes below the active zone first under the 1 sections, then under the 2 sections; above the open pit the wall spans like an arch. After formwork, the pit is filled with mass concrete up to 5–7 cm below the footing; the next day the gap is rammed tight with dry-pack mortar, and the remaining gaps can be filled with cement slurry through grout pipes. It is economical down to 2–3 m; next to a tree this may not be enough, so thirsty trees should be planted as far from the building as possible, or it is best to cut them down.
+c4a1214	Test yourself <span class="tag">quiz</span>
+f471401	Loess and its kind
+5e81b2f	Collapsible soils
+5c77711	When dry it stands like a wall, which is why wine cellars could be dug into it. Soaked, however, it suddenly collapses, and this movement happens once and is irreversible. About a third of Hungary is covered by loess.
+e1f2bc6	<b>~1/3</b><span>of Hungary is covered by loess</span>
+8377aed	<b>~10%</b><span>of the land is loess or a similar deposit</span>
+55d257e	<b>i<sub>r</sub> &gt; 0.01</b><span>above this collapse coefficient: at risk of collapse</span>
+16f258a	<b>3</b><span>conditions needed at once: soil, load, water</span>
+79d7833	The three conditions of collapse <span class="tag">switch them on</span>
+687fe33	Collapse needs <b>collapsible soil, load and water</b> together. If all three are present, the building cannot be protected from rapid, sudden settlement by increasing the safety against bearing failure, for example by widening the footing. Wet, saturated loess collapses under its “bare” load.
+7123342	Loess at grain scale
+edd820e	Switch the conditions
+f2a1a51	Macroporous structure of loess
+2834e94	Collapsible soil (macroporous loess)
+7e13d65	Load (building, self-weight)
+ed6d739	Water (burst pipe, infiltration)
+6755acf	In the laboratory: oedometer test with flooding <span class="tag">collapse coefficient</span>
+9d2f3d3	The sample is loaded at its natural water content and then flooded at the chosen load step. A collapsible sample then suffers a sudden additional compression. The collapse coefficient is i<sub>r</sub> = Δh / h, where Δh is the compression on flooding and h is the height of the sample.
+87f23e0	Oedometer simulator
+59fde48	1. load · 2. flood
+c57fd8c	Vertical stress σ
+2c2e766	Flooding
+ae07c25	New sample
+84f6a29	<span>h (mm)</span><b id="oedH">20.00</b>
+09a91f9	<span>Δh on flooding</span><b id="oedDh">–</b>
+cdc5594	<span>i<sub>r</sub> = Δh/h</span><b id="oedIr">–</b>
+21a1d2a	Which soil is at risk of collapse?
+e3481f2	Wind-blown silty fine sand with a loose fabric and a macroporous structure. The grains are held by weak calcite and clay bridges, which water weakens.
+11f3472	Loose, dry fine sand
+920de62	And the transitional soils. In a loose state their grain skeleton can collapse into a denser arrangement when wetted.
+9991f0c	Fresh fill
+18f05b3	Loose, uncompacted fill younger than 8–10 years can also collapse. This leads on to Chapter 3.
+71bdf12	3D soil lab: a burst pipe next to the house <span class="tag">simulator</span>
+c38d671	Increase the extent of the burst pipe, the load and the collapsibility of the soil. Switch on the protection, and watch when collapse occurs.
+646feaf	How do we protect against it? <span class="tag">6 + 5 + 1</span>
+766cb3a	Protection against damage
+31758dc	Keep surface water away: proper landscaping, no hollows collecting water.
+42d2501	Roof water led away from the building in a closed drain.

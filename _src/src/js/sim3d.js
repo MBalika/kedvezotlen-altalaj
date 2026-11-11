@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { clamp, lerp, smooth, $, $$, h, fmt, bindRange, mulberry32, stripS, cssVar } from './util.js';
+import { clamp, lerp, smooth, $, $$, h, fmt, bindRange, mulberry32, stripS, cssVar, EN } from './util.js';
 
 // ====================================================================== constants
 const BX = 15, BD = 8, BZ = 6;          // block half-width (x), depth (y), half-depth (z)
@@ -18,7 +18,7 @@ const MODELS = {
       ['season', 'range', 'Nedvességi állapot', 0, 100, 1, 18, (v) => v < 30 ? 'aszályos ősz' : v < 45 ? 'száraz nyár' : v < 56 ? 'átlagos' : v < 75 ? 'nedves tél' : 'csapadékos tavasz'],
       ['tree', 'range', 'Nyárfa távolsága a háztól', 1.5, 13, 0.5, 4, (v) => v >= 13 ? 'nincs fa' : fmt(v, 1) + ' m'],
       ['D', 'range', 'Alapozási mélység', 0.6, 3.0, 0.05, 0.8, (v) => fmt(v, 2) + ' m'],
-      ['n', 'range', 'Szintek száma', 1, 3, 1, 1, (v) => v + ' szint'],
+      ['n', 'range', 'Szintek száma', 1, 3, 1, 1, (v) => v + (EN ? (v > 1 ? ' storeys' : ' storey') : ' szint')],
     ],
     compute(p) {
       const s = (p.season - 50) / 50; const za = 2.25;
@@ -83,7 +83,7 @@ const MODELS = {
     controls: [
       ['edge', 'range', 'A feltöltött gödör széle', -8, 6, 0.1, 0, (v) => v <= -6.5 ? 'a ház mellett' : v >= 3 ? 'túl a házon' : 'a ház alatt'],
       ['Hmax', 'range', 'A gödör mélysége', 2, 7, 0.1, 5, (v) => fmt(v, 1) + ' m'],
-      ['age', 'range', 'A feltöltés kora', 1, 60, 1, 6, (v) => v + ' év'],
+      ['age', 'range', 'A feltöltés kora', 1, 60, 1, 6, (v) => v + (EN ? (v > 1 ? ' years' : ' year') : ' év')],
       ['mat', 'seg', 'Anyag', 0, 0, 0, 'rubble', [['rubble', 'Talaj, törmelék'], ['slag', 'Salak, hamu'], ['waste', 'Házi szemét']]],
       ['q', 'range', 'Talpfeszültség', 50, 250, 5, 120, (v) => v + ' kPa'],
       ['wet', 'toggle', 'Átázás (csőtörés, tetővíz)', 0, 0, 0, 0],

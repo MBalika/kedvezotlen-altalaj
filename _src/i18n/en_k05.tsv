@@ -1,0 +1,130 @@
+342f6a6	As narrow as possible, so that less stress reaches the organic layer.
+15c4a2a	If the peat is near the surface, (partial) soil replacement is often used.
+ff405c1	Or a deepened shallow foundation takes the load to competent soil below the organic layer.
+6f62545	Dynamic actions and fluctuating groundwater are dangerous for organic soil.
+c4476fa	It shrinks considerably when it dries out.
+2538e1e	On organic soil, the larger settlement of the building must be allowed for at service connections.
+59093f0	A flexible connection that allows movement is needed.
+a2750dd	After made ground, organic soils cause the most damage.
+cc4d7a6	Organic deposits are found in many places in Hungary, and after made ground they cause the most damage.
+7020895	Weak, highly compressible organic soils and made ground are generally unsuitable for carrying loads.
+a96031f	They are relatively easy and unambiguous to recognise.
+ce31b18	Montmorillonite swells less than kaolinite.
+efb5e15	The other way round: montmorillonite swells the most, kaolinite barely.
+b005a0f	The swelling pressure of expansive clay can be above 100 kPa.
+df1ce51	This is why swelling clay can lift a light building with a low contact pressure.
+dada3c1	Under a large hall floor on collapsible soil, deep compaction by vibroflotation can be considered.
+57719ff	It is one way of improving a large mass of ground.
+e905a40	expansive clay
+42218a0	expansive clays
+ac39d52	expansive soil
+7b32e20	collapsible soil
+3e6a98b	collapsible loess
+1481453	collapsible soils
+46a4347	depth of seasonal movement
+a4a10c7	swelling pressure
+1e36005	plasticity index
+012bba4	linear shrinkage
+ef97932	free swell
+24972e6	collapse coefficient
+0c6a6f3	differential settlement
+8fd7770	differential settlements
+d9468e7	high-plasticity clay
+cb7e213	full basement
+8e89549	partial basement
+5781a4f	groundwater level
+b38cd9d	bearing stratum
+135a9e2	deep foundation
+5dd255e	preloading
+cf9d491	secondary consolidation
+de979b1	consolidation time
+5abb33d	high water content
+22b5ca1	=
+1dfdd48	Formatting guard error
+5fe9864	Expansive clays
+2a026f5	Drought in a village on the Great Plain
+7165dbd	What happens in the clay?
+9acef8c	Seasonal movement of the building
+3e447e1	Recognition and limit values
+47b6026	Design rules
+94e7f56	Loess country, wine cellars
+d77e406	Loess at grain scale
+115c081	The three conditions
+1a811f4	Burst pipe and collapse
+fd81d8c	Oedometer, iᵣ
+3311fa8	Protection and ground improvement
+5088433	The history of a plot
+9bb41ea	What is made ground made of?
+a7bd083	Damage and statistics
+78de556	Water and gases
+802d5cb	Guidelines
+25e4251	Improvement methods
+9746b60	Underpinning in sections
+8e8083c	Animation · supplementary part
+f7af85d	What happens under the house?
+e5af9fb	The principle: the load below the active zone
+2078401	Digging, formwork, concreting
+9b66a10	Dry-packing and grouting
+4ac4ade	The limit: trees next to the house
+bb287e8	Holme Fen: the ground that disappears
+9fdddc9	Formation
+7026349	Recognition in the laboratory
+0887ff0	Properties
+6000ecc	Damage
+8ac0502	Foundations and guidelines
+f765b51	Play the animation: 
+9c06196	=
+4a0edff	=
+6f5adce	3D animated explainer video with narration captions. It can also be watched full screen.
+090df7b	Close
+79f6946	Loading the animation…
+aea2e72	Separate interactive page: the link will be here soon
+619e0f6	Not quite. 
+015daff	Start again
+4678098	 · All correct!
+610f3a1	Expansive clay
+6e4331d	Collapsible soil
+269731d	Result
+0199a17	${ok} / ${order.length} correct answers (${pct}%)
+05ae3b8	Excellent! With this knowledge you can found on unfavourable ground too.
+8af1a12	Good result. Review the chapters where you made mistakes.
+37b667b	It is worth going through the chapters once more, then trying again.
+cc4264e	Next statement →
+85ed5d3	Wrong. 
+5a9b647	Statement ${idx + 1} / ${order.length}
+200aaa9	Moisture state
+35f48ec	autumn drought
+151d602	dry summer
+fe82a0c	average
+ba6a30d	wet winter
+83072df	rainy spring
+cdd2fba	Distance of the poplar from the house
+1280675	The foundation level is below the depth of seasonal movement (2–2.5 m): seasonal movement practically stops.
+e4a80ee	The foundation level is deep enough, but the roots of the nearby poplar dry out the clay even deeper!
+2c6156b	The foundation level is ${fmt(p.D, 2)} m: above the 2–2.5 m depth of seasonal movement, so the building moves with the seasons.
+d19c43a	A thirsty tree near the house: differential settlement on the side facing the tree.
+8af88e7	Low contact pressure: the swelling pressure (>100 kPa) lifts the light house.
+f424127	Collapsible loess
+a894d1f	Burst pipe: soaked zone
+5ba1df1	no water
+71871a3	Contact pressure
+77e2aca	Collapse coefficient iᵣ
+db0c476	Sleeve + closed drain (no water reaches the loess)
+095e2cf	RC ring beam + reinforced grillage foundation
+2e4b510	All three conditions are met: collapse! The settlement is sudden and irreversible.
+b8bd94e	iᵣ ≤ 0.01: the soil is not at risk of collapse.
+3dfb71f	No water reaches the loess: no collapse.
+c9a10db	The water has not yet reached the soil under the footings.
+4dcf8f4	A stiff structure does not prevent collapse, but it makes the settlement more even, so the damage is smaller.
+7185f0b	Edge of the filled pit
+9e9cc23	beside the house
+0886c22	beyond the house
+62e1375	under the house
+746594a	Depth of the pit
+d691230	Age of the fill
+ee62b01	 years
+046533a	Soil, rubble
+1386458	Household waste
+cb34816	Soaking (burst pipe, roof water)
+0122ad4	Contact pressure ${p.q} kPa ≤ 150–200 kPa.
+630d31c	Contact pressure ${p.q} kPa: in the upper part of the 150–200 kPa limit.

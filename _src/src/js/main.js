@@ -1,4 +1,4 @@
-import { $, $$, h, fireTheme } from './util.js';
+import { $, $$, h, fireTheme, EN } from './util.js';
 import { heroCores, compare, clayMicro, criteria, season, storeys, rules, loessMicro, oedometer } from './widgets1.js';
 import { history, sortGame, stats, gas, improve, holme, peatGame, peatBars, settle, timeCurve, bulb, peatTree } from './widgets2.js';
 import { quizzes, detective, trueFalse } from './quiz.js';
@@ -8,6 +8,9 @@ import { startFormatting } from './guard.js';
 
 // Link of the separate "Védekezés a káros süllyedések ellen" page (set when it is deployed)
 const VEDEKEZES_URL = window.VEDEKEZES_URL || 'https://vedekezesakarossullyedesekellen.vercel.app';
+
+// angol videók (videok/en/): a magyarral azonos kép, időzítés és zene
+const EN_FILES = { 1: '1_Expansive_clays_EN_video.html', 2: '2_Collapsible_soils_EN_video.html', 3: '3_Made_ground_EN_video.html', 4: '4_Organic_soils_EN_video.html', 5: '5_Underpinning_on_expansive_clay_EN_video.html' };
 
 const VIDEOS = {
   1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261108c', poster: 'assets/p1.jpg?v=20261028', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
@@ -23,7 +26,7 @@ function videos() {
     const poster = h('button', { class: 'video-poster', type: 'button', 'aria-label': 'Animáció lejátszása: ' + v.title, style: `background-image:url('${v.poster}')` },
       h('span', { class: 'play', html: '<svg viewBox="0 0 24 24" fill="#111"><path d="M6 4l14 8-14 8z"/></svg>' }), h('span', { class: 'dur' }, v.dur));
     poster.addEventListener('click', () => openVideo(v));
-    const info = h('div', { class: 'video-info' }, h('span', { class: 'k' }, v.kicker || ('Animáció · ' + el.dataset.video + '. rész')), h('h4', {}, v.title),
+    const info = h('div', { class: 'video-info' }, h('span', { class: 'k' }, v.kicker || (EN ? 'Animation · part ' + el.dataset.video : 'Animáció · ' + el.dataset.video + '. rész')), h('h4', {}, v.title),
       h('p', {}, '3D animációs magyarázó videó narrációs feliratokkal. Teljes képernyőn is nézhető.'), h('ol', {}, ...v.parts.map(p => h('li', {}, p))));
     el.append(poster, info);
   });
@@ -33,7 +36,7 @@ function openVideo(v) {
   const inner = h('div', { class: 'modal-in' });
   const msg = h('div', { class: 'modal-msg' }, 'Animáció betöltése…');
   inner.append(msg);
-  const frame = h('iframe', { src: v.file + '#autoplay', title: v.title, allow: 'fullscreen; autoplay', allowfullscreen: true, webkitallowfullscreen: true });
+  const frame = h('iframe', { src: (EN ? v.file.replace(/^videok\/([1-5])_[^?]*/, (m, n) => 'videok/en/' + EN_FILES[n]) : v.file) + '#autoplay', title: v.title, allow: 'fullscreen; autoplay', allowfullscreen: true, webkitallowfullscreen: true });
   frame.addEventListener('load', () => msg.remove());
   inner.append(frame);
   const modal = h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': v.title }, inner, close);
@@ -51,6 +54,21 @@ function openVideo(v) {
   close.addEventListener('click', shut); modal.addEventListener('click', (e) => { if (e.target === modal) shut(); });
   document.addEventListener('keydown', esc);
   document.body.append(modal); close.focus();
+}
+
+// nyelvváltó (HU | EN): a választást megjegyezzük, és a másik nyelvű oldalon ugyanannál a fejezetnél folytatjuk
+function langSwitch() {
+  const sw = $('#langSw'), KEY = 'alap-pos'; const hh = () => { const t = $('.topbar'); return t ? t.offsetHeight : 0; };
+  if (sw) sw.addEventListener('click', () => {
+    try { localStorage.setItem('alap-lang', EN ? 'hu' : 'en'); } catch (e) {}
+    const H0 = hh(); let best = null; document.querySelectorAll('main [id]').forEach((n) => { if (n.closest('svg')) return; const r = n.getBoundingClientRect(); if (r.height && r.top <= H0 + 1 && r.bottom > H0) best = n; });
+    try { sessionStorage.setItem(KEY, JSON.stringify({ id: best ? best.id : '', off: best ? H0 - best.getBoundingClientRect().top : 0, y: scrollY, t: Date.now() })); } catch (e) {}
+    sw.setAttribute('href', (EN ? './' : 'en') + (best ? '#' + best.id : ''));
+  });
+  let p = null; try { p = JSON.parse(sessionStorage.getItem(KEY) || 'null'); sessionStorage.removeItem(KEY); } catch (e) {}
+  if (p && Date.now() - p.t < 20000) { if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+    const go = () => { const n = p.id && document.getElementById(p.id); const y = n ? n.getBoundingClientRect().top + scrollY - hh() + p.off : p.y; scrollTo({ top: Math.max(0, y), behavior: 'instant' }); };
+    requestAnimationFrame(go); addEventListener('load', () => { go(); setTimeout(go, 600); }, { once: true }); }
 }
 
 function theme() {
@@ -78,7 +96,7 @@ function navigation() {
     const y = window.scrollY + window.innerHeight * 0.4;
     const t = Math.min(1, Math.max(0, (y - a.offsetTop) / (b.offsetTop - a.offsetTop)));
     marker.style.top = (t * (log.clientHeight - 3)) + 'px';
-    depth.textContent = (t * 20).toFixed(1).replace('.', ',') + ' m';
+    depth.textContent = (t * 20).toFixed(1).replace('.', EN ? '.' : ',') + ' m';
   };
   addEventListener('scroll', onScroll, { passive: true }); onScroll();
 }
@@ -102,6 +120,6 @@ theme();
 [['cores', heroCores], ['compare', compare], ['videos', videos], ['clayMicro', clayMicro], ['criteria', criteria], ['season', season], ['storeys', storeys], ['rules', rules],
   ['loessMicro', loessMicro], ['oedometer', oedometer], ['history', history], ['sortGame', sortGame], ['stats', stats], ['gas', gas], ['improve', improve],
   ['holme', holme], ['peatGame', peatGame], ['peatBars', peatBars], ['settle', settle], ['timeCurve', timeCurve], ['bulb', bulb], ['peatTree', peatTree],
-  ['quizzes', quizzes], ['detective', detective], ['trueFalse', trueFalse], ['sims', initSims], ['nav', navigation], ['counts', counts], ['vedekezes', vedekezes]].forEach(([n, f]) => safe(f, n));
+  ['quizzes', quizzes], ['detective', detective], ['trueFalse', trueFalse], ['sims', initSims], ['nav', navigation], ['counts', counts], ['vedekezes', vedekezes], ['lang', langSwitch]].forEach(([n, f]) => safe(f, n));
 startFormatting();   // sorkizárás + magyar elválasztás + nem törő egységek (formázás skill)
 window.__ready = true;

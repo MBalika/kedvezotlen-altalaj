@@ -1,0 +1,120 @@
+0a00d1e	change in water content: drought, trees, rainfall
+f2dd220	cyclic: swelling and shrinkage, year after year
+e202626	foundation level ≥ 2–2.5 m, high contact pressure, full basement
+59362ba	<span class="dot" style="background:var(--c2s)"></span><b>Collapsible soil</b>
+ec34c87	loess, loose fine sand, fresh fill; i<sub>r</sub> &gt; 0.01
+2de5f38	soaking under load
+39dfcca	sudden, one-off, irreversible
+e2dd488	water away, stiff structure, reinforced footing
+b81bce6	<span class="dot" style="background:var(--c3s)"></span><b>Made ground</b>
+03c72e3	rubble, slag, waste; unknown age and density
+b1dd38b	compression, soaking, decay
+ba3d32b	uneven, follows the thickness
+2b28803	σ ≤ 150–200 kPa, uniform thickness, improvement
+8ca5919	<span class="dot" style="background:var(--c4s)"></span><b>Organic soil</b>
+34d2442	dark, light, fibrous, w &gt; 50–70%
+e24e3d2	load, groundwater lowering, heat
+0357ba4	large, slow, lasting for decades
+e9d4f1a	narrow shallow footing in the cover layer, soil replacement, deepened footing
+91521a7	Soil detective <span class="tag">which soil is it?</span>
+b8d7046	Read the site description, and guess which unfavourable soil is causing the trouble.
+1dd442a	Knowledge check
+ba20c08	True or false?
+068e551	Statements about all four soils. After each answer we show the explanation. At the end you see your score.
+3894eee	Where next?
+77ccacb	Protection against harmful settlement
+d09f731	Lower contact pressure, deeper foundation level, soil replacement, soil stabilisation, preloading, flexible structures, the right construction sequence and deep foundations are covered in detail on a separate page (in Hungarian).
+f54fd01	<b>Protection against harmful settlement</b><span>Interactive module on the 8 basic methods (in Hungarian)</span>
+04df833	Further effects on shallow foundations – vibration, earthquakes, cavities, scour and frost – are covered on a separate page; swelling and shrinking clay also appears there as a related effect.
+651da58	<b>External effects on shallow foundations</b><span>Vibration, earthquakes, cavities, scour and frost – interactive module (in Hungarian)</span>
+8c7f27a	<b style="color:var(--ink)">Foundations on unfavourable ground · BME Faculty of Civil Engineering, Department of Engineering Geology and Geotechnics</b>⏎    <span>Interactive learning material for the Foundation Engineering course at the BME Faculty of Civil Engineering. The simulators are indicative, illustrative models and do not replace geotechnical design.</span>
+aa2b0a8	How deep is the depth of seasonal movement?
+001a444	The foundation level should be no closer than 2–2.5 m to the ground surface: below this depth the water content no longer changes with the seasons.
+a1863ba	When does damage caused by expansive clay typically appear?
+c9887c1	When the snow melts in spring
+b14b326	After a long dry summer, especially after several dry years
+d5018ea	During a flood
+15b5959	During a long frost
+f711261	The damage typically appears after a long dry summer, especially if several dry years follow one another.
+02b61b4	What percentage of the damage affects single-storey buildings?
+863c784	83% of the damage occurs in single-storey, 13% in two-storey and 4% in three-storey buildings: the small load cannot counteract the swelling.
+40d26b3	Which clay mineral swells most strongly?
+420101a	Water enters between the layers of montmorillonite (smectite), so it swells strongly. A high montmorillonite and illite content is characteristic of expansive clay.
+42d22c3	Why is a high contact pressure favourable on expansive clay?
+17e178d	Because it counteracts the swelling pressure, so the soil cannot lift the building
+d6ae3ab	Because it speeds up consolidation
+944ea3e	Because it takes the footing below the frost depth
+97a2546	The bearing resistance of the ground should be used as fully as possible: the higher the contact pressure, the less the swelling pressure can lift the building.
+1530ffa	Which is the worst solution on such ground?
+b46201a	A full basement
+471df02	A partial basement
+6bcbe54	A reinforced strip footing 2.5 m deep
+7317a70	Pad footings with ground beams, 2.5 m deep
+9a9106c	A partial basement is the worst: the part with the basement stands deep, in undisturbed soil, while the rest is in the moving zone. The result is uneven movement and cracking.
+0d674c7	How should “wet” services be brought into the building?
+b50e412	Parallel to the wall
+3961a05	Perpendicular to the wall, through an oval, sealed opening, in a sleeve
+21a33fb	Diagonally under the floor
+3eba22d	The connections should be perpendicular to the wall, and relative movement between the pipe and the wall must be possible.
+affbb73	Which three factors must be present together for collapse?
+4cbf20b	Drought, load, clay
+3d3e140	Collapsible soil, load and water
+a90825a	Water, frost, loess
+588060a	Load, temperature, water
+f72ac07	Collapse requires collapsible soil, load and water to be present together.
+0560f5f	When is a soil at risk of collapse?
+a9437ed	The collapse coefficient is iᵣ = Δh/h; if it exceeds 0.01 (1%), the soil is at risk of collapse.
+0191432	Does widening the footing protect the building from collapse?
+26b4b3d	Yes, because the contact pressure decreases
+40c0436	No: if all three conditions are met, increasing the safety against bearing failure does not help either
+6bbeb01	Only for footings wider than 2 m
+14191d3	Only in sandy loess
+fdbc0ff	If all three conditions are met, the building cannot be protected from rapid, sudden settlement by increasing the safety against bearing failure (by widening the footing).
+570ab42	How much of Hungary is covered by loess?
+d9480d7	About 1/3
+05318f6	About 2/3
+47036c0	~90%
+7c66329	About a third of Hungary is covered by loess, so collapse is a particularly important issue here.
+87594c0	What should be done in rainy weather after the foundation trench has been excavated?
+3d8f7c2	Wait until it dries out
+a67ffa2	Concrete straight away, or remove the soaked soil
+5258a78	Cover it and leave it for a week
+e6833f1	Wash it in with water and compact it
+47277e4	After excavation, concreting must start straight away, or the soaked soil below foundation level must be removed.
+5208059	Which method is NOT one of the ground improvement methods used for collapsible soils?
+7964a82	Dropped tamping plate
+8fc004f	Vibroflotation
+263361d	Stabilisation with sodium silicate
+d44cb15	Ground freezing
+418ca7b	Methods used for collapsible soil: dropped tamping plate, vibroflotation, stabilisation with sodium silicate, soil burning, flooding + preloading.
+97e7dd3	What is the aim of flooding + preloading?
+8aae24a	To dry out the soil
+bf806a3	To force collapse in advance, before construction
+ec28072	To raise the groundwater level
+18f73cc	To dissolve the lime
+7eee4b9	With flooding and preloading, collapse is forced in advance, before the structure is completed.
+9ba242f	Which fill is the most dangerous?
+1daa785	50-year-old, compacted sandy gravel
+ec3093b	Household waste, or uncompacted fill less than 8–10 years old
+e15fc63	Old, mixed soil
+28208a6	Compacted crushed concrete
+01d6dd9	Household waste (municipal waste) and uncompacted fill less than 8–10 years old are very dangerous.
+4b8a671	What percentage of the damaged floors in Hungary stood on fill?
+08cc913	40% of the damaged structural elements, 57% of the partition walls and 70% of the floors stood on fill.
+ed9ae1d	What share of the damage related to made ground was triggered by water?
+522e759	87% of the damage was triggered by water (broken sewers, roof water, burst pressure pipes, surface water).
+a92665e	What contact pressure should not be exceeded on made ground?
+c21598d	There is no limit
+0cfb230	According to the design guideline, the contact pressure should not exceed 150–200 kPa.
+37a48df	What layer thickness can be compacted with a vibratory roller?
+a7183ce	A plate compactor can compact layers 10–30 cm thick, a vibratory roller 30–50 cm, and a dropped tamping plate 2–4 m.
+cadf724	How should cement grouting be carried out in made ground?
+586f3d4	From the bottom upwards
+b05b839	From the top downwards
+3b7a1e4	Only from horizontal holes
+6b371ba	The order does not matter
+74da316	Cement grouting with a small amount of bentonite should be carried out from the top downwards.
+c7e9775	Where can soil replacement be carried out?
+49046ed	Only above the groundwater level
+f982052	Only below the groundwater level
+0fc1a99	Regardless of the groundwater
