@@ -75,4 +75,7 @@ r = subprocess.run(['node', 'i18n/numfix_js.mjs', *[f'{EN}/{f}' for f in FILES i
 print(r.stdout.strip().replace('\n', ' · '))
 if r.returncode: print(r.stderr); sys.exit(1)
 build(EN, 'dist/en', 'en-GB')
+# a védekezés-oldalnak is van angol változata: az angol oldal arra mutat
+p = 'dist/en.html'; t = open(p).read(); a = '"https://vedekezesakarossullyedesekellen.vercel.app"'; assert t.count(a) == 1, 'VEDEKEZES_URL'
+open(p, 'w').write(t.replace(a, '"https://vedekezesakarossullyedesekellen.vercel.app/en"'))
 shutil.copy('dist/en.html', '../en.html')
