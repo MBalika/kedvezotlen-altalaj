@@ -25396,7 +25396,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     O.font(26, 700, FH);
     g.fillStyle = C.water;
     g.fillText("WATER CONTENT", x + 30, y + 46);
-    const rows = [["sand", 20, "~20 %"], ["peat", 500, "several hundred %"], ["fibrous", 2e3, "up to 2000 %"]];
+    const rows = [["sand", 20, "~20 %"], ["peat", 500, "several hundred %"], ["fibrous", 2e3, "≤ 2000 %"]];
     const sc = (w - 260) / 2e3;
     rows.forEach(([n, v, s], i) => {
       const k = easeOut(clamp2((t - 43.6 - i * 0.5) / 1));
