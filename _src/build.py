@@ -6,6 +6,11 @@ JS-karakterláncok) az i18n/en_*.tsv párjai szerint cseréli (.en/ mappába), �
 Hiányzó fordításnál az angol build leáll, a hiányzó egységek a missing.tsv-be kerülnek.
 """
 import subprocess, os, sys, re, shutil, glob
+
+def _bxt(h):  # dobozcímek középre (formázás skill) – boxtitle.inc.html a build.py mellett
+    import pathlib as _p
+    s = (_p.Path(__file__).resolve().parent / 'boxtitle.inc.html').read_text(encoding='utf-8')
+    return h if 'id="bxt-js"' in h else h.replace('</head>', s + '</head>', 1)
 root = os.path.dirname(os.path.abspath(__file__))
 os.chdir(root)
 SITE = 'https://kedvezotlen-altalaj.vercel.app'
@@ -49,7 +54,7 @@ def build(src, out, lang):
 </body>
 </html>
 '''
-    open(f'{out}.html', 'w').write(full)
+    open(f'{out}.html', 'w').write(_bxt(full))
     if lang == 'hu': open('dist/artifact.html', 'w').write(head_common + body + f'\n<script>{js}</script>\n')
     print(os.path.basename(out) + '.html', len(full) // 1024, 'KB')
 
