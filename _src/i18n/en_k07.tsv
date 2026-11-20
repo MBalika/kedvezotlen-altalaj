@@ -1,4 +1,3 @@
-75eedd4	shallow terrace
 109d6d8	dried-out zone under the footing
 b36c4ae	Damage risk: 
 5440c44	${R.filter(r => st[r[0]]).length} / ${R.length} rules met

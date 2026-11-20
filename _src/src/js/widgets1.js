@@ -300,7 +300,7 @@ export function rules() {
     ['roof', 'Tetővíz gondos elvezetése', 'zárt csatornában, a háztól távol', 1],
     ['walk', '1,0–1,5 m széles, kifelé lejtő járda', 'az épület körül', 1],
     ['annex', 'Nincs kinyúló, kis terhelésű épületrész', 'vagy azt is kellő mélységben alapozzuk', 1],
-    ['tree', 'Nincs nagy vízigényű fa a ház közelében', 'pl. nyárfa, nyírfa: gyökere kiszívja a vizet az alapok alól', 2],
+    ['tree', 'Nincs nagy vízigényű fa a ház közelében', 'pl. nyárfa, fűz, tölgy: gyökere kiszívja a vizet az alapok alól', 2],
     ['pipe', '„Vizes” közművek merőlegesen, ovális nyílással, védőcsőben', 'biztosítva a vezeték és a fal relatív elmozdulását', 1],
   ];
   const st = {}; R.forEach(([k]) => st[k] = false);
@@ -321,19 +321,26 @@ export function rules() {
     // active zone band
     svg.append(s('rect', { x: 0, y: gy, width: W, height: 2.25 * mpx, fill: 'var(--c1s)', opacity: 0.18 }));
     svg.append(s('line', { x1: 0, x2: W, y1: gy + 2.25 * mpx, y2: gy + 2.25 * mpx, stroke: 'var(--acc)', 'stroke-dasharray': '7 6', 'stroke-width': 2 }));
-    svg.append(s('text', { x: 8, y: gy + 2.25 * mpx - 8, 'font-size': 12, fill: 'var(--acc)', 'font-weight': 700, text: 'meteorológiai határmélység ≈ 2–2,5 m' }));
     // terrain / puddle
     if (!st.terrain) svg.append(s('ellipse', { cx: 70, cy: gy + 2, rx: 46, ry: 6, fill: 'var(--waters)', opacity: 0.8 }));
     svg.append(s('line', { x1: 0, x2: W, y1: gy, y2: gy, stroke: '#5e7a3a', 'stroke-width': 4 }));
     // house
     const hx0 = 170, hx1 = 450;
     const fd = st.depth ? 2.4 : 0.8; const fw = st.stress ? 30 : 64;
-    // cellar
-    if (st.cellar) svg.append(s('rect', { x: hx0, y: gy, width: hx1 - hx0, height: fd * mpx - 14, fill: 'var(--surface2)', stroke: ink, 'stroke-width': 2 }));
-    else if (st.depth) { svg.append(s('rect', { x: hx0, y: gy, width: (hx1 - hx0) * 0.45, height: fd * mpx - 14, fill: 'var(--surface2)', stroke: 'var(--bad)', 'stroke-width': 2, 'stroke-dasharray': '6 4' })); svg.append(s('text', { x: hx0 + 6, y: gy + 22, 'font-size': 12, fill: 'var(--bad)', 'font-weight': 700, text: 'részleges pince' })); }
-    for (const x of [hx0, hx1]) {
-      svg.append(s('rect', { x: x - fw / 2, y: gy, width: fw, height: fd * mpx, fill: '#bdbab3', stroke: ink, 'stroke-width': 1.5 }));
-      if (st.rebar) for (let k = 0; k < 3; k++) svg.append(s('circle', { cx: x - fw / 2 + 7 + k * (fw - 14) / 2, cy: gy + fd * mpx - 8, r: 3, fill: '#7a3a1c' }));
+    // pince: kipipálva teljes (egy szint mély), különben részleges (a ház egy része alatt) – az alapsík mélyítése csak az alapokat viszi le
+    const cd = 2.6, cellarH = cd * mpx, pcx = hx0 + (hx1 - hx0) * 0.45;
+    const foot = (x, d, bad) => { svg.append(s('rect', { x: x - fw / 2, y: gy, width: fw, height: d * mpx, fill: '#bdbab3', stroke: bad ? 'var(--bad)' : ink, 'stroke-width': 1.5 }));
+      if (st.rebar) for (let k = 0; k < 3; k++) svg.append(s('circle', { cx: x - fw / 2 + 7 + k * (fw - 14) / 2, cy: gy + d * mpx - 8, r: 3, fill: '#7a3a1c' })); };
+    if (st.cellar) {
+      foot(hx0, Math.max(fd, cd + 0.3)); foot(hx1, Math.max(fd, cd + 0.3));
+      svg.append(s('rect', { x: hx0, y: gy, width: hx1 - hx0, height: cellarH, fill: 'var(--surface2)', stroke: ink, 'stroke-width': 2 }));
+      svg.append(s('rect', { x: hx0, y: gy + cellarH - 8, width: hx1 - hx0, height: 8, fill: '#bdbab3', stroke: ink, 'stroke-width': 1 }));
+      svg.append(s('text', { x: (hx0 + hx1) / 2, y: gy + cellarH / 2 + 5, 'font-size': 13, fill: 'var(--good)', 'font-weight': 700, 'text-anchor': 'middle', text: EN ? 'full basement' : 'teljes pince' }));
+    } else {
+      foot(hx0, Math.max(fd, cd + 0.3), true); foot(pcx, cd + 0.3, true); foot(hx1, fd);
+      svg.append(s('rect', { x: hx0, y: gy, width: pcx - hx0, height: cellarH, fill: 'var(--surface2)', stroke: 'var(--bad)', 'stroke-width': 2, 'stroke-dasharray': '6 4' }));
+      svg.append(s('rect', { x: hx0, y: gy + cellarH - 8, width: pcx - hx0, height: 8, fill: '#bdbab3', stroke: 'var(--bad)', 'stroke-width': 1 }));
+      svg.append(s('text', { x: (hx0 + pcx) / 2, y: gy + cellarH / 2 + 5, 'font-size': 13, fill: 'var(--bad)', 'font-weight': 700, 'text-anchor': 'middle', text: 'részleges pince' }));
     }
     svg.append(s('rect', { x: hx0 - 8, y: 60, width: hx1 - hx0 + 16, height: gy - 60, fill: 'var(--surface)', stroke: ink, 'stroke-width': 2 }));
     svg.append(s('path', { d: `M${hx0 - 26} 64 L${(hx0 + hx1) / 2} 8 L${hx1 + 26} 64 Z`, fill: '#8a3e2b', stroke: ink, 'stroke-width': 2 }));
@@ -344,9 +351,13 @@ export function rules() {
     else for (let k = 0; k < 6; k++) svg.append(s('line', { x1: hx1 + 14, y1: gy - 20, x2: hx1 + 4 + k * 5, y2: gy - 2, stroke: 'var(--waters)', 'stroke-width': 2 }));
     // walkway
     if (st.walk) for (const [a, b] of [[hx0 - 80, hx0 - 8], [hx1 + 8, hx1 + 80]]) svg.append(s('path', { d: `M${a} ${gy - (a < hx0 ? 0 : 6)} L${b} ${gy - (a < hx0 ? 6 : 0)} L${b} ${gy + 4} L${a} ${gy + 4} Z`, fill: '#a9a6a0', stroke: ink, 'stroke-width': 1 }));
-    // annex (terrace)
-    const ax0 = hx0 - 110, ax1 = hx0 - 8;
-    if (!st.annex) { svg.append(s('rect', { x: ax0, y: gy - 12, width: ax1 - ax0, height: 12, fill: '#c9c4ba', stroke: 'var(--bad)', 'stroke-width': 2 })); svg.append(s('rect', { x: ax0 + 4, y: gy, width: 16, height: 0.5 * mpx, fill: '#bdbab3', stroke: 'var(--bad)' })); svg.append(s('text', { x: ax0, y: gy - 18, 'font-size': 12, fill: 'var(--bad)', 'font-weight': 700, text: 'sekély terasz' })); }
+    // kinyúló, kis terhelésű épületrész: a házhoz csatlakozó szélfogó; kipipálva az is kellő mélységben alapozva
+    const ax0 = hx0 - 86, ax1 = hx0 - 8, ac = st.annex ? ink : 'var(--bad)', ad = st.annex ? fd : 0.4;
+    for (const x of [ax0 + 9]) svg.append(s('rect', { x: x - 8, y: gy, width: 16, height: ad * mpx, fill: '#bdbab3', stroke: ac, 'stroke-width': 1.5 }));
+    svg.append(s('rect', { x: ax0, y: gy - 84, width: ax1 - ax0, height: 84, fill: 'var(--surface)', stroke: ac, 'stroke-width': 2 }));
+    svg.append(s('path', { d: `M${ax0 - 10} ${gy - 80} L${ax1 + 2} ${gy - 104} L${ax1 + 2} ${gy - 96} L${ax0 - 10} ${gy - 72} Z`, fill: '#8a3e2b', stroke: ac, 'stroke-width': 1.5 }));
+    svg.append(s('rect', { x: ax0 + 22, y: gy - 58, width: 28, height: 58, fill: 'var(--surface2)', stroke: mut, 'stroke-width': 1.5 }));
+    svg.append(s('text', { x: 4, y: gy - 120, 'font-size': 12, fill: st.annex ? 'var(--good)' : 'var(--bad)', 'font-weight': 700, text: st.annex ? 'szélfogó mély alapon' : 'szélfogó sekély alapon' }));
     // tree
     const tx = st.tree ? W - 30 : hx1 + 70;
     svg.append(s('rect', { x: tx - 5, y: 30, width: 10, height: gy - 30, fill: '#6b4a2a' }));
@@ -354,10 +365,14 @@ export function rules() {
     const rootD = st.tree ? 1.4 : 3.6;
     for (let k = -3; k <= 3; k++) svg.append(s('path', { d: `M${tx} ${gy} q ${k * 18} ${rootD * mpx * 0.4} ${k * 34} ${rootD * mpx}`, stroke: '#6b4a2a', 'stroke-width': 2, fill: 'none', opacity: 0.7 }));
     if (!st.tree) svg.append(s('text', { x: tx - 60, y: gy + rootD * mpx + 16, 'font-size': 12, fill: 'var(--bad)', 'font-weight': 700, text: 'kiszárított zóna az alap alatt' }));
-    // utility pipe
-    const py = gy + 0.9 * mpx;
-    svg.append(s('line', { x1: 0, x2: hx0 - fw / 2, y1: py + (st.pipe ? 0 : 18), y2: py, stroke: '#3a7ab0', 'stroke-width': 7 }));
-    if (st.pipe) svg.append(s('ellipse', { cx: hx0, cy: py, rx: fw / 2 + 2, ry: 12, fill: 'none', stroke: 'var(--good)', 'stroke-width': 3 }));
+    // „vizes” közmű: vízszintesen, az alaptesten ÁT; kipipálva védőcsőben, hézaggal (különben mereven befalazva)
+    const py = gy + 0.56 * mpx;
+    if (st.pipe) svg.append(s('rect', { x: hx0 - fw / 2 - 7, y: py - 11, width: fw + 14, height: 22, rx: 5, fill: 'var(--surface)', stroke: 'var(--good)', 'stroke-width': 3 }));
+    svg.append(s('line', { x1: 0, x2: hx0 + fw / 2 + 26, y1: py, y2: py, stroke: '#3a7ab0', 'stroke-width': 7 }));
+    if (!st.pipe) for (const x of [hx0 - fw / 2, hx0 + fw / 2]) svg.append(s('line', { x1: x, x2: x, y1: py - 9, y2: py + 9, stroke: 'var(--bad)', 'stroke-width': 3 }));
+    svg.append(s('text', { x: 6, y: py + 22, 'font-size': 12, fill: st.pipe ? 'var(--good)' : 'var(--bad)', 'font-weight': 700, text: st.pipe ? 'védőcsőben, hézaggal' : (EN ? 'rigidly built in' : 'mereven befalazva') }));
+    // a határmélység felirata legfelül, hogy az alap ne takarja
+    svg.append(s('text', { x: W - 8, y: gy + 2.25 * mpx - 8, 'font-size': 12, fill: 'var(--acc)', 'font-weight': 700, 'text-anchor': 'end', class: 'onsoil', text: 'meteorológiai határmélység ≈ 2–2,5 m' }));
     // risk meter
     const tot = R.reduce((a, r) => a + r[3], 0), got = R.reduce((a, r) => a + (st[r[0]] ? r[3] : 0), 0);
     const risk = 1 - got / tot;
