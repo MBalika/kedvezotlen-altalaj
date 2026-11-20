@@ -7,7 +7,7 @@ b3b3181	Surface compaction with dropped tamping plates (3–5 tonnes, dropped fr
 f938946	Deep compaction (vibroflotation).
 94b90dc	Soil stabilisation, for example with sodium silicate.
 a6551f0	Heat treatment, soil burning (abandoned for environmental reasons).
-985ad95	Flooding + preloading: collapse is forced in advance.
+97f02de	Flooding + preloading: the area is flooded between low dykes, then fill is placed on top, so the collapse takes place before construction.
 c16e5b8	<b class="lbl">During construction</b>After excavation, foundation trenches and pits must not get soaked! In rainy weather concreting must start straight away, or the soaked soil below foundation level must be removed.
 416eccb	The waste of the past under the house
 c7183f5	Made ground
@@ -37,10 +37,8 @@ fb4bd93	Much like those for collapsible soils.
 dbe933b	Depending on the state of the fill, the contact pressure should not exceed 150–200 kPa.
 7538ee1	Water away
 d458313	Water must be kept away from the building: roof water, services, surface water.
-a4dc4a6	Uniform thickness
-653c838	The fill under the footings should be of roughly the same thickness.
 10225b8	Three-dimensional stiffness
-373411a	The three-dimensional stiffness of the structure must be increased (ring beams, slab diaphragms).
+fa408d6	The three-dimensional stiffness of the structure must be increased (ring beams, slab diaphragms, foundation ring beam).
 ae244dc	No extensions
 a750670	Extensions should be avoided, because they settle differently.
 78e3848	How do we improve made ground? <span class="tag">method selector</span>

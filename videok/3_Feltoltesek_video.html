@@ -1,4 +1,4 @@
-<!doctype html><html lang="hu"><head><meta charset="utf-8"><title>Térfogatváltozó agyagok</title>
+<!doctype html><html lang="hu"><head><meta charset="utf-8"><title>Feltöltések</title>
 <style>html,body{margin:0;background:#000;overflow:hidden}#wrap{position:relative;width:1920px;height:1080px}
 canvas{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block}</style></head>
 <body><div id="wrap"><canvas id="c3d" width="1920" height="1080"></canvas><canvas id="c2d" width="1920" height="1080"></canvas></div>
@@ -22791,7 +22791,7 @@ vec3 deformP(vec3 p){
   float hy = max(p.y, 0.0);
   q.x += sign(p.x) * uTilt * hy * smoothstep(4.3, 4.95, abs(p.x)) * step(p.y, 3.6);
   q.z += sign(p.z) * uTilt * hy * smoothstep(3.8, 4.45, abs(p.z)) * step(p.y, 3.6);
-  float ter = step(5.06, p.x) * step(p.y, 2.95) * step(-1.8, p.z) * step(p.z, 3.8);
+  float ter = step(5.06, p.x) * step(p.y, 2.95) * step(-3.2, p.z) * step(p.z, 3.8);
   float stp = step(4.56, p.z) * step(p.y, 0.62) * step(2.1, p.x) * step(p.x, 3.9);
   q.y -= uAnnex * (0.10 + 0.09*(p.x-5.0)) * ter; q.x += uAnnex * 0.20 * ter;
   q.y -= uAnnex * 0.12 * stp; q.z += uAnnex * 0.17 * stp;
@@ -23311,31 +23311,45 @@ vec3 deformP(vec3 p){
       fu.push(sh);
     }
     add(mergeGeometries(fu), mWoodPost, "furniture");
-    const ts = new BoxGeometry(2.6, 0.3, 5.2);
-    ts.translate(6.3, 0.15, 1);
+    const ts = new BoxGeometry(2.6, 0.3, 6.6);
+    ts.translate(6.3, 0.15, 0.3);
     add(ts, mConcrete, "terrace");
-    const tp = [];
-    [[7.45, -1.45], [7.45, 3.45]].forEach(([x, z]) => {
-      const b = new BoxGeometry(0.14, 2.35, 0.14);
-      b.translate(x, 0.3 + 1.175, z);
-      tp.push(b);
-    });
-    [[-1.45], [3.45]].forEach(([z]) => {
-      const b = new BoxGeometry(2.55, 0.14, 0.12);
-      b.translate(6.2, 2.62, z);
-      tp.push(b);
-    });
-    for (let k = 0; k < 7; k++) {
-      const b = new BoxGeometry(2.5, 0.1, 0.06);
-      b.translate(6.2, 2.74, -1.3 + k * 0.78);
-      tp.push(b);
+    {   // fészer: x 5,0–7,6 m, z −3,0…3,6 m; a tető a háztól kifelé lejt
+      const mShedWood = plain({ map: T2.wood, color: 11569754, roughness: 0.8 });
+      const mShedRoof = plain({ color: 7634302, roughness: 0.45, metalness: 0.5, side: DoubleSide });
+      const roofY = (x) => 2.5 - (x - 5) * 0.16;
+      const wd = [], dr = [];
+      for (let k = 0; k < 30; k++) {   // külső fal (x = 7,5), ajtónyílással
+        const z = -3 + k * 0.22 + 0.11;
+        if (z > -1.32 && z < -0.38) continue;
+        const b = new BoxGeometry(0.07, 1.78, 0.2);
+        b.translate(7.5, 0.3 + 0.89, z);
+        wd.push(b);
+      }
+      { const b = new BoxGeometry(0.07, 0.22, 0.98); b.translate(7.5, 1.97, -0.85); wd.push(b); }
+      [-2.96, 3.56].forEach((z) => {   // két végfal, a tető lejtését követve
+        for (let k = 0; k < 11; k++) {
+          const x = 5.08 + k * 0.22 + 0.11, hh = roofY(x) - 0.36;
+          const b = new BoxGeometry(0.2, hh, 0.07);
+          b.translate(x, 0.3 + hh / 2, z);
+          wd.push(b);
+        }
+      });
+      [[7.5, -2.96], [7.5, 3.56]].forEach(([x, z]) => { const b = new BoxGeometry(0.12, 1.8, 0.12); b.translate(x, 0.3 + 0.9, z); wd.push(b); });
+      { const b = new BoxGeometry(0.12, 0.12, 6.7); b.translate(7.5, 2.12, 0.3); wd.push(b); }
+      add(mergeGeometries(wd), mShedWood, "pergola");
+      { const b = new BoxGeometry(0.06, 1.72, 0.88); b.translate(7.47, 0.3 + 0.86, -0.85); dr.push(b);
+        const hd = new BoxGeometry(0.08, 0.05, 0.14); hd.translate(7.53, 1.25, -0.55); dr.push(hd); }
+      add(mergeGeometries(dr), mDoor, "shedDoor");
+      const rf = [];
+      { const sl = Math.atan(0.16), b = new BoxGeometry(2.86, 0.06, 6.95);
+        rf.push(b);
+        for (let k = 0; k < 20; k++) { const r = new BoxGeometry(2.86, 0.035, 0.07); r.translate(0, 0.045, -3.3 + k * 0.347); rf.push(r); }
+        const g2 = mergeGeometries(rf);
+        g2.rotateZ(-sl);
+        g2.translate(6.5, roofY(6.5) + 0.05, 0.3);
+        add(g2, mShedRoof, "shedRoof"); }
     }
-    {
-      const b = new BoxGeometry(0.14, 0.14, 5.1);
-      b.translate(7.45, 2.62, 1);
-      tp.push(b);
-    }
-    add(mergeGeometries(tp), mWoodPost, "pergola");
     const st = [];
     for (let k = 0; k < 3; k++) {
       const b = new BoxGeometry(1.5, 0.15 * (k + 1), 0.3);
@@ -25193,9 +25207,8 @@ vec3 debris(vec2 p, float layer, vec3 matrix, vec4 nz){
     [93, 98.8, "Robban\xE1svesz\xE9ly", ["Pinc\xE9ben gy\u0171lik \xF6ssze"], { kc: C.red, hc: C.red }],
     [99.4, 103.4, "1", ["Kis talpfesz\xFClts\xE9g"]],
     [103.6, 107.8, "2  \xB7  V\xEDz t\xE1vol", ["A v\xEDz ne jusson a felt\xF6lt\xE9sbe"], { kc: C.water, hc: C.water }],
-    [108, 111.9, "3", ["Azonos vastags\xE1g"]],
-    [112.1, 115.9, "4", ["T\xE9rbeli merevs\xE9g"]],
-    [116.1, 118.9, "5", ["*Ker\xFClend\u0151*"], { kc: C.red, hc: C.red }],
+    [108, 115.9, "3  \xB7  T\xE9rbeli merevs\xE9g", ["Vasbeton *koszor\xFA*, *f\xF6d\xE9mt\xE1rcsa* \xE9s *talpkoszor\xFA*"]],
+    [116.1, 118.9, "4", ["*Ker\xFClend\u0151*"], { kc: C.red, hc: C.red }],
     
     [125.2, 130.8, "Ejtett d\xF6ng\xF6l\u0151lap", ["Neh\xE9z s\xFAly szabades\xE9ssel"]],
     
@@ -25390,7 +25403,7 @@ vec3 debris(vec2 p, float layer, vec3 matrix, vec4 nz){
       g.save();
       g.globalAlpha = a * 0.9;
       g.fillStyle = "rgba(8,10,12,0.78)";
-      O.rr(80, 48, 760, 140, 14);
+      O.rr(80, 48, 470, 76, 14);
       g.fill();
       g.globalAlpha = a;
       O.font(28, 700, FH);
@@ -25410,12 +25423,12 @@ vec3 debris(vec2 p, float layer, vec3 matrix, vec4 nz){
       }
       const da = win(t, 104.2, 107.8, 0.5, 0.4);
       if (da > 0) {
-        L(proj(10.5, -0.66, 0.1), "Z\xC1RT CSATORNA", da, { dx: 60, dy: 120, color: C.water });
-        const p0 = proj(6.6, -0.6, 0.1), p1 = proj(12.8, -0.69, 0.1);
+        L(proj(-10.2, -0.66, 0.1), "Z\xC1RT CSATORNA", da, { dx: 40, dy: -120, color: C.water });
+        const p0 = proj(-6.6, -0.6, 0.1), p1 = proj(-12.4, -0.69, 0.1);
         O.arrow(p0.x, p0.y - 30, p1.x, p1.y - 30, da, C.water, 7, 22);
         
       }
-      const ta = win(t, 108.3, 111.9, 0.4, 0.4);
+      const ta = 0;   // az „azonos vastagság” irányelv kikerült (adottság)
       if (ta > 0) {
         const p = proj(-4.85, -3.6, 0), q = proj(4.85, -1.2, 0);
         O.tag(p.x + 16, p.y, "6 m", ta, C.red, 36);
@@ -25423,12 +25436,13 @@ vec3 debris(vec2 p, float layer, vec3 matrix, vec4 nz){
         O.tag(1330, 700, "\u2715  ELT\xC9R\u0150 VASTAGS\xC1G", ta, C.red, 40);
         O.tag(1330, 764, "\u2713  AZONOS VASTAGS\xC1G", ta * smooth(seg(t, 109.4, 110)), C.green, 30);
       }
-      const ra = win(t, 112.4, 115.9, 0.5, 0.4);
-      L(proj(-4.85, 3.02, 0), "VB. KOSZOR\xDA", ra, { dx: -60, dy: -150, color: "#ff8a3a" });
-      L(proj(1.5, 3.1, 0), "F\xD6D\xC9MT\xC1RCSA", ra * sub(ra, win(t, 113, 115.9, 0.4, 0.4)), { dx: 120, dy: -120, color: "#ff8a3a" });
+      const ra = win(t, 108.4, 115.9, 0.5, 0.4);
+      L(proj(-4.85, 3.02, 0), "VB. KOSZOR\xDA", ra, { dx: 70, dy: -165, color: "#ff8a3a" });
+      L(proj(1.5, 3.1, 0), "F\xD6D\xC9MT\xC1RCSA", ra * sub(ra, win(t, 109, 115.9, 0.4, 0.4)), { dx: 120, dy: -120, color: "#ff8a3a" });
+      L(proj(4.85, 0.12, 0), "TALPKOSZOR\xDA", win(t, 112.4, 115.9, 0.5, 0.4), { dx: 150, dy: 80, color: "#ff8a3a" });
       const ma = win(t, 116.4, 118.9, 0.3, 0.3);
       if (ma > 0) {
-        const p = proj(...deformJS(6.6, 0.3, 1));
+        const p = proj(...deformJS(6.5, 1.4, -1.4));
         L(p, "\u2715  MELL\xC9\xC9P\xCDT\xC9S", ma, { dx: 120, dy: -140, color: C.red, sub: "elt\xE9r\u0151 s\xFCllyed\xE9s" });
       }
     }
@@ -27990,17 +28004,17 @@ If you want to offset all timestamps of a track such that the first one is zero,
     {
       const gm = new MeshStandardMaterial({ color: 7040882, roughness: 0.35, metalness: 0.6 });
       const kg = new MeshStandardMaterial({ color: 13132078, roughness: 0.55, metalness: 0 });
-      const dp = new Mesh(pipeSweep([[5.63, 3.12, 0], [5.63, 2.9, 0], [5.1, 2.42, 0], [5.1, 0.36, 0]], 0.055, 0.14), gm);
+      const dp = new Mesh(pipeSweep([[-5.63, 3.12, 0], [-5.63, 2.9, 0], [-5.1, 2.42, 0], [-5.1, 0.36, 0]], 0.055, 0.14), gm);
       const sock = new Mesh(new CylinderGeometry(0.088, 0.088, 0.22, 20), kg);
-      sock.position.set(5.1, 0.33, 0);
-      const ug = new Mesh(pipeSweep([[5.1, 0.42, 0], [5.1, -0.55, 0], [6.2, -0.6, 0], [24, -0.85, 0]], 0.07, 0.35, 16), kg);
+      sock.position.set(-5.1, 0.33, 0);
+      const ug = new Mesh(pipeSweep([[-5.1, 0.42, 0], [-5.1, -0.55, 0], [-6.2, -0.6, 0], [-24, -0.85, 0]], 0.07, 0.35, 16), kg);
       drain.add(dp, sock, ug);
       for (const y of [0.8, 1.6, 2.25]) {
         const ring = new Mesh(new TorusGeometry(0.064, 0.013, 8, 20), gm);
         ring.rotation.x = Math.PI / 2;
-        ring.position.set(5.1, y, 0);
+        ring.position.set(-5.1, y, 0);
         const rod = new Mesh(new BoxGeometry(0.05, 0.024, 0.024), gm);
-        rod.position.set(5.03, y, 0);
+        rod.position.set(-5.03, y, 0);
         drain.add(ring, rod);
       }
     }
@@ -28019,6 +28033,18 @@ If you want to offset all timestamps of a track such that the first one is zero,
     }
     ring.visible = false;
     scene.add(ring);
+    const ring2 = new Group();   // talpkoszorú: körbefutó vasbeton merevítés az alapok tetején (lábazat)
+    {
+      const rm = new MeshStandardMaterial({ color: 16747066, emissive: 16738832, emissiveIntensity: 0.9, transparent: true, opacity: 0.85 });
+      [[-4.85, 0.12, -0.01, 0.5, 0.36, 0.02], [4.85, 0.12, -0.01, 0.5, 0.36, 0.02], [0, 0.12, -4.35, 10.2, 0.36, 0.34], [-4.85, 0.12, -2.2, 0.34, 0.36, 4.3], [4.85, 0.12, -2.2, 0.34, 0.36, 4.3]].forEach(([x, y, z, sx, sy, sz]) => {
+        const b = new Mesh(new BoxGeometry(sx, sy, sz), rm);
+        b.position.set(x, y, z);
+        ring2.add(b);
+      });
+      ring2.userData.mat = rm;
+    }
+    ring2.visible = false;
+    scene.add(ring2);
     const spray = makeDust(160);
     spray.points.material.color.set(8370408);
     scene.add(spray.points);
@@ -28034,7 +28060,7 @@ If you want to offset all timestamps of a track such that the first one is zero,
     scene.add(site.group);
     const pl1 = new PointLight(16773341, 0, 60, 1.5), pl2 = new PointLight(16756848, 0, 60, 1.5), pl3 = new PointLight(12572927, 0, 60, 1.5);
     scene.add(pl1, pl2, pl3);
-    R = { sky, sun, hemi, terrain, trees, houseB, backClip, front, section, leakPipe, drain, ring, spray, dust, falling, gas, block, site, pl: [pl1, pl2, pl3] };
+    R = { sky, sun, hemi, terrain, trees, houseB, backClip, front, section, leakPipe, drain, ring, ring2, spray, dust, falling, gas, block, site, pl: [pl1, pl2, pl3] };
     window.ready = true;
   }
   var SHOTS = [
@@ -28044,7 +28070,7 @@ If you want to offset all timestamps of a track such that the first one is zero,
     { t0: 53, t1: 65, keys: [[53, [-1.5, 2, 25.5], [-1.8, -1.6, 0], 46], [65, [0.5, 2.4, 24], [0, -1.2, 0], 46]] },
     { t0: 65, t1: 77, keys: [[65, [-0.4, 1.9, 9.6], [0.9, 1.5, -1.2], 46], [77, [0.3, 1.7, 8.6], [1.2, 1.5, -1.2], 46]] },
     { t0: 77, t1: 99, keys: [[77, [-5.5, 0.8, 19], [-5.2, -1.6, 0], 44], [87, [-4, 0.6, 19.5], [-3.6, -1.8, 0], 44], [99, [-2, 1.2, 21], [-2, -1.4, 0], 44]] },
-    { t0: 99, t1: 119, keys: [[99, [0, 2.4, 25], [0, -1, 0], 44], [103.6, [2.5, 3.2, 23], [2, 0.2, 0], 44], [108, [0, 1.6, 24], [0, -2.4, 0], 46], [112, [1.5, 3.8, 19.5], [0.5, 2, 0], 42], [116, [8, 2.2, 15], [6, 0.8, 1], 42], [119, [8, 2.2, 15], [6, 0.8, 1], 42]] },
+    { t0: 99, t1: 119, keys: [[99, [0, 2.4, 25], [0, -1, 0], 44], [103.6, [2.5, 3.2, 23], [2, 0.2, 0], 44], [108, [1.3, 3.6, 20.4], [0.6, 1.8, 0], 42], [112, [1.5, 3.8, 19.5], [0.5, 2, 0], 42], [116, [8, 2.2, 15], [6, 0.8, 1], 42], [119, [8, 2.2, 15], [6, 0.8, 1], 42]] },
     { t0: 119, t1: 131, base: CS, keys: [[119, [-24.5, 1, 16.5], [-24, -2.9, 0], 44], [131, [-23, 0.8, 16], [-22.8, -3, 0], 44]] },
     { t0: 131, t1: 145, base: CS, keys: [[131, [-6.6, 0.6, 14.5], [-6, -3.2, 0], 44], [145, [-4, 0.6, 14], [-3.9, -3.2, 0], 44]] },
     { t0: 145, t1: 155, base: CS, keys: [[145, [9.3, 0.6, 11.5], [9.8, -1.9, 0], 42], [155, [10.1, 0.5, 10.8], [10.1, -1.9, 0], 42]] },
@@ -28181,7 +28207,7 @@ If you want to offset all timestamps of a track such that the first one is zero,
     const falling = t >= 21.3 && t < 33.4 && !(t > 24.9 && t < 25.3) && !(t > 28.3 && t < 28.7);
     R.falling.update(t, falling, -(6 - fill) + 0.1, pal);
     SU.uPitHL.value = inn(t, "diff") ? win(t, 53.4, 64.8, 0.6, 0.5) : t >= 7.4 && t < 12 ? win(t, 7.4, 12, 0.5, 0.5) : 0;
-    SU.uThick.value = inn(t, "diff") ? win(t, 54.5, 64.8, 0.5, 0.5) : inn(t, "guide") ? win(t, 108.2, 112, 0.5, 0.4) : 0;
+    SU.uThick.value = inn(t, "diff") ? win(t, 54.5, 64.8, 0.5, 0.5) : 0;
     if (inn(t, "water")) {
       SU.uWetC.value.set(-7.2, 1);
       SU.uWetR.value = 3.4 * Math.pow(smooth(seg(t, 78.2, 82.4)), 0.8);
@@ -28209,9 +28235,12 @@ If you want to offset all timestamps of a track such that the first one is zero,
     const inG = inn(t, "guide");
     R.drain.visible = inG && t > 103.6;
     R.houseB.parts.gutters.visible = inG && t > 103.6;
-    const ringK = inG ? win(t, 112.2, 116, 0.6, 0.4) : 0;
+    const ringK = inG ? win(t, 108.2, 116, 0.6, 0.4) : 0;
     R.ring.visible = ringK > 0.01;
     R.ring.userData.mat.opacity = 0.85 * ringK;
+    const tkK = inG ? win(t, 112.1, 116, 0.6, 0.4) : 0;   // talpkoszorú az alapok szintjén
+    R.ring2.visible = tkK > 0.01;
+    R.ring2.userData.mat.opacity = 0.85 * tkK;
     if (inG) {
       HU.uCorner.value.w = 0;
       SU.uLiftL.value = 0;

@@ -9,7 +9,7 @@ import subprocess, os, sys, re, shutil, glob
 root = os.path.dirname(os.path.abspath(__file__))
 os.chdir(root)
 SITE = 'https://kedvezotlen-altalaj.vercel.app'
-FILES = ['body.html', 'js/data.js', 'js/guard.js', 'js/main.js', 'js/quiz.js', 'js/sim3d.js', 'js/util.js', 'js/widgets1.js', 'js/widgets2.js']
+FILES = ['body.html', 'js/data.js', 'js/guard.js', 'js/main.js', 'js/mvids.js', 'js/quiz.js', 'js/sim3d.js', 'js/util.js', 'js/widgets1.js', 'js/widgets2.js']
 META = {
   'hu': ('Alapozás kedvezőtlen altalajon', 'Interaktív segédanyag: térfogatváltozó agyag, roskadékony lösz, feltöltés és szerves talaj — 3D szimulátorokkal, animációkkal, kvízekkel.', 'hu'),
   'en-GB': ('Foundations on unfavourable ground', 'Interactive learning module: expansive clay, collapsible loess, made ground and organic soil — with 3D simulators, animations and quizzes.', 'en-gb'),

@@ -6,6 +6,7 @@ import { quizzes, detective, trueFalse } from './quiz.js';
 import { QUIZ, DETECTIVE, TF } from './data.js';
 import { initSims } from './sim3d.js';
 import { startFormatting } from './guard.js';
+import { methodVideos } from './mvids.js';
 
 // Link of the separate "Védekezés a káros süllyedések ellen" page (set when it is deployed)
 const VEDEKEZES_URL = window.VEDEKEZES_URL || 'https://vedekezesakarossullyedesekellen.vercel.app';
@@ -14,11 +15,11 @@ const VEDEKEZES_URL = window.VEDEKEZES_URL || 'https://vedekezesakarossullyedese
 const EN_FILES = { 1: '1_Expansive_clays_EN_video.html', 2: '2_Collapsible_soils_EN_video.html', 3: '3_Made_ground_EN_video.html', 4: '4_Organic_soils_EN_video.html', 5: '5_Underpinning_on_expansive_clay_EN_video.html' };
 
 const VIDEOS = {
-  1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261120c', poster: 'assets/p1.jpg?v=20261120', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
-  2: { file: 'videok/2_Roskadekony_talajok_video.html?v=20261120c', poster: 'assets/p2.jpg?v=20261120', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
-  3: { file: 'videok/3_Feltoltesek_video.html?v=20261120c', poster: 'assets/p3.jpg?v=20261120', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
-  5: { file: 'videok/5_Alapmegerosites_terfogatvaltozo_agyagon_video.html?v=20261120c', poster: 'assets/p5.jpg?v=20261120', dur: '2:21', title: 'Alapmegerősítés: szakaszos alábetonozás', kicker: 'Animáció · kiegészítő rész', parts: ['Mi történik a ház alatt?', 'Az elv: a teher az aktív zóna alá', 'Ásás, zsaluzás, betonozás', 'Ékelés és injektálás', 'A korlát: fák a ház mellett'] },
-  4: { file: 'videok/4_Szerves_talajok_video.html?v=20261120c', poster: 'assets/p4.jpg?v=20261120', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
+  1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261120d', poster: 'assets/p1.jpg?v=20261120', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
+  2: { file: 'videok/2_Roskadekony_talajok_video.html?v=20261120d', poster: 'assets/p2.jpg?v=20261120', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
+  3: { file: 'videok/3_Feltoltesek_video.html?v=20261120d', poster: 'assets/p3.jpg?v=20261120', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
+  5: { file: 'videok/5_Alapmegerosites_terfogatvaltozo_agyagon_video.html?v=20261120d', poster: 'assets/p5.jpg?v=20261120', dur: '2:21', title: 'Alapmegerősítés: szakaszos alábetonozás', kicker: 'Animáció · kiegészítő rész', parts: ['Mi történik a ház alatt?', 'Az elv: a teher az aktív zóna alá', 'Ásás, zsaluzás, betonozás', 'Ékelés és injektálás', 'A korlát: fák a ház mellett'] },
+  4: { file: 'videok/4_Szerves_talajok_video.html?v=20261120d', poster: 'assets/p4.jpg?v=20261120', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
 };
 
 function videos() {
@@ -128,7 +129,7 @@ function safe(fn, name) { try { fn(); } catch (e) { console.error('widget hiba: 
 
 theme();
 safe(initSoilSVG, 'soil');
-[['cores', heroCores], ['compare', compare], ['videos', videos], ['videoStrip', videoStrip], ['clayMicro', clayMicro], ['criteria', criteria], ['season', season], ['storeys', storeys], ['rules', rules],
+[['cores', heroCores], ['compare', compare], ['videos', videos], ['videoStrip', videoStrip], ['methodVideos', methodVideos], ['clayMicro', clayMicro], ['criteria', criteria], ['season', season], ['storeys', storeys], ['rules', rules],
   ['loessMicro', loessMicro], ['oedometer', oedometer], ['history', history], ['sortGame', sortGame], ['stats', stats], ['gas', gas], ['improve', improve],
   ['holme', holme], ['peatGame', peatGame], ['peatBars', peatBars], ['settle', settle], ['timeCurve', timeCurve], ['bulb', bulb], ['peatTree', peatTree],
   ['quizzes', quizzes], ['detective', detective], ['trueFalse', trueFalse], ['sims', initSims], ['nav', navigation], ['counts', counts], ['vedekezes', vedekezes], ['lang', langSwitch]].forEach(([n, f]) => safe(f, n));
