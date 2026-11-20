@@ -497,7 +497,7 @@ export function peatTree() {
         step.append(opts); box.append(step);
       } else {
         box.append(h('div', { class: 'tree-res' }, h('span', { class: 'eyebrow' }, 'Javaslat'), h('h4', { style: 'font-size:20px;margin-top:4px' }, n[0]), h('p', { style: 'margin-top:6px' }, n[1]),
-          h('p', { class: 'small muted', style: 'margin-top:8px' }, 'Minden esetben: zárt alaprajz, térbeli merevítés, rugalmas közműcsatlakozás. Kerüld a részleges alápincézést, a melléépítést, a rezgést és a talajvízszint-ingadozást.')));
+          h('p', { class: 'small muted', style: 'margin-top:8px' }, 'Minden esetben: zárt alaprajz, térbeli merevítés (koszorú, födémtárcsa, talpkoszorú vagy vasalt alap), rugalmas közműcsatlakozás. Kerüld a rezgést és a talajvízszint-ingadozást.')));
       }
     });
   }

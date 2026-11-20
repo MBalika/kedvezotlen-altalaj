@@ -23081,6 +23081,26 @@ vec3 deformP(vec3 p){
       fu.push(sh);
     }
     add(mergeGeometries(fu), mWoodPost, "furniture");
+    {   // cserépkályha a szobában (a hőhatás forrása)
+      const mStove = plain({ color: 3043159, roughness: 0.3, metalness: 0.1 });
+      const mStoveDark = plain({ color: 2763306, roughness: 0.6, metalness: 0.4 });
+      const mFire = plain({ color: 16742938, emissive: 16734720, emissiveIntensity: 1.6 });
+      const SX = 2.4, SZ = -1.3, FY = 0.45;
+      const body = [];
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) {   // csempesorok
+        const b = new BoxGeometry(0.29, 0.34, 0.62);
+        b.translate(SX - 0.3 + c * 0.3, FY + 0.14 + 0.17 + r * 0.355, SZ);
+        body.push(b);
+      }
+      add(mergeGeometries(body), mStove, "stove");
+      const dk = [];
+      { const b = new BoxGeometry(1.02, 0.14, 0.72); b.translate(SX, FY + 0.07, SZ); dk.push(b); }
+      { const b = new BoxGeometry(1.02, 0.1, 0.72); b.translate(SX, FY + 0.14 + 4 * 0.355 + 0.05, SZ); dk.push(b); }
+      { const b = new BoxGeometry(0.16, 1.02, 0.16); b.translate(SX, FY + 0.14 + 4 * 0.355 + 0.1 + 0.51, SZ - 0.1); dk.push(b); }
+      { const b = new BoxGeometry(0.4, 0.34, 0.04); b.translate(SX, FY + 0.5, SZ + 0.32); dk.push(b); }
+      add(mergeGeometries(dk), mStoveDark, "stoveTrim");
+      { const b = new BoxGeometry(0.28, 0.2, 0.03); b.translate(SX, FY + 0.5, SZ + 0.345); add(b, mFire, "stoveFire", false, false); }
+    }
     const ts = new BoxGeometry(2.6, 0.3, 5.2);
     ts.translate(6.3, 0.15, 1);
     add(ts, mConcrete, "terrace");
@@ -23728,12 +23748,12 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
             }
             // heat source (heating pipe / boiler room) drying the peat
             if (uHeat > 0.001) {
-              float hr = length(vec2(x - 2.4, (d - 1.15) * 1.3));
+              float hr = length(vec2((x - 2.4) * 0.9, (d - 0.55) * 1.1));
               float glow = exp(-hr * hr / 3.2) * uHeat;
               col = mix(col, col * vec3(1.25, 1.0, 0.8) + vec3(0.18, 0.06, 0.0), glow * 0.6);
               float hdry = exp(-pow(length(vec2(x - 2.4, (d - 2.4) * 1.2)), 2.0) / 2.6) * uHeat * inPeat;
               col = mix(col, peat(vec2(x, -D), D, nz2, 0.0, 1.0), hdry * 0.8);
-              float pipe = 1.0 - smoothstep(0.16, 0.19, length(vec2(x - 2.4, d - 1.15)));
+              float pipe = 0.0;
               col = mix(col, vec3(0.75, 0.45, 0.2), pipe); emis += vec3(1.0, 0.35, 0.05) * pipe * uHeat * 0.6 + vec3(0.5, 0.12, 0.0) * glow * 0.35;
             }
             // vibration rings from the road (dynamic loads)
@@ -24025,6 +24045,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
           vec2 xz = vWPos.xz;
           vec4 n1 = texture2D(uNoise, xz / 23.0), n2 = texture2D(uNoise, xz / 4.0);
           float furrow = 0.5 + 0.5 * sin(xz.y * 7.85 + n2.r * 0.8);
+          furrow = mix(0.5, furrow, 1.0 - smoothstep(0.5, 1.9, fwidth(xz.y * 7.85)));   // távol a barázdák átlagszínre simulnak (nincs moiré)
           vec3 soil = mix(vec3(0.04, 0.032, 0.026), vec3(0.13, 0.10, 0.075), furrow) * (0.8 + 0.45 * n1.r);
           float parcel = step(0.5, fract(xz.x / 38.0 + 0.3));
           vec3 grass = texture2D(uGrass, xz / 3.2, 0.8).rgb * (0.8 + 0.3 * n1.b);
@@ -24383,36 +24404,44 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       });
     }
     group.add(well);
+    const PIPE_Y = -0.5;   // a vezeték az alaptesten (0…−0,9 m) megy át, nem alatta
     const pipeM = new MeshStandardMaterial({ color: 10119752, roughness: 0.5, metalness: 0.1 });
     const inner = new Mesh(new CylinderGeometry(0.1, 0.1, 1.6, 20), pipeM);
     inner.rotation.z = Math.PI / 2;
-    inner.position.set(4.3, -0.95, 0);
+    inner.position.set(4.3, PIPE_Y, 0);
     const outer = new Mesh(new CylinderGeometry(0.1, 0.1, 9, 20), pipeM);
     outer.rotation.z = Math.PI / 2;
-    outer.position.set(9.6, -0.95, 0);
+    outer.position.set(9.6, PIPE_Y, 0);
     const flex = new Group();
     const flexM = new MeshStandardMaterial({ color: 16747066, roughness: 0.5, emissive: 4200448 });
-    for (let k = 0; k < 7; k++) {
-      const r = new Mesh(new TorusGeometry(0.13, 0.03, 8, 20), flexM);
-      r.rotation.y = Math.PI / 2;
-      r.position.x = k * 0.1;
-      flex.add(r);
-    }
+    const sleeve = new Mesh(new CylinderGeometry(0.23, 0.23, 0.9, 28, 1, true), new MeshStandardMaterial({ color: 9212071, roughness: 0.45, metalness: 0.3, side: DoubleSide }));   // védőcső az alaptestben
+    sleeve.rotation.z = Math.PI / 2;
+    const collar = new Mesh(new TorusGeometry(0.23, 0.035, 8, 28), flexM), collar2 = collar.clone();
+    collar.rotation.y = collar2.rotation.y = Math.PI / 2;
+    const link = new Mesh(new CylinderGeometry(0.1, 0.1, 1, 20), pipeM);   // a folytonos vezeték a védőcsőben, hézaggal
+    flex.add(sleeve, collar, collar2, link);
     group.add(inner, outer, flex);
     function update(houseY, mode) {
-      inner.position.y = -0.95 + houseY;
+      inner.position.y = PIPE_Y + houseY;
       if (mode < 0.5) {
         outer.position.x = 9.6;
         outer.scale.y = 1;
+        inner.position.x = 4.3;
+        inner.scale.y = 1;
         flex.visible = false;
       } else {
-        outer.position.x = 9.95;
-        outer.scale.y = 8.3 / 9;
+        outer.position.x = 9.8;
+        outer.scale.y = 8.6 / 9;
+        inner.position.x = 3.9;
+        inner.scale.y = 0.8 / 1.6;
         flex.visible = true;
-        flex.children.forEach((r, k) => {
-          const u = k / 6;
-          r.position.set(5.12 + u * 0.6, -0.95 + houseY * (1 - u), 0);
-        });
+        sleeve.position.set(4.85, PIPE_Y + houseY, 0);
+        collar.position.set(4.4, PIPE_Y + houseY, 0);
+        collar2.position.set(5.3, PIPE_Y + houseY, 0);
+        const dx = 1.2, dy = -houseY;   // (4,3; y+houseY) → (5,5; y): a vezeték követi a süllyedést, nem törik
+        link.position.set(4.9, PIPE_Y + houseY / 2, 0);
+        link.scale.y = Math.hypot(dx, dy);
+        link.rotation.z = Math.atan2(dy, dx) - Math.PI / 2;
       }
     }
     return { group, well, update };
@@ -25044,10 +25073,12 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
   var CHAPTERS = [[0, "Jelens\xE9g"], [20, "Eredet"], [34, "Felismer\xE9s"], [52, "Tulajdons\xE1gok"], [72, "K\xE1rok"], [96, "Alapoz\xE1s"], [142, "Ir\xE1nyelvek"], [160, "\xD6sszefoglal\xE1s"]];
   var CAPS = [
     
-    [5.6, 10.4, "Az\xF3ta", ["*4 m*-n\xE9l t\xF6bbet s\xFCllyedt"]],
+    [0.5, 5.3, "Holme Fen, Anglia \xB7 1851", ["A l\xE1pot *lecsapolj\xE1k*.", "Vasoszlopot vernek a t\u0151zegbe: a teteje a *felsz\xEDnen* van"]],
+    [5.6, 10.5, "A lecsapol\xE1s \xF3ta", ["A t\u0151zeg kisz\xE1rad \xE9s lebomlik:", "a felsz\xEDn *4 m*-n\xE9l t\xF6bbet s\xFCllyedt"]],
     [20.4, 25, "Hogyan keletkezik?", ["V\xEDz alatt *nem* *bomlik* *le*: t\u0151zeg lesz"]],
     [25.2, 29.6, "Haz\xE1nkban", ["Hans\xE1g, Ecsedi-l\xE1p, Kis-Balaton"]],
     
+    [29.8, 33.8, "Nem csak a t\u0151zeg", ["A szerves *iszap* \xE9s a szerves *agyag* is vesz\xE9lyes"], { kc: C.red, hc: C.red }],
     [34.4, 37.9, "Felismer\xE9s", ["*S\xF6t\xE9t*, sokszor *rostos*"]],
     
     
@@ -25058,7 +25089,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     
     [72.4, 77.8, "V\xE1ltoz\xF3 vastags\xE1g", ["Vastagabb t\u0151zeg, *nagyobb* s\xFCllyed\xE9s"], { kc: C.red, hc: C.red }],
     [78.4, 85.6, "Talajv\xEDzszint-s\xFCllyed\xE9s", ["A t\u0151zeg *kisz\xE1rad*, *lebomlik*"], { kc: C.water, hc: C.water }],
-    [86.2, 89.8, "H\u0151hat\xE1s", ["*Helyi* kisz\xE1rad\xE1s"], { kc: C.red, hc: C.red }],
+    [86.2, 89.8, "H\u0151hat\xE1s", ["A tart\xF3s h\u0151 alatt a t\u0151zeg *kisz\xE1rad* \xE9s *zsugorodik*"], { kc: C.red, hc: C.red }],
     [90.2, 95.8, "Rezg\xE9s, k\xF6zm\u0171vek", ["A merev k\xF6zm\u0171 *elt\xF6rik*"], { kc: C.red, hc: C.red }],
     
     [101.2, 106.6, "", ["Keskeny alap: *kevesebb* jut a t\u0151zegre"]],
@@ -25069,10 +25100,11 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
     [127.6, 131.8, "Gerenda a pill\xE9reken", ["A t\u0151zegre *nem* jut terhel\xE9s"]],
     [132.4, 137.2, "", ["*Merev* \xE9p\xEDtm\xE9ny"]],
     [137.4, 141.8, "", ["*Egy* *t\xF6mbk\xE9nt*, egyenletesen s\xFCllyed"]],
-    [142.4, 146.8, "K\xF6zm\u0171csatlakoz\xE1s", ["*Rugalmas* bek\xF6t\xE9s"], { kc: C.green, hc: C.green }],
+    [142.4, 146.8, "K\xF6zm\u0171csatlakoz\xE1s", ["*V\xE9d\u0151cs\u0151ben*, h\xE9zaggal az alapon \xE1t"], { kc: C.green, hc: C.green }],
+    [147.2, 151.8, "T\xE9rbeli merevs\xE9g", ["*Koszor\xFA*, *f\xF6d\xE9mt\xE1rcsa*, *talpkoszor\xFA* vagy vasalt alap"]],
     
     
-    [156.2, 159.8, "", ["*K\xFCl\xF6n\xF6sen* vesz\xE9lyes"], { kc: C.red, hc: C.red }]
+    [152.2, 159.8, "", ["*K\xFCl\xF6n\xF6sen* vesz\xE9lyes"], { kc: C.red, hc: C.red }]
   ];
   var rel = (base, x, y, z) => [base.x + x, base.y + y, base.z + z];
   var fmt = (v, d = 1) => v.toFixed(d).replace(".", ",");
@@ -25102,7 +25134,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
         g.restore();
       }
       const top = proj(...rel(FEN, 0, 0.05, -0.42));
-      L(top, "HOLME FEN OSZLOP", win(t, 1, 5, 0.5, 0.4), { dx: 140, dy: -120 });
+      L(top, "VASOSZLOP", win(t, 1, 5.4, 0.5, 0.4), { dx: 140, dy: -120, sub: "a teteje 1851-ben a felsz\xEDnen" });
       const ga = win(t, 4.4, 12.8, 0.5, 0.5);
       {
         const la = win(t, 3.2, 19.8, 0.5, 0.5);
@@ -25141,7 +25173,8 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       }
       const sa = win(t, 1.5, 19.8, 0.5, 0.5);
       L(proj(...rel(FEN, -6.5, -(drop + (5.5 - drop) * 0.5), 0)), "T\u0150ZEG", sa, { dx: -150, dy: 20, color: C.accent, sub: "" });
-      L(proj(...rel(FEN, -6.5, -6.6, 0)), "AGYAG", sa * sub(sa, win(t, 2, 19.8, 0.5, 0.5)), { dx: -150, dy: 40, color: "#b8c4cc" });
+      L(proj(...rel(FEN, 7.5, -6.6, 0)), "AGYAG", sa * sub(sa, win(t, 2, 19.8, 0.5, 0.5)), { dx: 150, dy: 30, color: "#b8c4cc" });
+      if (drop > 1.2) L(proj(...rel(FEN, 0.7, -drop * 0.25, -0.42)), "ENNYIT S\xDCLLYEDT A FELSZ\xCDN", win(t, 6.4, 12.6, 0.5, 0.4), { dx: 170, dy: -90, color: C.accent });
       if (drop > 0.4) L(proj(...rel(FEN, 5.5, -(drop + 0.9), 0)), "TALAJV\xCDZ", win(t, 4, 12.6, 0.5, 0.5), { dx: 140, dy: 70, color: C.water });
       O.bigLine("A talaj sz\xF3 szerint elt\u0171nik", t - 10.8, win(t, 10.8, 13, 0.4, 0.4), 880, 84, C.white, { under: C.accent });
     }
@@ -25201,9 +25234,19 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       L(proj(13, 0.4, -2.5), "SZIVATTY\xDAZ\xC1S", wa, { dx: -60, dy: -140, color: C.water });
       
       
-      L(proj(2.4, -1.15, 0), "KAZ\xC1NH\xC1Z", win(t, 86.6, 89.8, 0.4, 0.4), { dx: 140, dy: -150, color: "#ff9a4a" });
+      {
+        const ha = win(t, 86.6, 89.8, 0.4, 0.4);
+        if (ha > 0) {
+          L(proj(2.85, 1.6, -1.0), "K\xC1LYHA", ha, { dx: 150, dy: -110, color: "#ff9a4a", sub: "tart\xF3s h\u0151" });
+          [1.75, 2.4, 3.05].forEach((x, i) => {   // lefelé terjedő hő
+            const k = (t * 0.9 + i * 0.33) % 1, p0 = proj(x, 0.15 - k * 0.5, 0.05), p1 = proj(x, -0.75 - k * 0.5, 0.05);
+            O.arrow(p0.x, p0.y, p1.x, p1.y, ha * Math.sin(k * Math.PI) * 0.9, "#ff9a4a", 7, 20);
+          });
+          L(proj(2.4, -2.3, 0.05), "KISZ\xC1RAD\xD3 T\u0150ZEG", ha * sub(ha, win(t, 87.4, 89.8, 0.4, 0.4)), { dx: 170, dy: 70, color: C.red, sub: "zsugorodik" });
+        }
+      }
       const pa = win(t, 90.6, 95.8, 0.4, 0.4);
-      L(proj(5.15, -0.95 + SU2.uLiftR.value * 0.5, 0.1), "ELT\xD6RT CSATLAKOZ\xC1S", pa, { dx: 120, dy: 110, color: C.red });
+      L(proj(5.15, -0.5 + SU2.uLiftR.value * 0.5, 0.1), "ELT\xD6RT CSATLAKOZ\xC1S", pa, { dx: 120, dy: 110, color: C.red });
       L(proj(13.5, 0, 0), "REZG\xC9S", pa * sub(pa, win(t, 91, 95.8, 0.4, 0.4)), { dx: 40, dy: -160, color: "#ffd36a" });
     }
     if (t >= 96 && t < 112.2) {
@@ -25277,7 +25320,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       g.save();
       g.globalAlpha = a * 0.9;
       g.fillStyle = "rgba(8,10,12,0.78)";
-      O.rr(80, 48, 760, 140, 14);
+      O.rr(80, 48, 470, 76, 14);
       g.fill();
       g.globalAlpha = a;
       O.font(28, 700, FH);
@@ -25288,16 +25331,22 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       
       g.restore();
       
-      const ma = win(t, 147.6, 151.8, 0.3, 0.3);
+      {
+        const ka = win(t, 143, 146.8, 0.4, 0.4);
+        L(proj(4.85, -0.27 + SU2.uLiftR.value, 0.25), "V\xC9D\u0150CS\u0150", ka, { dx: -130, dy: -150, color: C.green, sub: "az alapon \xE1t, h\xE9zaggal" });
+        L(proj(7.6, -0.5, 0.1), "FOLYTONOS VEZET\xC9K", ka * sub(ka, win(t, 143.8, 146.8, 0.4, 0.4)), { dx: 90, dy: 120, color: "#ff9a4a", sub: "k\xF6veti a s\xFCllyed\xE9st" });
+      }
+      const ma = 0;   // a részleges alápincézés és a melléépítés kikerült
       if (ma > 0) {
         const p = proj(...deformJS(6.6, 0.3, 1));
         L(p, "\u2715  MELL\xC9\xC9P\xCDT\xC9S", ma, { dx: 120, dy: -140, color: C.red });
         O.tag(110, 215, "\u2715  R\xC9SZLEGES AL\xC1PINC\xC9Z\xC9S", ma, C.red, 34);
       }
-      const ra = win(t, 152.4, 155.9, 0.5, 0.4);
-      L(proj(-4.85, 3.02, 0), "VB. KOSZOR\xDA", ra, { dx: -60, dy: -150, color: "#ff8a3a" });
-      L(proj(1.5, 3.1, 0), "F\xD6D\xC9MT\xC1RCSA", ra * sub(ra, win(t, 153, 155.9, 0.4, 0.4)), { dx: 120, dy: -120, color: "#ff8a3a" });
-      const da = win(t, 156.4, 159.8, 0.4, 0.4);
+      const ra = win(t, 147.6, 151.8, 0.5, 0.4);
+      L(proj(-4.85, 3.02, 0), "VB. KOSZOR\xDA", ra, { dx: 70, dy: -165, color: "#ff8a3a" });
+      L(proj(1.5, 3.1, 0), "F\xD6D\xC9MT\xC1RCSA", ra * sub(ra, win(t, 148.2, 151.8, 0.4, 0.4)), { dx: 120, dy: -120, color: "#ff8a3a" });
+      L(proj(4.85, 0.12, 0), "TALPKOSZOR\xDA", win(t, 149.4, 151.8, 0.4, 0.4), { dx: 150, dy: 80, color: "#ff8a3a", sub: "vagy vasalt alap" });
+      const da = win(t, 152.4, 159.8, 0.4, 0.4);
       L(proj(13.5, 0, 0), "\u2715  REZG\xC9S", da, { dx: 40, dy: -160, color: C.red });
       L(proj(-9, -SU2.uGW.value, 0), "\u2715  TALAJV\xCDZ-INGADOZ\xC1S", da, { dx: -60, dy: -170, color: C.red });
     }
@@ -25344,7 +25393,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
       const a = win(t, t0, t1, 0.45, 0.45);
       if (a > 0) O.caption(lines, t - t0, a, { kicker: kick, ...opts || {} });
     }
-    const cuts = [20, 34, 38, 43, 52, 72, 78, 86, 90, 96, 112, 122, 132, 142, 147, 152, 156, 160];
+    const cuts = [20, 34, 38, 43, 52, 72, 78, 86, 90, 96, 112, 122, 132, 142, 147, 152, 160];
     let fa = 0;
     for (const c of cuts) fa = Math.max(fa, 1 - smooth(Math.abs(t - c) / 0.42));
     fa = Math.max(fa, 1 - smooth(t / 0.8));
@@ -27525,14 +27574,14 @@ If you want to offset all timestamps of a track such that the first one is zero,
       audio.currentTime = tNow;
       audio.play().catch(() => {
       });
-      playing = true;
+      playing = window.__vplay = true;
       lastWall = performance.now();
       $("pp").textContent = "\u275A\u275A Sz\xFCnet";
       st.style.display = "none";
     }
     function pause() {
       audio.pause();
-      playing = false;
+      playing = window.__vplay = false;
       $("pp").textContent = "\u25B6 Lej\xE1tsz\xE1s";
     }
     $("pp").onclick = () => playing ? pause() : play();
@@ -27906,10 +27955,22 @@ If you want to offset all timestamps of a track such that the first one is zero,
     }
     ring.visible = false;
     scene.add(ring);
+    const ring2 = new Group();   // talpkoszorú: körbefutó vasbeton merevítés az alapok tetején
+    {
+      const rm = new MeshStandardMaterial({ color: 16747066, emissive: 16738832, emissiveIntensity: 0.9, transparent: true, opacity: 0.85 });
+      [[-4.85, 0.12, -0.01, 0.5, 0.36, 0.02], [4.85, 0.12, -0.01, 0.5, 0.36, 0.02], [0, 0.12, -4.35, 10.2, 0.36, 0.34], [-4.85, 0.12, -2.2, 0.34, 0.36, 4.3], [4.85, 0.12, -2.2, 0.34, 0.36, 4.3]].forEach(([x, y, z, sx, sy, sz]) => {
+        const b = new Mesh(new BoxGeometry(sx, sy, sz), rm);
+        b.position.set(x, y, z);
+        ring2.add(b);
+      });
+      ring2.userData.mat = rm;
+    }
+    ring2.visible = false;
+    scene.add(ring2);
     const spray = makeDust(120);
     spray.points.material.color.set(8370408);
     scene.add(spray.points);
-    R = { sky, sun, hemi, terrain, trees, neigh, houseB, backClip, front, section, fen, lake, lab, extras, site, drain, ring, spray };
+    R = { sky, sun, hemi, terrain, trees, neigh, houseB, backClip, front, section, fen, lake, lab, extras, site, drain, ring, ring2, spray };
     window.ready = true;
   }
   var SHOTS = [
@@ -27928,9 +27989,8 @@ If you want to offset all timestamps of a track such that the first one is zero,
     { t0: 122, t1: 132, base: CS, keys: [[122, [-0.5, 0.9, 12.5], [0, -1.5, 0], 44], [132, [0.5, 0.8, 12], [0.2, -1.5, 0], 44]] },
     { t0: 132, t1: 142, base: CS, keys: [[132, [14.5, 2.4, 19], [16, 0.4, -1], 44], [142, [17.5, 2, 18], [16, 0.3, -1], 44]] },
     { t0: 142, t1: 147, keys: [[142, [6.6, 0.5, 9.5], [6.4, -0.6, 0], 42], [147, [7, 0.4, 9], [6.6, -0.7, 0], 42]] },
-    { t0: 147, t1: 152, keys: [[147, [8.5, 2.2, 15], [6, 0.8, 1], 42], [152, [9.5, 2.4, 14.5], [6.2, 0.8, 1], 42]] },
-    { t0: 152, t1: 156, keys: [[152, [1.5, 3.8, 19.5], [0.5, 2, 0], 42], [156, [0.5, 3.6, 19], [0.3, 2, 0], 42]] },
-    { t0: 156, t1: 160, keys: [[156, [2, 1.6, 26.5], [2, -2.2, 0], 46], [160, [2.5, 1.6, 26], [2.4, -2.2, 0], 46]] },
+    { t0: 147, t1: 152, keys: [[147, [1.5, 3.8, 19.5], [0.5, 2, 0], 42], [152, [0.6, 3.6, 19], [0.3, 1.9, 0], 42]] },
+    { t0: 152, t1: 160, keys: [[152, [2, 1.6, 26.5], [2, -2.2, 0], 46], [160, [2.6, 1.6, 25.8], [2.4, -2.2, 0], 46]] },
     { t0: 160, t1: TOTAL + 1, keys: [[160, [28, 17, 36], [0, 2, 0], 40], [TOTAL + 1, [20, 11, 30], [0, 2.2, 0], 40]] }
   ];
   function cr(p0, p1, p2, p3, u) {
@@ -27985,6 +28045,7 @@ If you want to offset all timestamps of a track such that the first one is zero,
     return { sL, sR, cw, liftC };
   }
   function renderAt(t) {
+    window.__vt = t;
     const st = {};
     const atFen = t < 20, inLab = inn(t, "recog") || inn(t, "props"), inSite = inn(t, "site");
     const golden = inn(t, "sum");
@@ -28069,10 +28130,10 @@ If you want to offset all timestamps of a track such that the first one is zero,
       if (t < 147) {
         st.cons = smooth(seg(t, 142.6, 145.4)) * 0.8;
       }
-      if (t >= 156) {
-        SU.uVib.value = win(t, 156.3, 159.8, 0.4, 0.4);
-        SU.uGW.value = 1.3 + 0.55 * Math.sin((t - 156) * 2.4) * win(t, 156.3, 159.8, 0.4, 0.4);
-        SU.uGWHL.value = win(t, 156.3, 159.8, 0.4, 0.4);
+      if (t >= 152) {
+        SU.uVib.value = win(t, 152.3, 159.8, 0.4, 0.4);
+        SU.uGW.value = 1.3 + 0.55 * Math.sin((t - 152) * 2.4) * win(t, 152.3, 159.8, 0.4, 0.4);
+        SU.uGWHL.value = win(t, 152.3, 159.8, 0.4, 0.4);
       }
     }
     if (st.cons + st.shrink + st.heat > 0) {
@@ -28085,7 +28146,7 @@ If you want to offset all timestamps of a track such that the first one is zero,
         HU.uCrackOpen.value = HU.uCrackProg.value > 0 ? 1 : 0;
       }
     }
-    if (inn(t, "rules") && t >= 147 && t < 152) HU.uAnnex.value = smooth(seg(t, 147.8, 149.6));
+    if (inn(t, "rules") && t >= 147 && t < 152) HU.uAnnex.value = 0;
     SU.uLiftL.value = deformJS(-4.85, 0, 0)[1];
     SU.uLiftR.value = deformJS(4.85, 0, 0)[1];
     if (inn(t, "shallow")) {
@@ -28112,9 +28173,12 @@ If you want to offset all timestamps of a track such that the first one is zero,
     R.extras.group.visible = exOn;
     R.extras.well.visible = inn(t, "damage") && t > 78;
     R.extras.update(SU.uLiftR.value, inn(t, "rules") ? 1 : 0);
-    const ringK = inn(t, "rules") ? win(t, 152.3, 155.9, 0.5, 0.4) : 0;
+    const ringK = inn(t, "rules") ? win(t, 147.4, 151.8, 0.5, 0.4) : 0;
     R.ring.visible = ringK > 0.01;
     R.ring.userData.mat.opacity = 0.85 * ringK;
+    const tkK = inn(t, "rules") ? win(t, 149.2, 151.8, 0.5, 0.4) : 0;   // talpkoszorú / vasalt alap
+    R.ring2.visible = tkK > 0.01;
+    R.ring2.userData.mat.opacity = 0.85 * tkK;
     R.houseB.parts.gutters.visible = false;
     R.spray.update(V2(14.8, 0.1, -2.5), inn(t, "damage") && t > 79 && t < 86 ? (t - 79) % 1.6 : -1, 0.6, 0.3);
     R.lab.group.visible = inLab;
@@ -28181,4 +28245,23 @@ three/build/three.module.js:
    * SPDX-License-Identifier: MIT
    *)
 */
-</script></body></html>
+</script><style>
+#mvk{position:absolute;right:56px;top:56px;width:380px;padding:12px 12px 14px;border:0;border-radius:18px;background:rgba(8,10,12,.82);color:#fff;font:600 22px/1.25 Inter,Arial,sans-serif;text-align:left;cursor:pointer;z-index:4;opacity:0;transform:translateY(-14px);transition:opacity .45s,transform .45s;pointer-events:none;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#mvk.on{opacity:1;transform:none;pointer-events:auto}#mvk:hover{background:rgba(20,24,28,.92)}
+#mvk i{display:block;font:700 15px/1 Inter,Arial,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#f0a33a;margin:2px 4px 10px}
+#mvk span.th{display:block;position:relative;aspect-ratio:16/9;border-radius:10px;background-size:cover;background-position:center;overflow:hidden}
+#mvk span.pl{position:absolute;left:50%;top:50%;width:72px;height:50px;margin:-25px 0 0 -36px;border-radius:14px;background:#f0a33a;display:grid;place-items:center}
+#mvk.yt span.pl{background:#ff1f1f}#mvk span.pl:after{content:"";border-left:20px solid #111;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:5px}
+#mvk.yt span.pl:after{border-left-color:#fff}
+#mvk b{display:block;margin:11px 4px 2px;font-size:25px}#mvk small{display:block;margin:0 4px;font:500 16px/1.3 Inter,Arial,sans-serif;color:#c9d2ce}
+</style>
+<script>(function(){
+  var W=[[112.4, 121.8, "tj1"], [122.4, 131.8, "mv1"]],D={"tj1": {"n": "Talajcsere", "s": "animáció · Védekezés app", "u": "https://vedekezesakarossullyedesekellen.vercel.app/video/tj1.html", "yt": false, "img": "data:image/webp;base64,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"}, "mv1": {"n": "Mélyalapozás", "s": "animáció · Mélyalapozások app", "u": "https://melyalapozasok.vercel.app/video/v1.html", "yt": false, "img": "data:image/webp;base64,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"}},wrap=document.getElementById("wrap");if(!wrap||/[?&]render=1/.test(location.search))return;
+  var el=document.createElement("button");el.id="mvk";el.type="button";wrap.appendChild(el);var cur=null;
+  function show(k){cur=k;if(!k){el.className="";return}var d=D[k];el.innerHTML='<i>Nézd meg részletesen</i><span class="th" style="background-image:url('+d.img+')"><span class="pl"></span></span><b></b><small></small>';
+    el.querySelector("b").textContent=d.n;el.querySelector("small").textContent=d.s;el.className="on"+(d.yt?" yt":"")}
+  setInterval(function(){var t=window.__vt||0,k=null;for(var i=0;i<W.length;i++)if(t>=W[i][0]&&t<W[i][1])k=W[i][2];if(k!==cur)show(k)},200);
+  el.addEventListener("click",function(e){e.stopPropagation();if(!cur)return;var pp=document.getElementById("pp");if(window.__vplay&&pp)pp.click();
+    if(window.parent&&window.parent!==window){try{window.parent.postMessage({kaMethod:cur},"*");return}catch(x){}}window.open(D[cur].u,"_blank","noopener")});
+})();</script>
+</body></html>

@@ -50,6 +50,9 @@ function openExt(m, x) {
 }
 
 export function methodVideos() {
+  // a videókon belüli „Nézd meg részletesen” kártya (iframe) kérésére ugyanez a lejátszóablak nyílik meg, a videó fölött
+  addEventListener('message', (e) => { const k = e.data && e.data.kaMethod; if (!k || !MV[k]) return;
+    const m = { ...MV[k] }, x = info(k); if (EN && m.en) m.name = m.title = m.en; openExt(m, x); });
   $$('.mvids[data-mv]').forEach((box) => {
     const keys = box.dataset.mv.split(',').map((s) => s.trim()).filter((k) => MV[k]);
     const row = h('div', { class: 'mv-row', style: '--n:' + keys.length });
