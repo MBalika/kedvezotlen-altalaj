@@ -12,7 +12,7 @@ s = rep(s, 'vec3 ts = vec3(0.17, 0.125, 0.085) * (0.75 + 0.5 * nz3.r);', 'vec3 t
 s = rep(s, 'Object.assign(sh.uniforms, LU, { uNoise: { value: T2.noise }, uBase: { value: base } });', 'Object.assign(sh.uniforms, LU, { uNoise: { value: T2.noise }, uBase: { value: base }, uTxLoess: { value: __soilTex("loess") } });')
 s = rep(s, 'varying vec3 vWPos; uniform sampler2D uNoise; uniform float uWallWet, uBase;', 'varying vec3 vWPos; uniform sampler2D uNoise; uniform sampler2D uTxLoess; uniform float uWallWet, uBase;')
 s = rep(s, """        vec3 col = vec3(0.80, 0.68, 0.49) * (0.86 + 0.26 * n1.r);
-        col *= 0.93 + 0.1 * n2.g;""", """        vec3 col = mix(texture2D(uTxLoess, p / vec2(4.0, 3.0)).rgb, texture2D(uTxLoess, p * 0.63 / vec2(4.0, 3.0) + 0.41).rgb, smoothstep(0.4, 0.6, n1.r)) * vec3(1.22, 1.3, 1.5);""")
+        col *= 0.93 + 0.1 * n2.g;""", """        vec3 col = mix(texture2D(uTxLoess, p / vec2(4.0, 3.0), 1.0).rgb, texture2D(uTxLoess, p * 0.63 / vec2(4.0, 3.0) + 0.41, 1.0).rgb, smoothstep(0.4, 0.6, n1.r)) * vec3(1.22, 1.3, 1.5);""")
 s = rep(s, 'col = mix(col, vec3(0.95, 0.92, 0.85), d * 0.8);', 'col = mix(col, vec3(0.95, 0.92, 0.85), d * 0.0);')
 s = rep(s, 'col = mix(col, vec3(0.2, 0.15, 0.1), pore * 0.7);', 'col = mix(col, vec3(0.2, 0.15, 0.1), pore * 0.0);')
 # talajminták (1:46–1:56): valódi homok- és feltöltéstextúra a hengereken

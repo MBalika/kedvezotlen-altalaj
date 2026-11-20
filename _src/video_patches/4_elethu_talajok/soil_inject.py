@@ -22,9 +22,9 @@ def inject(s, kinds):
     s = rep(s, '<script>(() => {\n', '<script>(() => {\n' + js)
     s = rep(s, '  init().catch((e) => {', '  __soilLoad().then(init).catch((e) => {')
     # a metszet-shader: mintavevők + ismétlődést oldó kettős mintavétel
-    glsl = ''.join('uniform sampler2D %s;\n' % UNI[k] for k in kinds) + '''vec3 soilT(sampler2D t, vec2 p){
-  vec3 a = texture2D(t, p / vec2(4.0, 3.0)).rgb;
-  vec3 b = texture2D(t, p * 0.71 / vec2(4.0, 3.0) + vec2(0.37, 0.21)).rgb;
+    glsl = '#define SOIL_LOD 1.0\n' + ''.join('uniform sampler2D %s;\n' % UNI[k] for k in kinds) + '''vec3 soilT(sampler2D t, vec2 p){
+  vec3 a = texture2D(t, p / vec2(4.0, 3.0), SOIL_LOD).rgb;
+  vec3 b = texture2D(t, p * 0.71 / vec2(4.0, 3.0) + vec2(0.37, 0.21), SOIL_LOD).rgb;
   float k = smoothstep(0.38, 0.62, texture2D(uNoise, p * 0.045 + 0.13).g);
   return mix(a, b, k);
 }

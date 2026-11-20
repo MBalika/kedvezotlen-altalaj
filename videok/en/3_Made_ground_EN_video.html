@@ -23459,8 +23459,8 @@ vec3 deformP(vec3 p){
         if (vWPos.x > uHole.x && vWPos.x < uHole.y && vWPos.z > uHole.z && vWPos.z < uHole.w && vWPos.y > -0.5) discard;`).replace("#include <map_fragment>", `#include <map_fragment>
         {
           vec2 xz = vWPos.xz;
-          vec3 grass = texture2D(uGrass, xz / 3.2).rgb;
-          vec3 grass2 = texture2D(uGrass, xz / 11.0 + 0.37).rgb;
+          vec3 grass = texture2D(uGrass, xz / 3.2, 0.8).rgb;
+          vec3 grass2 = texture2D(uGrass, xz / 11.0 + 0.37, 0.8).rgb;
           grass = mix(grass, grass2, 0.35);
           vec4 nzA = texture2D(uNoise, xz / 37.0);
           vec4 nzB = texture2D(uNoise, xz / 9.0);
@@ -23820,6 +23820,7 @@ vec3 deformP(vec3 p){
     `
 varying vec3 vWPos;
 uniform sampler2D uNoise;
+#define SOIL_LOD 1.0
 uniform sampler2D uTxNatural;
 uniform sampler2D uTxRubble;
 uniform sampler2D uTxSlag;
@@ -23827,8 +23828,8 @@ uniform sampler2D uTxWaste;
 uniform sampler2D uTxMixed;
 uniform sampler2D uTxTop;
 vec3 soilT(sampler2D t, vec2 p){
-  vec3 a = texture2D(t, p / vec2(4.0, 3.0)).rgb;
-  vec3 b = texture2D(t, p * 0.71 / vec2(4.0, 3.0) + vec2(0.37, 0.21)).rgb;
+  vec3 a = texture2D(t, p / vec2(4.0, 3.0), SOIL_LOD).rgb;
+  vec3 b = texture2D(t, p * 0.71 / vec2(4.0, 3.0) + vec2(0.37, 0.21), SOIL_LOD).rgb;
   float k = smoothstep(0.38, 0.62, texture2D(uNoise, p * 0.045 + 0.13).g);
   return mix(a, b, k);
 }

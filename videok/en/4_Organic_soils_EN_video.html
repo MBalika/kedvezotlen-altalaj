@@ -23229,8 +23229,8 @@ vec3 deformP(vec3 p){
         if (vWPos.x > uHole.x && vWPos.x < uHole.y && vWPos.z > uHole.z && vWPos.z < uHole.w && vWPos.y > -0.5) discard;`).replace("#include <map_fragment>", `#include <map_fragment>
         {
           vec2 xz = vWPos.xz;
-          vec3 grass = texture2D(uGrass, xz / 3.2).rgb;
-          vec3 grass2 = texture2D(uGrass, xz / 11.0 + 0.37).rgb;
+          vec3 grass = texture2D(uGrass, xz / 3.2, 0.8).rgb;
+          vec3 grass2 = texture2D(uGrass, xz / 11.0 + 0.37, 0.8).rgb;
           grass = mix(grass, grass2, 0.35);
           vec4 nzA = texture2D(uNoise, xz / 37.0);
           vec4 nzB = texture2D(uNoise, xz / 9.0);
@@ -23592,6 +23592,7 @@ vec3 deformP(vec3 p){
     `
 varying vec3 vWPos;
 uniform sampler2D uNoise;
+#define SOIL_LOD 1.0
 uniform sampler2D uTxPeat;
 uniform sampler2D uTxPeatDry;
 uniform sampler2D uTxSand;
@@ -23599,8 +23600,8 @@ uniform sampler2D uTxGravel;
 uniform sampler2D uTxSilt;
 uniform sampler2D uTxTop;
 vec3 soilT(sampler2D t, vec2 p){
-  vec3 a = texture2D(t, p / vec2(4.0, 3.0)).rgb;
-  vec3 b = texture2D(t, p * 0.71 / vec2(4.0, 3.0) + vec2(0.37, 0.21)).rgb;
+  vec3 a = texture2D(t, p / vec2(4.0, 3.0), SOIL_LOD).rgb;
+  vec3 b = texture2D(t, p * 0.71 / vec2(4.0, 3.0) + vec2(0.37, 0.21), SOIL_LOD).rgb;
   float k = smoothstep(0.38, 0.62, texture2D(uNoise, p * 0.045 + 0.13).g);
   return mix(a, b, k);
 }
@@ -24026,7 +24027,7 @@ float stripS(float X, float z, float b){ // Boussinesq strip load, sigma_z / q
           float furrow = 0.5 + 0.5 * sin(xz.y * 7.85 + n2.r * 0.8);
           vec3 soil = mix(vec3(0.04, 0.032, 0.026), vec3(0.13, 0.10, 0.075), furrow) * (0.8 + 0.45 * n1.r);
           float parcel = step(0.5, fract(xz.x / 38.0 + 0.3));
-          vec3 grass = texture2D(uGrass, xz / 3.2).rgb * (0.8 + 0.3 * n1.b);
+          vec3 grass = texture2D(uGrass, xz / 3.2, 0.8).rgb * (0.8 + 0.3 * n1.b);
           vec3 crop = mix(soil, grass * vec3(0.95, 1.0, 0.65), smoothstep(0.55, 0.92, furrow) * 0.9);
           vec3 col = mix(soil, crop, parcel);
           float dt = abs(xz.y + 14.0);

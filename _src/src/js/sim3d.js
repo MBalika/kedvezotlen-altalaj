@@ -14,7 +14,7 @@ const HL = HX1 - HX0;                    // house length (m)
 // ====================================================================== soil models
 const MODELS = {
   clay: {
-    name: 'Térfogatváltozó agyag', ch: 1, ex: 20,
+    name: 'Térfogatváltozó agyag', ch: 1, ex: 4,
     controls: [
       ['season', 'range', 'Nedvességi állapot', 0, 100, 1, 18, (v) => v < 30 ? 'aszályos ősz' : v < 45 ? 'száraz nyár' : v < 56 ? 'átlagos' : v < 75 ? 'nedves tél' : 'csapadékos tavasz'],
       ['tree', 'range', 'Nyárfa távolsága a háztól', 1.5, 13, 0.5, 4, (v) => v >= 13 ? 'nincs fa' : fmt(v, 1) + ' m'],
@@ -49,7 +49,7 @@ const MODELS = {
     },
   },
   loess: {
-    name: 'Roskadékony lösz', ch: 2, ex: 12,
+    name: 'Roskadékony lösz', ch: 2, ex: 2.5,
     controls: [
       ['water', 'range', 'Csőtörés: átázott zóna', 0, 100, 1, 0, (v) => v === 0 ? 'nincs víz' : 'r ≈ ' + fmt(0.3 + 4.2 * v / 100, 1) + ' m'],
       ['q', 'range', 'Talpfeszültség', 20, 200, 5, 90, (v) => v + ' kPa'],
@@ -80,7 +80,7 @@ const MODELS = {
     },
   },
   fill: {
-    name: 'Feltöltés', ch: 3, ex: 10,
+    name: 'Feltöltés', ch: 3, ex: 4,
     controls: [
       ['edge', 'range', 'A feltöltött gödör széle', -8, 6, 0.1, 0, (v) => v <= -6.5 ? 'a ház mellett' : v >= 3 ? 'túl a házon' : 'a ház alatt'],
       ['Hmax', 'range', 'A gödör mélysége', 2, 7, 0.1, 5, (v) => fmt(v, 1) + ' m'],
@@ -117,7 +117,7 @@ const MODELS = {
     },
   },
   peat: {
-    name: 'Szerves talaj (tőzeg)', ch: 4, ex: 5,
+    name: 'Szerves talaj (tőzeg)', ch: 4, ex: 3,
     controls: [
       ['hc', 'range', 'Homok fedőréteg', 0.5, 3, 0.1, 2.4, (v) => fmt(v, 1) + ' m'],
       ['hp', 'range', 'Tőzeg vastagsága (bal oldalon)', 0.5, 5, 0.1, 3, (v) => fmt(v, 1) + ' m'],
@@ -178,7 +178,7 @@ export function initSims() {
     const soil = el.dataset.soil, M = MODELS[soil];
     el.setAttribute('data-ch', M.ch);
     const stage = h('div', { class: 'sim-stage' }, h('div', { class: 'ph' }, renderer ? 'A 3D nézet akkor töltődik be, amikor ide görgetsz.' : 'Ez a böngésző nem támogatja a WebGL-t, ezért a 3D nézet nem jeleníthető meg. A számított értékek jobb oldalt ekkor is működnek.'));
-    const hud = h('div', { class: 'sim-hud' }, h('span', { class: 'chip' }, M.name), h('span', { class: 'chip' }, 'mozgás ×' + M.ex + ' nagyítva'), h('span', { class: 'chip mid', 'data-hint': '1' }, { clay: 'Tipp: húzd az évszakot tavaszig, majd vissza', loess: 'Tipp: növeld az átázott zónát!', fill: 'Tipp: told a gödör szélét a ház alá', peat: 'Tipp: szélesítsd az alapot, süllyeszd a talajvizet' }[soil]));
+    const hud = h('div', { class: 'sim-hud' }, h('span', { class: 'chip' }, M.name), h('span', { class: 'chip' }, 'mozgás ×' + fmt(M.ex, M.ex % 1 ? 1 : 0) + ' nagyítva'), h('span', { class: 'chip mid', 'data-hint': '1' }, { clay: 'Tipp: húzd az évszakot tavaszig, majd vissza', loess: 'Tipp: növeld az átázott zónát!', fill: 'Tipp: told a gödör szélét a ház alá', peat: 'Tipp: szélesítsd az alapot, süllyeszd a talajvizet' }[soil]));
     const legend = h('div', { class: 'sim-legend' }, 'Forgatás: húzás · Nagyítás: görgő / csípés');
     const resetBtn = h('button', { class: 'btn small sim-reset', type: 'button' }, 'Nézet');
     stage.append(hud, legend, resetBtn);
@@ -495,7 +495,7 @@ function buildWorld(renderer, S) {
     const tL = r.sL / 1000 * M.ex, tR = r.sR / 1000 * M.ex;
     const k = preset === 'loess' ? 0.18 : 0.08;
     const ddL = tL - disp.yL, ddR = tR - disp.yR;
-    if (preset === 'loess' && (ddL > 0.25 || ddR > 0.25) && dustAge > 1.5) dustAge = 0;
+    if (preset === 'loess' && (ddL > 0.08 || ddR > 0.08) && dustAge > 1.5) dustAge = 0;
     disp.yL += ddL * k; disp.yR += ddR * k;
     const moving = Math.abs(ddL) + Math.abs(ddR) > 0.002;
     // house transform: tilt about the footprint

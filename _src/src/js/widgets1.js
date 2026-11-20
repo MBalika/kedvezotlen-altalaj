@@ -11,7 +11,7 @@ export function heroCores() {
     ['szerves', 'tex-peat', 'Szerves talaj', 'tőzeg · iszap', 'var(--c4s)', 'peat'],
   ];
   items.forEach(([id, pat, name, sub, col, kind], i) => {
-    const H = 300 + [0, 30, -20, 15][i];
+    const H = 320;   // mind a négy minta egyforma hosszú, az aljuk egy vonalban
     const svg = svgRoot(110, H + 40);
     const gid = 'coreShade' + i;
     svg.append(s('defs', {}, s('linearGradient', { id: gid, x1: 0, x2: 1, y1: 0, y2: 0 },
