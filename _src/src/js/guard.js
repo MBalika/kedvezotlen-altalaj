@@ -97,3 +97,6 @@ export function startFormatting() {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => RAG.later(60));   /* a webfont betöltése után a sorok újratördelődnek */
   const iv = setInterval(() => { if (window.__fmtHyphReady) { clearInterval(iv); requestAnimationFrame(() => RAG.run()); } }, 100); setTimeout(() => clearInterval(iv), 10000);
 }
+
+/* elválasztó a rácsba zárt rövid címekhez (pl. a hős mintakártyái): a szövegre csak lágy kötőjelek kerülnek, más formázás nem */
+export function whenHyph(cb) { const H = window.Hyphenopoly, HK = EN ? 'en-gb' : 'hu'; if (H && H.hyphenators && H.hyphenators[HK]) H.hyphenators[HK].then(cb).catch(() => {}); }

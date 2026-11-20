@@ -129,12 +129,13 @@ html[lang^="en"] .hero h1 { font-size: clamp(36px, 5.9vw, 78px); }   /* angolul 
 .stat span { font-size: 13px; color: var(--muted); }
 @media (max-width: 560px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-.cores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-items: start; }   /* a hengerek teteje, alja és a felirataik is egy vonalban */
-.core { text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; }
+.cores { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 14px; align-items: start; }   /* a hengerek teteje, alja és a felirataik is egy vonalban */
+.core { text-decoration: none; display: grid; grid-row: span 3; grid-template-rows: subgrid; justify-items: center; align-items: start; cursor: pointer; min-width: 0; }   /* közös sorok: a négy cím és a négy alcím is egy vonalban indul */
 .core svg { width: 100%; max-width: 110px; height: auto; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18)); transition: transform 0.25s cubic-bezier(.2, .8, .2, 1); }
 .core:hover svg { transform: translateY(-10px) rotate(-1.5deg); }
-.core b { font-family: var(--f-display); font-weight: 800; font-size: 14px; text-align: center; line-height: 1.15; }
-.core small { font-family: var(--f-mono); font-size: 11px; color: var(--muted); text-align: center; }
+.core b { font-family: var(--f-display); font-weight: 800; font-size: 14px; text-align: center; line-height: 1.15; max-width: 100%; hyphens: manual; -webkit-hyphens: manual; }
+.core small { font-family: var(--f-mono); font-size: 11px; line-height: 1.45; color: var(--muted); text-align: center; }
+.core small span { display: block; }
 .core b.short { display: none; }
 @media (max-width: 640px) { .core b.long { display: none; } .core b.short { display: block; } .core small { display: none; } }
 @media (max-width: 700px) { .svgbox svg.wide { min-width: 640px; } .svgbox { overflow-x: auto; } }
@@ -399,7 +400,7 @@ svg text.onsoil { fill: var(--ink); paint-order: stroke; stroke: var(--surface);
 .vstrip { margin: 6px 0 34px; }
 .vstrip-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 12px; }
 .vstrip-hint { font-size: 13.5px; color: var(--muted); }
-.vstrip-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.vstrip-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .vcard { display: flex; flex-direction: column; gap: 9px; padding: 0; border: 0; background: none; cursor: pointer; text-align: center; color: var(--ink); font: inherit; min-width: 0; }
 .vcard .vthumb { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 12px; background-size: cover; background-position: center; background-color: #111; box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 8px 22px -12px rgba(0,0,0,.45); overflow: hidden; transition: transform .18s ease, box-shadow .18s ease; }
 .vcard:hover .vthumb, .vcard:focus-visible .vthumb { transform: translateY(-3px); box-shadow: 0 14px 28px -12px rgba(0,0,0,.55); }
@@ -408,7 +409,7 @@ svg text.onsoil { fill: var(--ink); paint-order: stroke; stroke: var(--surface);
 .vcard .play svg { width: 18px; height: 18px; margin-left: 2px; }
 .vcard .dur { position: absolute; right: 8px; bottom: 7px; z-index: 1; font: 500 12px 'IBM Plex Mono', monospace; color: #fff; background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 6px; }
 .vcard b { font: 700 14.5px/1.25 Archivo, sans-serif; text-wrap: balance; }
-@media (max-width: 1060px) {
+@media (max-width: 760px) {
   .vstrip-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 10px; margin-right: calc(-1 * var(--pad, 16px)); padding-right: var(--pad, 16px); -webkit-overflow-scrolling: touch; }
   .vcard { flex: 0 0 min(300px, 74vw); scroll-snap-align: start; }
 }

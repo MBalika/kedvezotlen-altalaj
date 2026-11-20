@@ -1,4 +1,5 @@
 import { clamp, lerp, smooth, $, h, s, svgRoot, fmt, bindRange, segmented, onVisible, verdict, cssVar, onTheme, mulberry32, EN } from './util.js';
+import { whenHyph } from './guard.js';
 const YR = (n) => EN ? 'Year ' + n : n + '. év';   // évszám-felirat (angolul „Year 2”)
 
 // ------------------------------------------------------------------ hero core samples
@@ -8,7 +9,7 @@ export function heroCores() {
     ['terfogatvaltozo', 'tex-clay', 'Térfogatváltozó agyag', 'duzzad · zsugorodik', 'var(--c1s)', 'clay'],
     ['roskadekony', 'tex-loess', 'Roskadékony lösz', 'átázva roskad', 'var(--c2s)', 'loess'],
     ['feltoltes', 'tex-rubble', 'Feltöltés', 'törmelék · szemét', 'var(--c3s)', 'fill'],
-    ['szerves', 'tex-peat', 'Szerves talaj', 'tőzeg · iszap', 'var(--c4s)', 'peat'],
+    ['szerves', 'tex-peat', 'Szerves talaj', 'tőzeg · szerves iszap, agyag', 'var(--c4s)', 'peat'],
   ];
   items.forEach(([id, pat, name, sub, col, kind], i) => {
     const H = 320;   // mind a négy minta egyforma hosszú, az aljuk egy vonalban
@@ -28,8 +29,11 @@ export function heroCores() {
     svg.append(s('ellipse', { cx: 55, cy: top + 2, rx: 45, ry: 9, fill: '#fff', opacity: 0.15 }));
     // depth ticks
     for (let m = 0; m <= 5; m++) { const y = top + m * (H / 5); svg.append(s('line', { x1: 102, x2: 108, y1: y, y2: y, stroke: 'currentColor', 'stroke-width': 1, opacity: 0.5 })); }
-    const short = ['Agyag', 'Lösz', 'Feltöltés', 'Tőzeg'][i];
-    const a = h('a', { class: 'core', href: '#' + id, 'data-ch': String(i + 1), 'aria-label': name }, svg, h('b', { class: 'long' }, name), h('b', { class: 'short' }, short), h('small', {}, sub));
+    const short = ['Agyag', 'Lösz', 'Feltöltés', 'Szerves talaj'][i];
+    const bl = h('b', { class: 'long' }, name);
+    whenHyph(fn => { bl.textContent = fn(name); });   // keskeny hasábban (pl. 1024 px) a hosszú szó elválasztva törik, nem lóg át a szomszédra
+    const sm = h('small', {}); sub.split(' · ').forEach(t => sm.append(h('span', {}, t)));   // tételenként külön sor: nem marad „·” a sor végén
+    const a = h('a', { class: 'core', href: '#' + id, 'data-ch': String(i + 1), 'aria-label': name }, svg, bl, h('b', { class: 'short' }, short), sm);
     box.append(a);
   });
 }

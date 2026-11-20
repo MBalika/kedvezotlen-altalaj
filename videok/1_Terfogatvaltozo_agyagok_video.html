@@ -24583,7 +24583,8 @@ float boxm(vec2 p, vec2 a, vec2 b){ return step(a.x,p.x)*step(p.x,b.x)*step(a.y,
     [71.6, 78.2, "Mi\xE9rt duzzad?", ["A v\xEDz *sz\xE9tfesz\xEDti* a lemezeket"], { kc: C.water, hc: C.water }],
     
     
-    [110.6, 115, "Mi\xE9rt?", ["A k\xF6nny\u0171 h\xE1zat felemeli az agyag"]],
+    [106.8, 109.9, "Mi\xE9rt?", ["A *k\xF6nny\u0171* h\xE1zat fel tudja emelni az agyag"]],
+    [110.1, 115, "T\xF6bb szint", ["Min\xE9l t\xF6bb szintes a h\xE1z, ann\xE1l *merevebb* a szerkezete,", "\xE9s jobban b\xEDrja a mozg\xE1sk\xFCl\xF6nbs\xE9get"]],
     [128.4, 134, "1  \xB7  M\xE9lyen", ["Alaps\xEDk legal\xE1bb *2\u20132,5 m* m\xE9lyen"]],
     [134.2, 140, "2  \xB7  Pince", ["*Teljes* pince"], { hc: C.accent }],
     [140.2, 146, "3\u20134  \xB7  Alap", ["Keskeny alap, nagy talpfesz\xFClts\xE9g"]],
@@ -24747,7 +24748,7 @@ float boxm(vec2 p, vec2 a, vec2 b){ return step(a.x,p.x)*step(p.x,b.x)*step(a.y,
         g.fillText(["EGYSZINTES", "K\xC9TSZINTES", "H\xC1ROMSZINTES"][i], p.x, p.y + 30);
         g.restore();
       });
-      const pa = win(t, 110.8, 115, 0.5, 0.4);
+      const pa = win(t, 106.8, 110.0, 0.5, 0.4);
       if (pa > 0) {
         const p = proj(STATS.x - 17, 0.2, STATS.z + 4.5);
         O.arrow(p.x - 60, p.y - 210, p.x - 60, p.y - 40, pa, C.accent, 10, 28);

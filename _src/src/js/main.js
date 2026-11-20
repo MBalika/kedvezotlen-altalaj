@@ -14,11 +14,11 @@ const VEDEKEZES_URL = window.VEDEKEZES_URL || 'https://vedekezesakarossullyedese
 const EN_FILES = { 1: '1_Expansive_clays_EN_video.html', 2: '2_Collapsible_soils_EN_video.html', 3: '3_Made_ground_EN_video.html', 4: '4_Organic_soils_EN_video.html', 5: '5_Underpinning_on_expansive_clay_EN_video.html' };
 
 const VIDEOS = {
-  1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261120b', poster: 'assets/p1.jpg?v=20261120', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
-  2: { file: 'videok/2_Roskadekony_talajok_video.html?v=20261120b', poster: 'assets/p2.jpg?v=20261120', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
-  3: { file: 'videok/3_Feltoltesek_video.html?v=20261120b', poster: 'assets/p3.jpg?v=20261120', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
-  5: { file: 'videok/5_Alapmegerosites_terfogatvaltozo_agyagon_video.html?v=20261120b', poster: 'assets/p5.jpg?v=20261120', dur: '2:21', title: 'Alapmegerősítés: szakaszos alábetonozás', kicker: 'Animáció · kiegészítő rész', parts: ['Mi történik a ház alatt?', 'Az elv: a teher az aktív zóna alá', 'Ásás, zsaluzás, betonozás', 'Ékelés és injektálás', 'A korlát: fák a ház mellett'] },
-  4: { file: 'videok/4_Szerves_talajok_video.html?v=20261120b', poster: 'assets/p4.jpg?v=20261120', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
+  1: { file: 'videok/1_Terfogatvaltozo_agyagok_video.html?v=20261120c', poster: 'assets/p1.jpg?v=20261120', dur: '2:56', title: 'Térfogatváltozó agyagok', parts: ['Aszály egy alföldi faluban', 'Mi történik az agyagban?', 'Az épület évszakos mozgása', 'Felismerés és határértékek', 'Tervezési szabályok'] },
+  2: { file: 'videok/2_Roskadekony_talajok_video.html?v=20261120c', poster: 'assets/p2.jpg?v=20261120', dur: '3:07', title: 'Roskadékony talajok', parts: ['Löszvidék, pincesor', 'A lösz szemcseszinten', 'A három feltétel', 'Csőtörés és roskadás', 'Ödométer, iᵣ', 'Védekezés és talajjavítás'] },
+  3: { file: 'videok/3_Feltoltesek_video.html?v=20261120c', poster: 'assets/p3.jpg?v=20261120', dur: '2:57', title: 'Feltöltések', parts: ['Egy telek története', 'Miből áll a feltöltés?', 'Károk és statisztika', 'Víz és gázok', 'Irányelvek', 'Javítási módszerek'] },
+  5: { file: 'videok/5_Alapmegerosites_terfogatvaltozo_agyagon_video.html?v=20261120c', poster: 'assets/p5.jpg?v=20261120', dur: '2:21', title: 'Alapmegerősítés: szakaszos alábetonozás', kicker: 'Animáció · kiegészítő rész', parts: ['Mi történik a ház alatt?', 'Az elv: a teher az aktív zóna alá', 'Ásás, zsaluzás, betonozás', 'Ékelés és injektálás', 'A korlát: fák a ház mellett'] },
+  4: { file: 'videok/4_Szerves_talajok_video.html?v=20261120c', poster: 'assets/p4.jpg?v=20261120', dur: '2:51', title: 'Szerves talajok', parts: ['Holme Fen: a talaj, amely eltűnik', 'Keletkezés', 'Felismerés a laborban', 'Tulajdonságok', 'Károk', 'Alapozás és irányelvek'] },
 };
 
 function videos() {
@@ -32,11 +32,11 @@ function videos() {
     el.append(poster, info);
   });
 }
-// videósáv a bevezető alatt: mind az öt animáció egy sorban (keskeny kijelzőn oldalra húzható)
+// videósáv a bevezető alatt: a négy talajtípus animációja egy sorban (keskeny kijelzőn oldalra húzható)
 function videoStrip() {
   const row = $('#vstrip'); if (!row) return;
-  [1, 2, 3, 4, 5].forEach((n) => { const v = VIDEOS[n];
-    const card = h('button', { class: 'vcard', type: 'button', 'data-ch': String(n === 5 ? 1 : n), 'aria-label': 'Animáció lejátszása: ' + v.title },
+  [1, 2, 3, 4].forEach((n) => { const v = VIDEOS[n];   // a felső sávban csak a négy talajtípus; az alapmegerősítés (5.) a térfogatváltozó agyag fejezetében
+    const card = h('button', { class: 'vcard', type: 'button', 'data-ch': String(n), 'aria-label': 'Animáció lejátszása: ' + v.title },
       h('span', { class: 'vthumb', style: `background-image:url('${v.poster}')` }, h('span', { class: 'play', html: '<svg viewBox="0 0 24 24" fill="#111"><path d="M6 4l14 8-14 8z"/></svg>' }), h('span', { class: 'dur' }, v.dur)),
       h('b', {}, v.title));
     card.addEventListener('click', () => openVideo(v)); row.append(card); });

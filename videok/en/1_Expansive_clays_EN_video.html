@@ -24583,7 +24583,8 @@ float boxm(vec2 p, vec2 a, vec2 b){ return step(a.x,p.x)*step(p.x,b.x)*step(a.y,
     [71.6, 78.2, "Why does it swell?", ["Water *forces* the layers apart"], { kc: C.water, hc: C.water }],
     
     
-    [110.6, 115, "Why?", ["The clay lifts the light house"]],
+    [106.8, 109.9, "Why?", ["The clay can lift a *light* house"]],
+    [110.1, 115, "More storeys", ["The more storeys a house has, the *stiffer* its structure,", "and the better it copes with differential movement"]],
     [128.4, 134, "1  ·  Deep", ["Foundation level at least *2–2.5 m* deep"]],
     [134.2, 140, "2  ·  Basement", ["*Full* basement"], { hc: C.accent }],
     [140.2, 146, "3–4  ·  Footing", ["Narrow footing, high pressure"]],
@@ -24747,7 +24748,7 @@ float boxm(vec2 p, vec2 a, vec2 b){ return step(a.x,p.x)*step(p.x,b.x)*step(a.y,
         g.fillText(["SINGLE-STOREY", "TWO-STOREY", "THREE-STOREY"][i], p.x, p.y + 30);
         g.restore();
       });
-      const pa = win(t, 110.8, 115, 0.5, 0.4);
+      const pa = win(t, 106.8, 110.0, 0.5, 0.4);
       if (pa > 0) {
         const p = proj(STATS.x - 17, 0.2, STATS.z + 4.5);
         O.arrow(p.x - 60, p.y - 210, p.x - 60, p.y - 40, pa, C.accent, 10, 28);
