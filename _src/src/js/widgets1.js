@@ -327,8 +327,8 @@ export function rules() {
     // house
     const hx0 = 170, hx1 = 450;
     const fd = st.depth ? 2.4 : 0.8; const fw = st.stress ? 30 : 64;
-    // pince: kipipálva teljes (egy szint mély), különben részleges (a ház egy része alatt) – az alapsík mélyítése csak az alapokat viszi le
-    const cd = 2.6, cellarH = cd * mpx, pcx = hx0 + (hx1 - hx0) * 0.45;
+    // pince: csak kipipálva látszik (teljes, egy szint mély); az alapsík mélyítése csak az alapokat viszi le
+    const cd = 2.6, cellarH = cd * mpx;
     const foot = (x, d, bad) => { svg.append(s('rect', { x: x - fw / 2, y: gy, width: fw, height: d * mpx, fill: '#bdbab3', stroke: bad ? 'var(--bad)' : ink, 'stroke-width': 1.5 }));
       if (st.rebar) for (let k = 0; k < 3; k++) svg.append(s('circle', { cx: x - fw / 2 + 7 + k * (fw - 14) / 2, cy: gy + d * mpx - 8, r: 3, fill: '#7a3a1c' })); };
     if (st.cellar) {
@@ -336,12 +336,7 @@ export function rules() {
       svg.append(s('rect', { x: hx0, y: gy, width: hx1 - hx0, height: cellarH, fill: 'var(--surface2)', stroke: ink, 'stroke-width': 2 }));
       svg.append(s('rect', { x: hx0, y: gy + cellarH - 8, width: hx1 - hx0, height: 8, fill: '#bdbab3', stroke: ink, 'stroke-width': 1 }));
       svg.append(s('text', { x: (hx0 + hx1) / 2, y: gy + cellarH / 2 + 5, 'font-size': 13, fill: 'var(--good)', 'font-weight': 700, 'text-anchor': 'middle', text: EN ? 'full basement' : 'teljes pince' }));
-    } else {
-      foot(hx0, Math.max(fd, cd + 0.3), true); foot(pcx, cd + 0.3, true); foot(hx1, fd);
-      svg.append(s('rect', { x: hx0, y: gy, width: pcx - hx0, height: cellarH, fill: 'var(--surface2)', stroke: 'var(--bad)', 'stroke-width': 2, 'stroke-dasharray': '6 4' }));
-      svg.append(s('rect', { x: hx0, y: gy + cellarH - 8, width: pcx - hx0, height: 8, fill: '#bdbab3', stroke: 'var(--bad)', 'stroke-width': 1 }));
-      svg.append(s('text', { x: (hx0 + pcx) / 2, y: gy + cellarH / 2 + 5, 'font-size': 13, fill: 'var(--bad)', 'font-weight': 700, 'text-anchor': 'middle', text: 'részleges pince' }));
-    }
+    } else { foot(hx0, fd); foot(hx1, fd); }   // pince nélküli ház: pince csak akkor látszik, ha be van pipálva
     svg.append(s('rect', { x: hx0 - 8, y: 60, width: hx1 - hx0 + 16, height: gy - 60, fill: 'var(--surface)', stroke: ink, 'stroke-width': 2 }));
     svg.append(s('path', { d: `M${hx0 - 26} 64 L${(hx0 + hx1) / 2} 8 L${hx1 + 26} 64 Z`, fill: '#8a3e2b', stroke: ink, 'stroke-width': 2 }));
     for (const x of [hx0 + 40, hx1 - 90]) svg.append(s('rect', { x, y: 92, width: 50, height: 42, fill: 'var(--surface2)', stroke: mut, 'stroke-width': 1.5 }));
