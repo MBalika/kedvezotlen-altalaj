@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { soilPattern, onSoil, crackedTop } from './soil.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { clamp, lerp, smooth, $, $$, h, fmt, bindRange, mulberry32, stripS, cssVar, EN } from './util.js';
 
@@ -156,7 +157,8 @@ const MODELS = {
 };
 
 // ====================================================================== textures
-function canvasTex(w, hgt) { const c = document.createElement('canvas'); c.width = w; c.height = hgt; const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return { c, g: c.getContext('2d'), t }; }
+function canvasTex(w, hgt, k = 1) { const c = document.createElement('canvas'); c.width = w * k; c.height = hgt * k; const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; const g = c.getContext('2d'); if (k !== 1) g.scale(k, k); return { c, g, t, w, h: hgt }; }
+const SS = 2;   // a metszetvásznak kétszeres felbontásban készülnek (éles talajtextúra)
 
 function noiseFill(g, w, hgt, base, amp, seed, n = 9000, size = [2, 6]) {
   g.fillStyle = base; g.fillRect(0, 0, w, hgt);
@@ -292,7 +294,8 @@ function buildWorld(renderer, S) {
     const m = new THREE.Mesh(new THREE.PlaneGeometry(52, 26), new THREE.MeshBasicMaterial({ map: t.t, transparent: true, depthWrite: false })); m.rotation.x = -Math.PI / 2; m.position.y = -BD - 0.6; scene.add(m); }
 
   // ---------------- soil block with canvas faces
-  const front = canvasTex(CW, CH), sideR = canvasTex(BZ * 2 * PXM, CH), sideL = canvasTex(BZ * 2 * PXM, CH), topT = canvasTex(1024, 410);
+  const front = canvasTex(CW, CH, SS), sideR = canvasTex(BZ * 2 * PXM, CH, SS), sideL = canvasTex(BZ * 2 * PXM, CH, SS), topT = canvasTex(2048, 820);
+  onSoil(() => setTimeout(() => { lastSec = ''; dirty = 2; if (!running) frame(); }, 0));
   const darkM = new THREE.MeshStandardMaterial({ color: 0x3a2e24, roughness: 1 });
   const frontM = new THREE.MeshStandardMaterial({ map: front.t, roughness: 0.92 });
   const sideRM = new THREE.MeshStandardMaterial({ map: sideR.t, roughness: 0.95 });
@@ -330,10 +333,23 @@ function buildWorld(renderer, S) {
   const wallSide = new THREE.MeshStandardMaterial({ map: sideWallT.t, roughness: 0.9 });
   const body = new THREE.Mesh(new THREE.BoxGeometry(HL, 3, HZ1 - HZ0), [wallSide, wallSide, wallSide, wallSide, wallFront, wallSide]);
   body.position.set((HX0 + HX1) / 2, 1.5, (HZ0 + HZ1) / 2); body.castShadow = true; body.receiveShadow = true; house.add(body);
-  const roofG = new THREE.ConeGeometry((HL / 2 + 0.6) * Math.SQRT2, 3.2, 4, 1); roofG.rotateY(Math.PI / 4);
-  const roof = new THREE.Mesh(roofG, new THREE.MeshStandardMaterial({ color: 0x9a4a32, roughness: 0.75, flatShading: true }));
-  roof.position.set((HX0 + HX1) / 2, 3 + 1.6, (HZ0 + HZ1) / 2); roof.castShadow = true; house.add(roof);
-  const chim = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.8, 0.6), new THREE.MeshStandardMaterial({ color: 0x8a5a44, roughness: 0.9 })); chim.position.set(HX0 + 2, 4.6, 0.5); chim.castShadow = true; house.add(chim);
+  // kontyolt cseréptető: négy sík, cserépsorokkal
+  const roofT = canvasTex(512, 512);
+  { const g = roofT.g, rr = mulberry32(77); g.fillStyle = '#8f4a34'; g.fillRect(0, 0, 512, 512); const rows = 16, cols = 12, th = 512 / rows, tw = 512 / cols;
+    for (let j = 0; j < rows; j++) for (let i = -1; i < cols; i++) { const x = (i + (j % 2) * 0.5) * tw, y = j * th; const v = 0.82 + rr() * 0.36; g.fillStyle = `rgb(${150 * v | 0},${74 * v | 0},${52 * v | 0})`; g.beginPath(); g.moveTo(x + 1, y); g.lineTo(x + tw - 1, y); g.lineTo(x + tw - 1, y + th * 0.7); g.quadraticCurveTo(x + tw / 2, y + th * 1.12, x + 1, y + th * 0.7); g.closePath(); g.fill();
+      const gr = g.createLinearGradient(0, y, 0, y + th); gr.addColorStop(0, 'rgba(0,0,0,0.38)'); gr.addColorStop(0.25, 'rgba(0,0,0,0)'); gr.addColorStop(0.85, 'rgba(255,220,190,0.14)'); gr.addColorStop(1, 'rgba(0,0,0,0.25)'); g.fillStyle = gr; g.fill(); }
+    for (let k = 0; k < 500; k++) { g.fillStyle = rr() < 0.5 ? 'rgba(40,30,20,0.12)' : 'rgba(110,120,80,0.1)'; g.fillRect(rr() * 512, rr() * 512, 3 + rr() * 14, 2 + rr() * 8); }
+    roofT.t.wrapS = roofT.t.wrapT = THREE.RepeatWrapping; roofT.t.needsUpdate = true; }
+  const roofG = new THREE.BufferGeometry();
+  { const a = HL / 2 + 0.6, b = (HZ1 - HZ0) / 2 + 0.6, hh = 3.0, pos = [], uv = []; const T = 0.32; // cserépsor-ismétlés (1/m)
+    const face = (p0, p1) => { const ap = [0, hh, 0]; const ex = p1[0] - p0[0], ez = p1[2] - p0[2], L = Math.hypot(ex, ez); const mx = (p0[0] + p1[0]) / 2, mz = (p0[2] + p1[2]) / 2; const sl = Math.hypot(hh, Math.hypot(mx, mz)); pos.push(...p0, ...p1, ...ap); uv.push(0, 0, L * T, 0, L * T / 2, sl * T * 1.6); };
+    const c = [[-a, 0, b], [a, 0, b], [a, 0, -b], [-a, 0, -b]]; for (let i = 0; i < 4; i++) face(c[i], c[(i + 1) % 4]);
+    pos.push(...c[0], ...c[2], ...c[1], ...c[0], ...c[3], ...c[2]); for (let i = 0; i < 6; i++) uv.push(0, 0);
+    roofG.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); roofG.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); roofG.computeVertexNormals(); }
+  const roof = new THREE.Mesh(roofG, new THREE.MeshStandardMaterial({ map: roofT.t, roughness: 0.8 }));
+  roof.position.set((HX0 + HX1) / 2, 3, (HZ0 + HZ1) / 2); roof.castShadow = true; house.add(roof);
+  { const eave = new THREE.Mesh(new THREE.BoxGeometry(HL + 1.24, 0.12, HZ1 - HZ0 + 1.24), new THREE.MeshStandardMaterial({ color: 0xe9e3d6, roughness: 0.7 })); eave.position.set((HX0 + HX1) / 2, 2.98, (HZ0 + HZ1) / 2); house.add(eave); }
+  const chim = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.8, 0.6), new THREE.MeshStandardMaterial({ color: 0x8a5a44, roughness: 0.9 })); chim.position.set(HX0 + 2.6, 4.9, (HZ0 + HZ1) / 2 - 0.4); chim.castShadow = true; house.add(chim);
   const winM = new THREE.MeshStandardMaterial({ color: 0x2b3a46, roughness: 0.15, metalness: 0.4 });
   const frameM = new THREE.MeshStandardMaterial({ color: 0xf2efe8, roughness: 0.6 });
   [[HX0 + 1.6, 1.7], [HX1 - 1.6, 1.7]].forEach(([x, y]) => { const f = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.3, 0.08), frameM); f.position.set(x, y, HZ1 + 0.02); const w = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.1, 0.1), winM); w.position.set(x, y, HZ1 + 0.03); house.add(f, w); });
@@ -344,9 +360,9 @@ function buildWorld(renderer, S) {
   // ---------------- tree (poplar)
   const tree = new THREE.Group(); scene.add(tree);
   { const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.32, 7, 10), new THREE.MeshStandardMaterial({ color: 0x5a4433, roughness: 0.9 })); trunk.position.y = 3.5; trunk.castShadow = true; tree.add(trunk);
-    const leaf = new THREE.MeshStandardMaterial({ color: 0x4f7a2c, roughness: 0.85, flatShading: true });
-    const r = mulberry32(4);
-    for (let i = 0; i < 9; i++) { const m = new THREE.Mesh(new THREE.IcosahedronGeometry(1.1 + r() * 0.5, 1), leaf); m.position.set((r() - 0.5) * 1.2, 4.2 + i * 0.85, (r() - 0.5) * 1.2); m.scale.set(1, 1.5, 1); m.castShadow = true; tree.add(m); } }
+    const r = mulberry32(4); const greens = [0x3f6a26, 0x4f7a2c, 0x5c8a34, 0x356022, 0x6a9440].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9 }));
+    const sph = new THREE.IcosahedronGeometry(1, 2);
+    for (let i = 0; i < 70; i++) { const t = r(); const y = 2.6 + t * 9.4; const rad = (0.35 + 1.25 * Math.sin(Math.PI * Math.pow(t, 0.75))) * 0.9; const a = r() * 6.283, d = rad * Math.sqrt(r()) * 0.9; const m = new THREE.Mesh(sph, greens[(r() * greens.length) | 0]); const sc = 0.45 + r() * 0.45; m.scale.set(sc, sc * 1.25, sc); m.position.set(Math.cos(a) * d, y, Math.sin(a) * d); m.castShadow = true; tree.add(m); } }
   tree.position.z = 1.0;
 
   // ---------------- puddle (loess) and gas (fill)
@@ -359,7 +375,7 @@ function buildWorld(renderer, S) {
 
   // ---------------- state
   const disp = { yL: 0, yR: 0 };
-  let lastSec = '';
+  let lastSec = '', isoCv = null;
 
   function setPreset(p) { preset = p; dirty = 2; lastSec = ''; resize(); if (!running) frame(); }
   function setDirty() { dirty = 2; }
@@ -369,7 +385,8 @@ function buildWorld(renderer, S) {
   function drawSection(g, w, hgt, soil, p, r, sideView) {
     const rr = mulberry32(11);
     g.clearRect(0, 0, w, hgt);
-    const layerBand = (d0, d1, base, amp, seed) => { g.save(); g.beginPath(); g.rect(0, Y(d0), w, Y(d1) - Y(d0)); g.clip(); noiseFill(g, w, hgt, base, amp, seed, 5000, [2, 5]); g.restore(); };
+    const layerBand = (d0, d1, kind) => { g.fillStyle = soilPattern(g, kind, PXM); g.fillRect(0, Y(d0), w, Y(d1) - Y(d0)); };
+    const topsoil = () => { layerBand(0, 0.3, 'topsoil'); const gr = g.createLinearGradient(0, Y(0.22), 0, Y(0.42)); gr.addColorStop(0, 'rgba(30,20,12,0.5)'); gr.addColorStop(1, 'rgba(30,20,12,0)'); g.fillStyle = gr; g.fillRect(0, Y(0.22), w, Y(0.2)); const rt = mulberry32(31); g.strokeStyle = 'rgba(200,180,130,0.5)'; g.lineWidth = 0.7; for (let k = 0; k < 260; k++) { const x = rt() * w; g.beginPath(); g.moveTo(x, Y(0.02)); g.quadraticCurveTo(x + (rt() - 0.5) * 8, Y(0.2), x + (rt() - 0.5) * 12, Y(0.2 + rt() * 0.5)); g.stroke(); } };
     const label = (txt, x, y, col = '#fff', size = 22) => { size = Math.round(size * 1.45); g.font = `800 ${size}px Archivo, Arial, sans-serif`; g.lineWidth = 4; g.strokeStyle = 'rgba(0,0,0,0.45)'; g.strokeText(txt, x, y); g.fillStyle = col; g.fillText(txt, x, y); };
     const yL = disp.yL, yR = disp.yR; // metres, positive = down (visual, exaggerated)
     const footing = (xc, D, B, dy) => {
@@ -378,7 +395,7 @@ function buildWorld(renderer, S) {
       g.fillRect(x0, Y(dy), x1 - x0, Y(D)); g.strokeRect(x0, Y(dy), x1 - x0, Y(D));
     };
     if (soil === 'clay') {
-      layerBand(0, 0.3, '#3d2f22', 40, 1); layerBand(0.3, BD, '#8c6a4c', 34, 2);
+      layerBand(0.3, BD, 'clay'); topsoil();
       const za = 2.25; const s = r.s;
       // moisture of the active zone
       g.fillStyle = s > 0 ? `rgba(40,60,90,${0.25 * s})` : `rgba(255,230,180,${0.25 * -s})`; g.fillRect(0, Y(0.3), w, Y(za) - Y(0.3));
@@ -393,8 +410,7 @@ function buildWorld(renderer, S) {
       g.strokeStyle = '#5cc2f2'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, Y(7.2)); g.lineTo(w, Y(7.2)); g.stroke(); label('talajvíz mélyen', 14, Y(7.2) - 8, '#9fdcff', 18);
       if (!sideView) { footing(XL, p.D, 0.6, yL); footing(XR, p.D, 0.6, yR); }
     } else if (soil === 'loess') {
-      layerBand(0, 0.3, '#3d2f22', 40, 1); layerBand(0.3, BD, '#c9a862', 30, 3);
-      g.strokeStyle = 'rgba(110,80,30,0.35)'; g.lineWidth = 1.5; for (let k = 0; k < 400; k++) { const x = rr() * w, y = Y(0.3) + rr() * (hgt - Y(0.3)); g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rr() - 0.5) * 2, y + 6 + rr() * 8); g.stroke(); }
+      layerBand(0.3, BD, 'loess'); topsoil();
       if (!sideView && r.W > 0) { const cx = X(r.cx), cy = Y(r.cd); const grd = g.createRadialGradient(cx, cy, 5, cx, cy, r.r * PXM); grd.addColorStop(0, 'rgba(40,110,170,0.75)'); grd.addColorStop(0.85, 'rgba(60,140,200,0.45)'); grd.addColorStop(1, 'rgba(60,140,200,0)'); g.fillStyle = grd; g.beginPath(); g.arc(cx, cy, r.r * PXM, 0, 7); g.fill();
         g.strokeStyle = 'rgba(160,220,255,0.9)'; g.setLineDash([8, 6]); g.lineWidth = 2.5; g.beginPath(); g.arc(cx, cy, r.r * PXM * 0.97, 0, 7); g.stroke(); g.setLineDash([]); label('átázott lösz', cx - 60, cy + r.r * PXM * 0.6, '#d8f1ff', 20); }
       if (!sideView) {
@@ -407,17 +423,15 @@ function buildWorld(renderer, S) {
       }
       label('lösz (makropórusos)', 14, Y(5.6), '#fff', 26);
     } else if (soil === 'fill') {
-      layerBand(0, 0.3, '#3d2f22', 40, 1); layerBand(0.3, BD, '#8a7458', 30, 4);
+      layerBand(0.3, BD, 'natural'); topsoil();
       const depth = (x) => clamp((p.edge - x) * 1.0, 0, p.Hmax);
       // fill polygon
       g.save(); g.beginPath(); g.moveTo(0, Y(0.3)); for (let x = -BX; x <= BX; x += 0.1) g.lineTo(X(x), Y(Math.max(0.3, depth(x)))); g.lineTo(w, Y(0.3)); g.closePath(); g.clip();
-      const base = { rubble: '#7e6a5a', slag: '#3b3936', waste: '#3f3326' }[p.mat];
-      noiseFill(g, w, hgt, base, 40, 6, 4000, [2, 5]);
-      const cols = { rubble: ['#b35a3a', '#a8a59e', '#d0ccc4', '#6a5a4a'], slag: ['#1d1c1b', '#6d6a66', '#9d9a96', '#b35a3a'], waste: ['#2a6fd0', '#d8402a', '#e8c83a', '#f0f0f0', '#3f8f5a', '#111'] }[p.mat];
-      for (let k = 0; k < 900; k++) { const x = rr() * w, y = Y(0.3) + rr() * (hgt - Y(0.3)); g.fillStyle = cols[k % cols.length]; g.save(); g.translate(x, y); g.rotate(rr() * 3); g.fillRect(-4 - rr() * 8, -2 - rr() * 3, 8 + rr() * 14, 4 + rr() * 6); g.restore(); }
-      if (p.wet) { g.fillStyle = 'rgba(60,140,200,0.35)'; g.fillRect(0, 0, w, hgt); }
+      g.fillStyle = soilPattern(g, p.mat, PXM * 1.6); g.fillRect(0, 0, w, hgt);
+      { const gr = g.createLinearGradient(0, Y(0.3), 0, Y(0.9)); gr.addColorStop(0, 'rgba(40,28,16,0.55)'); gr.addColorStop(1, 'rgba(40,28,16,0)'); g.fillStyle = gr; g.fillRect(0, Y(0.3), w, Y(0.6)); }
+      if (p.wet) { g.fillStyle = 'rgba(30,60,90,0.38)'; g.fillRect(0, 0, w, hgt); }
       g.restore();
-      g.strokeStyle = '#ffffff'; g.lineWidth = 2.5; g.setLineDash([10, 7]); g.beginPath(); for (let x = -BX; x <= BX; x += 0.1) { const d = depth(x); if (d > 0.3) g.lineTo(X(x), Y(d)); else g.moveTo(X(x), Y(0.3)); } g.stroke(); g.setLineDash([]);
+      for (const [col, lw, dash] of [['rgba(20,14,8,0.55)', 5, []], ['#ffffff', 2.2, [10, 7]]]) { g.strokeStyle = col; g.lineWidth = lw; g.setLineDash(dash); g.beginPath(); for (let x = -BX; x <= BX; x += 0.1) { const d = depth(x); if (d > 0.3) g.lineTo(X(x), Y(d)); else g.moveTo(X(x), Y(0.3)); } g.stroke(); } g.setLineDash([]);
       if (p.mat === 'waste' && !sideView) { g.fillStyle = 'rgba(200,255,120,0.8)'; for (let k = 0; k < 40; k++) { const x = rr() * X(p.edge); const dd = depth(-BX + x / PXM); g.beginPath(); g.arc(x, Y(0.3) + rr() * Y(Math.max(0.4, dd - 0.3)), 3 + rr() * 3, 0, 7); g.fill(); } label('metán', 20, Y(1.0), '#d8ff8a', 20); }
       label('feltöltés', 16, Y(Math.min(p.Hmax, 6) * 0.55 + 0.4), '#fff', 26);
       label('termett talaj', w - 210, Y(5.8), '#fff', 24);
@@ -425,25 +439,24 @@ function buildWorld(renderer, S) {
         [[XL, r.HfL], [XR, r.HfR]].forEach(([xc, hf]) => { if (hf > 1.05) { g.strokeStyle = '#ffd36a'; g.lineWidth = 3; g.beginPath(); g.moveTo(X(xc + 0.7), Y(1.0)); g.lineTo(X(xc + 0.7), Y(hf)); g.stroke(); label(fmt(hf, 1) + ' m', X(xc + 0.85), Y((1 + hf) / 2) + 8, '#ffd36a', 20); } }); }
     } else if (soil === 'peat') {
       const hpAt = (x) => lerp(p.hp, r.hpR, smooth((x - XL) / (XR - XL)));
-      layerBand(0, BD, '#8c8473', 26, 8);
+      layerBand(0, BD, 'silt');
       // sand cover
-      layerBand(0.3, p.hc, '#c4a470', 30, 5);
+      layerBand(0.3, p.hc, 'sand');
       // peat lens
       g.save(); g.beginPath(); g.moveTo(0, Y(p.hc)); for (let x = -BX; x <= BX; x += 0.2) g.lineTo(X(x), Y(p.hc + hpAt(clamp(x, XL - 4, XR + 4)))); g.lineTo(w, Y(p.hc)); g.closePath(); g.clip();
-      noiseFill(g, w, hgt, '#2e241a', 30, 9, 3000, [2, 4]);
-      g.strokeStyle = 'rgba(190,160,110,0.5)'; g.lineWidth = 1.4; for (let k = 0; k < 600; k++) { const x = rr() * w, y = rr() * hgt; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + 6, y - 2 + rr() * 4, x + 12 + rr() * 10, y + (rr() - 0.5) * 3); g.stroke(); }
+      g.fillStyle = soilPattern(g, 'peat', PXM * 1.5); g.fillRect(0, 0, w, hgt);
       // dried peat above lowered GW
-      const gwN = 1.2 + p.gw; if (gwN > p.hc) { g.fillStyle = 'rgba(160,135,105,0.55)'; g.fillRect(0, Y(p.hc), w, Y(gwN) - Y(p.hc)); g.strokeStyle = '#1a120b'; g.lineWidth = 2; for (let k = 0; k < 40; k++) { const x = rr() * w; g.beginPath(); g.moveTo(x, Y(p.hc)); g.lineTo(x + 3, Y(gwN)); g.stroke(); } }
+      const gwN = 1.2 + p.gw; if (gwN > p.hc) { g.fillStyle = soilPattern(g, 'peatdry', PXM * 1.5); g.fillRect(0, Y(p.hc), w, Y(gwN) - Y(p.hc)); g.strokeStyle = '#140d07'; for (let k = 0; k < 46; k++) { const x = rr() * w; g.lineWidth = 1 + rr() * 2; g.beginPath(); g.moveTo(x, Y(p.hc)); g.lineTo(x + (rr() - 0.5) * 5, (Y(p.hc) + Y(gwN)) / 2); g.lineTo(x + (rr() - 0.5) * 8, Y(gwN) - rr() * 6); g.stroke(); } }
       g.restore();
-      layerBand(0, 0.3, '#3d2f22', 40, 1);
+      topsoil();
       // stress isobars under both footings
       if (!sideView) {
-        const img = g.getImageData(0, 0, w, hgt); const d = img.data; const b = p.B / 2; const D = 0.9;
+        const oc = isoCv || (isoCv = document.createElement('canvas')); oc.width = w; oc.height = hgt; const og = oc.getContext('2d'); const img = og.createImageData(w, hgt); const d = img.data; const b = p.B / 2; const D = 0.9;
         for (let py = Math.floor(Y(D)); py < hgt; py += 1) { const z = py / PXM - D - (yL + yR) / 2; if (z <= 0.01) continue;
           for (let px = Math.floor(X(XL - 4)); px < X(XR + 4); px++) { const x = px / PXM - BX; const v = stripS(x - XL, z, b) + stripS(x - XR, z, b);
             if (v < 0.1) continue; const i = (py * w + px) * 4; const c = v > 0.6 ? [255, 64, 38] : v > 0.4 ? [255, 140, 51] : v > 0.2 ? [255, 217, 77] : [77, 230, 204]; const a = Math.abs(v - 0.2) < 0.008 ? 1 : 0.38;
-            const cc = Math.abs(v - 0.2) < 0.008 ? [255, 255, 255] : c; d[i] = lerp(d[i], cc[0], a); d[i + 1] = lerp(d[i + 1], cc[1], a); d[i + 2] = lerp(d[i + 2], cc[2], a); } }
-        g.putImageData(img, 0, 0);
+            const cc = Math.abs(v - 0.2) < 0.008 ? [255, 255, 255] : c; d[i] = cc[0]; d[i + 1] = cc[1]; d[i + 2] = cc[2]; d[i + 3] = a * 255; } }
+        og.putImageData(img, 0, 0); g.drawImage(oc, 0, 0);
       }
       g.strokeStyle = '#5cc2f2'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, Y(gwN)); g.lineTo(w, Y(gwN)); g.stroke(); label(p.gw > 0 ? 'süllyedő talajvíz' : 'talajvíz', w - 230, Y(gwN) - 8, '#9fdcff', 18);
       label('homok fedőréteg', 14, Y((0.3 + p.hc) / 2) + 9, '#fff', Math.min(22, 10 + p.hc * 8));
@@ -454,22 +467,23 @@ function buildWorld(renderer, S) {
   }
   function drawSide(g, w, hgt, soil, p, r, isLeft) {
     const Yd = (d) => d * PXM;
-    const band = (d0, d1, base, amp, seed) => { g.save(); g.beginPath(); g.rect(0, Yd(d0), w, Yd(d1) - Yd(d0)); g.clip(); noiseFill(g, w, hgt, base, amp, seed, 2500, [2, 5]); g.restore(); };
+    const band = (d0, d1, kind, k = 1) => { g.fillStyle = soilPattern(g, kind, PXM * k, 137, 0); g.fillRect(0, Yd(d0), w, Yd(d1) - Yd(d0)); };
     g.clearRect(0, 0, w, hgt);
-    if (soil === 'clay') { band(0, 0.3, '#3d2f22', 40, 1); band(0.3, BD, '#8c6a4c', 34, 2); }
-    else if (soil === 'loess') { band(0, 0.3, '#3d2f22', 40, 1); band(0.3, BD, '#c9a862', 30, 3); }
-    else if (soil === 'fill') { band(0, BD, '#8a7458', 30, 4); const hf = isLeft ? clamp((p.edge + BX), 0, p.Hmax) : clamp(p.edge - BX, 0, p.Hmax); if (hf > 0.3) band(0.3, hf, { rubble: '#7e6a5a', slag: '#3b3936', waste: '#3f3326' }[p.mat], 50, 6); band(0, 0.3, '#3d2f22', 40, 1); }
-    else if (soil === 'peat') { band(0, BD, '#8c8473', 26, 8); band(0.3, p.hc, '#c4a470', 30, 5); band(p.hc, p.hc + (isLeft ? p.hp : r.hpR), '#2e241a', 30, 9); band(0, 0.3, '#3d2f22', 40, 1); }
+    if (soil === 'clay') band(0.3, BD, 'clay');
+    else if (soil === 'loess') band(0.3, BD, 'loess');
+    else if (soil === 'fill') { band(0, BD, 'natural'); const hf = isLeft ? clamp((p.edge + BX), 0, p.Hmax) : clamp(p.edge - BX, 0, p.Hmax); if (hf > 0.3) band(0.3, hf, p.mat, 1.6); }
+    else if (soil === 'peat') { band(0, BD, 'silt'); band(0.3, p.hc, 'sand'); band(p.hc, p.hc + (isLeft ? p.hp : r.hpR), 'peat', 1.5); }
+    band(0, 0.3, 'topsoil');
   }
   function drawTop(soil, p, r) {
     const g = topT.g, w = topT.c.width, hh = topT.c.height;
-    let grass = '#6f8f3e';
-    if (soil === 'clay' && r.s < 0) grass = '#a39a5a';
-    if (soil === 'peat') grass = '#5e7a3a';
-    noiseFill(g, w, hh, grass, 50, 21, 14000, [2, 4]);
-    if (soil === 'clay' && r.s < -0.2) { const rr = mulberry32(5); g.strokeStyle = `rgba(60,40,20,${-r.s * 0.7})`; g.lineWidth = 1.5; for (let k = 0; k < 140; k++) { let x = rr() * w, y = rr() * hh; g.beginPath(); g.moveTo(x, y); for (let j = 0; j < 4; j++) { x += (rr() - 0.5) * 40; y += (rr() - 0.5) * 40; g.lineTo(x, y); } g.stroke(); } }
+    const dry = soil === 'clay' ? clamp(-r.s) : 0;
+    g.fillStyle = soilPattern(g, 'grass', 68); g.fillRect(0, 0, w, hh);
+    if (dry > 0.02) { g.globalAlpha = Math.min(1, dry * 1.3); g.fillStyle = soilPattern(g, 'grassdry', 68); g.fillRect(0, 0, w, hh); g.globalAlpha = 1; }
+    if (soil === 'peat') { g.fillStyle = 'rgba(20,40,20,0.18)'; g.fillRect(0, 0, w, hh); }
+    if (dry > 0.2) crackedTop(g, w, hh, (dry - 0.2) / 0.8, 5, 74);
     // path to the door
-    g.fillStyle = 'rgba(170,165,150,0.9)'; g.fillRect(((HX0 + HX1) / 2 + BX) / (2 * BX) * w - 18, (HZ1 + BZ) / (2 * BZ) * hh, 36, hh);
+    { const px = ((HX0 + HX1) / 2 + BX) / (2 * BX) * w - 36, py = (HZ1 + BZ) / (2 * BZ) * hh; g.fillStyle = '#a9a498'; g.fillRect(px, py, 72, hh); g.strokeStyle = 'rgba(60,55,48,0.5)'; g.lineWidth = 2; for (let y = py; y < hh; y += 34) { g.beginPath(); g.moveTo(px, y); g.lineTo(px + 72, y); g.stroke(); } g.strokeRect(px, py, 72, hh); }
     topT.t.needsUpdate = true;
   }
 

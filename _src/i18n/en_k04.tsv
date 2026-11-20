@@ -71,7 +71,7 @@ bd36f50	In wetter weather the swelling clay lifts the lightly loaded building, a
 ddae544	On expansive clay it is mainly the superstructure that should be strengthened, not the foundation.
 d2e241b	The other way round: the foundation should take the bending and tension, not the superstructure – strengthen the foundation instead.
 1cb3470	A poplar near the house is favourable, because its roots stabilise the clay.
-e8a2f24	The roots of a thirsty tree (poplar, birch) draw the water from under the footings, so the clay shrinks.
+6bac40a	The roots of a thirsty tree (poplar, willow, oak) draw the water from under the footings, so the clay shrinks.
 746ca1d	On expansive clay the house needs paving 1.0–1.5 m wide around it, sloping away.
 2d24cc8	This way rainwater does not soak in next to the footings.
 39d80d6	When dry, loess can stand in a vertical face.
@@ -95,8 +95,8 @@ d878dea	Collapse happens once and is irreversible.
 bd8c578	87% of the damage was triggered by water.
 a296d58	On made ground the contact pressure may safely exceed 300 kPa.
 c4fbba4	The contact pressure should not exceed 150–200 kPa.
-754b480	Explosive methane can also form in made ground.
-d1122c9	And toxic gases too, such as cyanide.
+74fc5b1	Explosive methane can form in made ground that contains household refuse.
+067e0b5	The gas comes from decaying organic waste; rubble, slag and ash produce no gas.
 2eb93a5	A plate compactor can compact a layer 2–4 m thick.
 24696c5	A plate compactor 10–30 cm; the 2–4 m refers to the dropped tamping plate.
 fa8c597	A dropped tamping plate can compact made ground 2–4 m thick.

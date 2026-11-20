@@ -1,4 +1,5 @@
 import { $, $$, h, fireTheme, EN } from './util.js';
+import { initSoilSVG } from './soil.js';
 import { heroCores, compare, clayMicro, criteria, season, storeys, rules, loessMicro, oedometer } from './widgets1.js';
 import { history, sortGame, stats, gas, improve, holme, peatGame, peatBars, settle, timeCurve, bulb, peatTree } from './widgets2.js';
 import { quizzes, detective, trueFalse } from './quiz.js';
@@ -30,6 +31,15 @@ function videos() {
       h('p', {}, '3D animációs magyarázó videó narrációs feliratokkal. Teljes képernyőn is nézhető.'), h('ol', {}, ...v.parts.map(p => h('li', {}, p))));
     el.append(poster, info);
   });
+}
+// videósáv a bevezető alatt: mind az öt animáció egy sorban (keskeny kijelzőn oldalra húzható)
+function videoStrip() {
+  const row = $('#vstrip'); if (!row) return;
+  [1, 2, 3, 4, 5].forEach((n) => { const v = VIDEOS[n];
+    const card = h('button', { class: 'vcard', type: 'button', 'data-ch': String(n === 5 ? 1 : n), 'aria-label': 'Animáció lejátszása: ' + v.title },
+      h('span', { class: 'vthumb', style: `background-image:url('${v.poster}')` }, h('span', { class: 'play', html: '<svg viewBox="0 0 24 24" fill="#111"><path d="M6 4l14 8-14 8z"/></svg>' }), h('span', { class: 'dur' }, v.dur)),
+      h('b', {}, v.title));
+    card.addEventListener('click', () => openVideo(v)); row.append(card); });
 }
 function openVideo(v) {
   const close = h('button', { class: 'modal-close', type: 'button', 'aria-label': 'Bezárás' }, '✕');
@@ -117,7 +127,8 @@ function vedekezes() {
 function safe(fn, name) { try { fn(); } catch (e) { console.error('widget hiba: ' + name, e); } }
 
 theme();
-[['cores', heroCores], ['compare', compare], ['videos', videos], ['clayMicro', clayMicro], ['criteria', criteria], ['season', season], ['storeys', storeys], ['rules', rules],
+safe(initSoilSVG, 'soil');
+[['cores', heroCores], ['compare', compare], ['videos', videos], ['videoStrip', videoStrip], ['clayMicro', clayMicro], ['criteria', criteria], ['season', season], ['storeys', storeys], ['rules', rules],
   ['loessMicro', loessMicro], ['oedometer', oedometer], ['history', history], ['sortGame', sortGame], ['stats', stats], ['gas', gas], ['improve', improve],
   ['holme', holme], ['peatGame', peatGame], ['peatBars', peatBars], ['settle', settle], ['timeCurve', timeCurve], ['bulb', bulb], ['peatTree', peatTree],
   ['quizzes', quizzes], ['detective', detective], ['trueFalse', trueFalse], ['sims', initSims], ['nav', navigation], ['counts', counts], ['vedekezes', vedekezes], ['lang', langSwitch]].forEach(([n, f]) => safe(f, n));

@@ -1,0 +1,6 @@
+<!doctype html><meta charset=utf-8><body style="margin:0;background:#222"><script type=module>
+import {SOIL_KINDS, soilCanvas} from '/_src/tex/soiltex.js';
+const t0=performance.now(); const times={};
+for(const k of SOIL_KINDS){const a=performance.now(); const c=soilCanvas(k); times[k]=Math.round(performance.now()-a); c.id=k; c.style.cssText='display:block;margin:4px'; document.body.append(c);}
+window.times=times; window.ready=true;
+</script>

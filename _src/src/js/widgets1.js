@@ -5,10 +5,10 @@ const YR = (n) => EN ? 'Year ' + n : n + '. év';   // évszám-felirat (angolul
 export function heroCores() {
   const box = $('#heroCores'); if (!box) return;
   const items = [
-    ['terfogatvaltozo', 'hatch-clay', 'Térfogatváltozó agyag', 'duzzad · zsugorodik', 'var(--c1s)', 'clay'],
-    ['roskadekony', 'hatch-loess', 'Roskadékony lösz', 'átázva roskad', 'var(--c2s)', 'loess'],
-    ['feltoltes', 'hatch-fill', 'Feltöltés', 'törmelék · szemét', 'var(--c3s)', 'fill'],
-    ['szerves', 'hatch-peat', 'Szerves talaj', 'tőzeg · iszap', 'var(--c4s)', 'peat'],
+    ['terfogatvaltozo', 'tex-clay', 'Térfogatváltozó agyag', 'duzzad · zsugorodik', 'var(--c1s)', 'clay'],
+    ['roskadekony', 'tex-loess', 'Roskadékony lösz', 'átázva roskad', 'var(--c2s)', 'loess'],
+    ['feltoltes', 'tex-rubble', 'Feltöltés', 'törmelék · szemét', 'var(--c3s)', 'fill'],
+    ['szerves', 'tex-peat', 'Szerves talaj', 'tőzeg · iszap', 'var(--c4s)', 'peat'],
   ];
   items.forEach(([id, pat, name, sub, col, kind], i) => {
     const H = 300 + [0, 30, -20, 15][i];
@@ -22,10 +22,6 @@ export function heroCores() {
     // details per soil
     const g = s('g', { 'clip-path': '' });
     const r = mulberry32(i + 3);
-    if (kind === 'clay') for (let k = 0; k < 5; k++) { let x = 20 + r() * 70, y = top + 10 + r() * (H - 40); let d = `M${x} ${y}`; for (let j = 0; j < 4; j++) { x += (r() - 0.5) * 14; y += 8 + r() * 10; d += ` L${x} ${y}`; } g.append(s('path', { d, stroke: '#3b230e', 'stroke-width': 1.6, fill: 'none', opacity: 0.8 })); }
-    if (kind === 'loess') for (let k = 0; k < 9; k++) { const x = 18 + r() * 74, y = top + 10 + r() * (H - 30); g.append(s('ellipse', { cx: x, cy: y, rx: 2.2, ry: 5, fill: '#5f4718', opacity: 0.55 })); }
-    if (kind === 'fill') for (let k = 0; k < 14; k++) { const x = 16 + r() * 70, y = top + 8 + r() * (H - 26); const c = ['#9a4b33', '#d8d4cc', '#2a6fd0', '#3f8f5a', '#2a2826', '#e8c83a'][k % 6]; g.append(s('rect', { x, y, width: 6 + r() * 12, height: 3 + r() * 6, fill: c, transform: `rotate(${(r() - 0.5) * 60} ${x} ${y})`, opacity: 0.95 })); }
-    if (kind === 'peat') for (let k = 0; k < 16; k++) { const x = 16 + r() * 76, y = top + 10 + r() * (H - 30); g.append(s('path', { d: `M${x} ${y} q ${6 + r() * 6} ${-3 + r() * 6} ${12 + r() * 10} ${r() * 4}`, stroke: '#b89a6a', 'stroke-width': 1.2, fill: 'none', opacity: 0.8 })); }
     svg.append(g);
     svg.append(s('rect', { x: 10, y: top, width: 90, height: H, rx: 12, fill: `url(#${gid})` }));
     svg.append(s('ellipse', { cx: 55, cy: top + 2, rx: 45, ry: 9, fill: col, opacity: 0.95 }));

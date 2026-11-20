@@ -385,3 +385,30 @@ main .rag, footer .rag { text-align: left !important; }
   .sec-head { row-gap: 0; } .sec-head > div:last-child { display: contents; } .sec-head > div:last-child > * { grid-column: 2; } .sec-head .sec-num { grid-row: 1 / span 2; } .sec-head > div:last-child > .lede { grid-column: 1 / -1; }
   /* kvízkérdés: a sorszám úszik, a kérdés a teljes kártyaszélességet kapja */
   .q-head { display: block; } .q-head .n { float: left; margin: 3px 10px 0 0; } .q-head p { display: block; } }
+
+/* felirat talajtextúrán: a szöveg a tinta, körülötte a felület színével rajzolt glória (sötét témában megfordul) */
+svg text.onsoil { fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 4.5px; stroke-linejoin: round; }
+/* talajminta „fényképe” a felismerő kártyákon */
+.sample { height: 120px; border-radius: 10px; margin-bottom: 12px; background-size: 520px auto; background-position: 30% 40%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.25), inset 0 -18px 30px -12px rgba(0,0,0,.45), inset 0 14px 24px -14px rgba(255,255,255,.25); }
+.sample.s0 { background-color: #d3b780; background-image: url(assets/tex/loess.webp?v=1); }
+.sample.s1 { background-color: #2b1d12; background-image: url(assets/tex/peat.webp?v=1); background-size: 380px auto; }
+.sample.s2 { background-color: #7a766c; background-image: url(assets/tex/clay.webp?v=1); filter: saturate(.3) brightness(.95); }
+.sample.s3 { background-color: #4a473e; background-image: url(assets/tex/gyttja.webp?v=1); }
+
+/* videósáv a bevezető alatt */
+.vstrip { margin: 6px 0 34px; }
+.vstrip-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 12px; }
+.vstrip-hint { font-size: 13.5px; color: var(--muted); }
+.vstrip-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+.vcard { display: flex; flex-direction: column; gap: 9px; padding: 0; border: 0; background: none; cursor: pointer; text-align: center; color: var(--ink); font: inherit; min-width: 0; }
+.vcard .vthumb { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: 12px; background-size: cover; background-position: center; background-color: #111; box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 8px 22px -12px rgba(0,0,0,.45); overflow: hidden; transition: transform .18s ease, box-shadow .18s ease; }
+.vcard:hover .vthumb, .vcard:focus-visible .vthumb { transform: translateY(-3px); box-shadow: 0 14px 28px -12px rgba(0,0,0,.55); }
+.vcard .vthumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.5)); }
+.vcard .play { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: var(--acc, #f0a33a); display: grid; place-items: center; z-index: 1; box-shadow: 0 4px 14px rgba(0,0,0,.4); }
+.vcard .play svg { width: 18px; height: 18px; margin-left: 2px; }
+.vcard .dur { position: absolute; right: 8px; bottom: 7px; z-index: 1; font: 500 12px 'IBM Plex Mono', monospace; color: #fff; background: rgba(0,0,0,.55); padding: 2px 6px; border-radius: 6px; }
+.vcard b { font: 700 14.5px/1.25 Archivo, sans-serif; text-wrap: balance; }
+@media (max-width: 1060px) {
+  .vstrip-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 10px; margin-right: calc(-1 * var(--pad, 16px)); padding-right: var(--pad, 16px); -webkit-overflow-scrolling: touch; }
+  .vcard { flex: 0 0 min(300px, 74vw); scroll-snap-align: start; }
+}
