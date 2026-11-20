@@ -19,14 +19,13 @@ const MODELS = {
       ['season', 'range', 'Nedvességi állapot', 0, 100, 1, 18, (v) => v < 30 ? 'aszályos ősz' : v < 45 ? 'száraz nyár' : v < 56 ? 'átlagos' : v < 75 ? 'nedves tél' : 'csapadékos tavasz'],
       ['tree', 'range', 'Nyárfa távolsága a háztól', 1.5, 13, 0.5, 4, (v) => v >= 13 ? 'nincs fa' : fmt(v, 1) + ' m'],
       ['D', 'range', 'Alapozási mélység', 0.6, 3.0, 0.05, 0.8, (v) => fmt(v, 2) + ' m'],
-      ['n', 'range', 'Szintek száma', 1, 3, 1, 1, (v) => v + (EN ? (v > 1 ? ' storeys' : ' storey') : ' szint')],
     ],
     compute(p) {
       const s = (p.season - 50) / 50; const za = 2.25;
       const treeOn = p.tree < 13;
       const fT = (d) => treeOn ? clamp(1 - d / 12) : 0;
       const fR = fT(p.tree), fL = fT(p.tree + HL);
-      const q = [50, 95, 140][p.n - 1], ps = 150;
+      const q = 50, ps = 150;   // földszintes ház (a szintszám-csúszka kikerült)
       const one = (f) => {
         const zt = za + 2.4 * f;
         let mm = 0;
@@ -44,7 +43,7 @@ const MODELS = {
       else if (p.D >= 2.25) out.push(['mid', 'Az alapsík elég mély, de a közeli nyárfa gyökérzete ennél mélyebben is kiszárítja az agyagot!']);
       else out.push(['no', `Az alapsík ${fmt(p.D, 2)} m: a 2–2,5 m-es meteorológiai határmélység fölött van, az épület évszakosan mozog.`]);
       if (r.treeOn && p.tree < 8) out.push(['no', 'Nagy vízigényű fa a ház közelében: egyenlőtlen süllyedés a fa felőli oldalon.']);
-      if (r.s > 0.2 && p.n === 1 && p.D < 2) out.push(['mid', 'Kis talpfeszültség: a duzzadási nyomás (>100 kPa) megemeli a könnyű házat.']);
+      if (r.s > 0.2 && p.D < 2) out.push(['mid', 'Kis talpfeszültség: a duzzadási nyomás (>100 kPa) megemeli a könnyű házat.']);
       return out;
     },
   },
