@@ -44,3 +44,9 @@ cp dist/index.html ../index.html
 ## Videók zenéje
 
 A videók zenéje (2026-11) valódi hangszerek felvett mintáiból készült – zongora, vonósok, akusztikus és elektromos gitár, basszusgitár, fúvósok, akusztikus dob –, ütemre igazítva a képhez; a gép- és effekthangok a korábbi hangkönyvtárból vannak. Hangminták: Salamander Grand Piano (Alexander Holm, CC BY 3.0); tonejs-instruments (nbrosowsky; VSCO2, Karoryfer, Iowa, Freesound – CC BY 3.0); Tone.js dobminták.
+
+## 2026-11-20 – élethű talajok, átnézés
+- **Talajtextúrák:** `assets/tex/*.webp` (agyag, lösz, tőzeg, feltöltések, homok, kavics, gyep…), a `_src/tex/soiltex.js` rajzolja (`_src/tex/README.md`). Az oldal ábrái, a hős mintahengerei, a fúrási szelvény és a 3D talajlabor ezeket használják (`_src/src/js/soil.js`), a videók metszetei is (`_src/video_patches/4_elethu_talajok/`).
+- **Videósáv** a bevezető alatt (mind az öt animáció egy sorban, keskeny kijelzőn oldalra húzható).
+- **Betűk helyből:** `fonts/` (Archivo, Atkinson Hyperlegible, IBM Plex Mono – SIL Open Font License).
+- **Átnéző eszközök:** `_src/qa/` (audit, végigfényképezés, talajlabor-fényképek).
