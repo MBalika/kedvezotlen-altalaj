@@ -412,3 +412,11 @@ svg text.onsoil { fill: var(--ink); paint-order: stroke; stroke: var(--surface);
   .vstrip-row { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding-bottom: 10px; margin-right: calc(-1 * var(--pad, 16px)); padding-right: var(--pad, 16px); -webkit-overflow-scrolling: touch; }
   .vcard { flex: 0 0 min(300px, 74vw); scroll-snap-align: start; }
 }
+/* dobozcímek középen (kártyák címe és a fölötte álló kis címke) */
+.card h4 { text-align: center; text-wrap: balance; }
+.card > .k { display: block; text-align: center; }
+/* indexes jelek (E_oed, CH_4) a csúszkák feliratában és a dobozcímben: a rugalmas elrendezés nem szakíthatja le az indexet a jeléről */
+.slider label { display: block; }
+.slider label output { float: right; margin-left: 10px; }
+.widget-head h4 { display: block; position: relative; padding-left: 19px; }
+.widget-head h4::before { position: absolute; left: 0; top: 50%; margin-top: -5px; }

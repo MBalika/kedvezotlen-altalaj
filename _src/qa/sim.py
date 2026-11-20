@@ -10,6 +10,7 @@ async def main():
         b = await p.chromium.launch(args=ARGS); pg = await b.new_page(viewport={'width': W, 'height': 1000}, device_scale_factor=1)
         pg.on('pageerror', lambda e: print('PAGEERR', str(e)[:300])); pg.on('console', lambda m: print('CONSOLE', m.text[:300]) if m.type == 'error' else None)
         await pg.goto(url, wait_until='networkidle'); await pg.wait_for_timeout(1500)
+        if os.environ.get('THEME'): await pg.evaluate("document.documentElement.setAttribute('data-theme','%s')" % os.environ['THEME']); await pg.evaluate("dispatchEvent(new Event('resize'))")
         for i, sel in enumerate(SEL):
             s, n = (sel.split('@@') + ['0'])[:2]; el = pg.locator(s).nth(int(n))
             if await el.count() == 0: print('nincs', sel); continue

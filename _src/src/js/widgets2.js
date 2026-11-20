@@ -145,7 +145,7 @@ export function gas() {
   // composition bar (~45–60% CH4, ~40–60% CO2)
   const comp = [['CH₄ 45–60%', 52, 'var(--c4s)'], ['CO₂ 40–60%', 44, '#9aa3a8'], ['egyéb', 4, 'var(--warn)']];
   let x = 0; svg2.append(s('text', { x: 0, y: 14, 'font-size': 13, fill: 'var(--muted)', text: 'Hulladéklerakó-gáz jellemző összetétele' }));
-  comp.forEach(([t, v, c]) => { svg2.append(s('rect', { x: x * 3.5, y: 24, width: v * 3.5 - 2, height: 30, rx: 4, fill: c })); svg2.append(s('text', { x: x * 3.5 + 6, y: 74, 'font-size': 12, fill: 'var(--ink)', text: t })); x += v; });
+  comp.forEach(([t, v, c]) => { svg2.append(s('rect', { x: x * 3.5, y: 24, width: v * 3.5 - 2, height: 30, rx: 4, fill: c })); const last = t === comp[comp.length - 1][0]; const te = s('text', { x: last ? (x + v) * 3.5 - 2 : x * 3.5 + 6, y: 74, 'font-size': 12, fill: 'var(--ink)', 'text-anchor': last ? 'end' : 'start' }); te.innerHTML = t.replace(/[₂₄]/g, (ch) => `<tspan dy="3" font-size="9">${ch === '₂' ? 2 : 4}</tspan><tspan dy="-3">\u200a</tspan>`); svg2.append(te); x += v; });
   let c = 3, tt = 0, visible = false;
   bindRange('gasC', (v) => { c = v; upd(); }, (v) => fmt(v, 1) + ' tf%');
   function upd() {
@@ -277,14 +277,14 @@ export function holme() {
     svg.append(s('rect', { x: px - 7, y: y0 - 4, width: 14, height: clayTop + 1.5 * mpx - y0, fill: '#2e3430' })); svg.append(s('rect', { x: px - 5, y: y0 - 4, width: 3, height: clayTop + 1.5 * mpx - y0, fill: 'rgba(255,255,255,0.18)' }));
     svg.append(s('rect', { x: px - 12, y: y0 - 8, width: 24, height: 7, rx: 2, fill: '#2e3430' }));
     if (dr > 0.15) {
-      svg.append(s('line', { x1: px + 40, x2: px + 40, y1: y0, y2: surf, stroke: 'var(--ink)', 'stroke-width': 2.5 }));
-      svg.append(s('line', { x1: px + 32, x2: px + 48, y1: y0, y2: y0, stroke: 'var(--ink)', 'stroke-width': 2.5 }));
-      svg.append(s('line', { x1: px + 32, x2: px + 48, y1: surf, y2: surf, stroke: 'var(--ink)', 'stroke-width': 2.5 }));
-      svg.append(s('text', { x: px + 56, y: (y0 + surf) / 2 + 8, 'font-size': 26, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: 'var(--ink)', text: (year >= 2024 ? '> 4' : fmt(dr, 2)) + ' m' }));
+      svg.append(s('line', { x1: px + 40, x2: px + 40, y1: y0, y2: surf, stroke: '#1d2420', 'stroke-width': 2.5 }));
+      svg.append(s('line', { x1: px + 32, x2: px + 48, y1: y0, y2: y0, stroke: '#1d2420', 'stroke-width': 2.5 }));
+      svg.append(s('line', { x1: px + 32, x2: px + 48, y1: surf, y2: surf, stroke: '#1d2420', 'stroke-width': 2.5 }));
+      svg.append(s('text', { x: px + 56, y: (y0 + surf) / 2 + 8, 'font-size': 26, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: '#1d2420', text: (year >= 2024 ? '> 4' : fmt(dr, 2)) + ' m' }));
     }
     // trees and a house that sink with the land
     for (const tx of [150, 300, 640, 720]) { svg.append(s('path', { d: `M${tx - 4} ${surf - 4} L${tx - 2.5} ${surf - 46} L${tx + 2.5} ${surf - 46} L${tx + 4} ${surf - 4} Z`, fill: '#5a4030' })); [[0, -58, 19, '#3f6a26'], [-11, -50, 13, '#4f7a2c'], [11, -51, 13, '#467226'], [-4, -66, 13, '#5c8a34'], [7, -64, 11, '#55802e']].forEach(([dx, dy, r, c]) => svg.append(s('circle', { cx: tx + dx, cy: surf + dy, r, fill: c }))); }
-    svg.append(s('text', { x: W - 20, y: 44, 'text-anchor': 'end', 'font-size': 40, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: 'var(--ink)', text: year }));
+    svg.append(s('text', { x: W - 20, y: 44, 'text-anchor': 'end', 'font-size': 40, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: '#1d2420', text: year }));
   }
   bindRange('holmeY', (v) => render(v), (v) => String(v));
 }
