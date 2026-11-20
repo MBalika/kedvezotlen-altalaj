@@ -12,10 +12,6 @@ c16e5b8	<b class="lbl">During construction</b>After excavation, foundation trenc
 416eccb	The waste of the past under the house
 c7183f5	Made ground
 9f55683	The growth of towns and industrial sites has created more and more filled ground. Brickworks pits, gravel and sand pits, castle moats, slag heaps, refuse tips and low-lying areas have been filled. In Budapest, a huge amount of rubble had to be disposed of after the Second World War.
-4611f9e	The history of a plot <span class="tag">layer by layer</span>
-9069fad	Fills differ in material and age, and accordingly have different properties. Click through the history of an imaginary plot.
-b8a7936	From pit to building plot
-1ddf561	Step through the decades
 d297a53	How dangerous is it? <span class="tag">classify</span>
 0c6e5e3	The material can be soil, construction and industrial rubble, material with more than 10% organic content (spoil heaps, industrial waste), combustion products (slag, ash), household refuse and waste, or a mixture of these. Household waste (municipal waste) and uncompacted fill less than 8–10 years old are very dangerous.
 c1d75de	Where and why are buildings damaged? <span class="tag">Hungarian statistics</span>
@@ -29,8 +25,6 @@ c1d75de	Where and why are buildings damaged? <span class="tag">Hungarian statist
 b406102	=
 176683c	in the air
 7432a96	<b class="lbl">Case study · Loscoe, England, 1986</b>The clay pit of a former brickworks had been partly filled with waste. Methane escaping from the tip collected in the voids under a house and was ignited by the pilot light of the gas boiler: the house was destroyed and its three occupants were seriously injured. A rapid fall in air pressure (29 millibars in 7 hours) helped the gas to escape. After the incident, the management of landfill gas in Britain was fundamentally tightened.
-0732426	3D soil lab: a house on the edge of a pit <span class="tag">simulator</span>
-dca76d4	Move the edge of the filled pit under the house, set the age and material of the fill and the contact pressure, and switch on the soaking.
 320ffe6	Design guidelines
 fb4bd93	Much like those for collapsible soils.
 511ffa0	Limited contact pressure

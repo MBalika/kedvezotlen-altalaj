@@ -21,13 +21,13 @@
 </header>
 
 <div class="layout">
-  <aside class="rail" aria-label="Fúrási szelvény navigáció">
-    <div class="rail-title">fúrási szelvény</div>
+  <aside class="rail" aria-label="Fúrásszelvény navigáció">
+    <div class="rail-title">fúrás&shy;szelvény</div>
     <div class="rail-log" id="railLog">
       <a href="#terfogatvaltozo" data-ch="1" data-rail="terfogatvaltozo"><svg><rect width="100%" height="100%" fill="url(#hatch-clay)"/></svg><span>Agyag</span></a>
       <a href="#roskadekony" data-ch="2" data-rail="roskadekony"><svg><rect width="100%" height="100%" fill="url(#hatch-loess)"/></svg><span>Lösz</span></a>
       <a href="#feltoltes" data-ch="3" data-rail="feltoltes"><svg><rect width="100%" height="100%" fill="url(#hatch-fill)"/></svg><span>Feltöltés</span></a>
-      <a href="#szerves" data-ch="4" data-rail="szerves"><svg><rect width="100%" height="100%" fill="url(#hatch-peat)"/></svg><span>Tőzeg</span></a>
+      <a href="#szerves" data-ch="4" data-rail="szerves"><svg><rect width="100%" height="100%" fill="url(#hatch-peat)"/></svg><span>Szerves talaj</span></a>
       <div class="rail-marker" id="railMarker"></div>
     </div>
     <div class="rail-ticks"><span>0 m</span><span id="railDepth">0,0</span></div>
@@ -47,7 +47,7 @@
         </div>
         <div class="stats">
           <div class="stat"><b>4</b><span>talajtípus, 5 animáció</span></div>
-          <div class="stat"><b>4×3D</b><span>szimulátor csúszkákkal</span></div>
+          <div class="stat"><b>3×3D</b><span>szimulátor csúszkákkal</span></div>
           <div class="stat"><b id="statInter">20+</b><span>interaktív ábra</span></div>
           <div class="stat"><b id="statQ">70+</b><span>kérdés és állítás</span></div>
         </div>
@@ -315,19 +315,6 @@
       <div class="video" data-video="3"></div>
 
       <div class="sub">
-        <h3>Egy telek története <span class="tag">rétegről rétegre</span></h3>
-        <p>A feltöltések anyaga és kora eltérő, és ennek megfelelően más-más tulajdonságokkal rendelkeznek. Kattints végig egy elképzelt telek történetén.</p>
-        <div class="widget">
-          <div class="widget-head"><h4>Gödörből telek</h4><span class="hint">Lépj az évtizedeken</span></div>
-          <div class="widget-body">
-            <div class="svgbox" id="histBox"></div>
-            <div class="seg" id="histSeg" style="margin-top:10px"></div>
-            <p class="small muted" id="histText" style="margin-top:10px"></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="sub">
         <h3>Mennyire veszélyes? <span class="tag">osztályozd</span></h3>
         <p>Anyaguk lehet talaj, építési és ipari törmelék, 10%-nál nagyobb szervesanyag-tartalmú anyag (meddőhányó, ipari hulladék), égési termék (salak, hamu), házi szemét és hulladék, valamint ezek keveréke. Nagyon veszélyes a házi szemét (kommunális hulladék) és a 8–10 évnél frissebb, tömörítetlen feltöltés.</p>
         <div class="sort" id="sortGame"></div>
@@ -364,12 +351,6 @@
           </div>
         </div>
         <div class="note bad"><b class="lbl">Esettanulmány · Loscoe, Anglia, 1986</b>Egy egykori téglagyár agyaggödrét részben hulladékkal töltötték fel. A lerakóból kiáramló metán a ház alatti üregekben gyűlt össze, és a gázkazán gyújtólángja berobbantotta: a ház megsemmisült, a három lakó súlyosan megsérült. A légnyomás gyors esése (7 óra alatt 29 millibar) segítette a gáz kiáramlását. Az eset után Nagy-Britanniában alapjaiban szigorították a hulladéklerakó-gáz kezelését.</div>
-      </div>
-
-      <div class="sub" id="sim-fill">
-        <h3>3D talajlabor: ház a gödör szélén <span class="tag">szimulátor</span></h3>
-        <p>Told el a feltöltött gödör szélét a ház alatt, állítsd a feltöltés korát, anyagát és a talpfeszültséget, és kapcsold be az átázást.</p>
-        <div class="sim" data-soil="fill"></div>
       </div>
 
       <div class="sub">

@@ -78,43 +78,6 @@ const MODELS = {
       return out;
     },
   },
-  fill: {
-    name: 'Feltöltés', ch: 3, ex: 4,
-    controls: [
-      ['edge', 'range', 'A feltöltött gödör széle', -8, 6, 0.1, 0, (v) => v <= -6.5 ? 'a ház mellett' : v >= 3 ? 'túl a házon' : 'a ház alatt'],
-      ['Hmax', 'range', 'A gödör mélysége', 2, 7, 0.1, 5, (v) => fmt(v, 1) + ' m'],
-      ['age', 'range', 'A feltöltés kora', 1, 60, 1, 6, (v) => v + (EN ? (v > 1 ? ' years' : ' year') : ' év')],
-      ['mat', 'seg', 'Anyag', 0, 0, 0, 'rubble', [['rubble', 'Talaj, törmelék'], ['slag', 'Salak, hamu'], ['waste', 'Házi szemét']]],
-      ['q', 'range', 'Talpfeszültség', 50, 250, 5, 120, (v) => v + ' kPa'],
-      ['wet', 'toggle', 'Átázás (csőtörés, tetővíz)', 0, 0, 0, 0],
-    ],
-    compute(p) {
-      const depth = (x) => clamp((p.edge - x) * 1.0, 0, p.Hmax);
-      const HfL = depth(XL), HfR = depth(XR);
-      const baseE = { rubble: 6000, slag: 5000, waste: 1500 }[p.mat];
-      const E = baseE * (0.45 + 0.55 * Math.min(1, p.age / 30));
-      const D = 1.0, b = 0.35;
-      const one = (Hf) => {
-        if (Hf <= D) return 0;
-        let sum = 0; const n = 24; const dz = (Hf - D) / n;
-        for (let i = 0; i < n; i++) { const z = (i + 0.5) * dz; sum += p.q * stripS(0, z, b) * dz; }
-        let mm = sum / E * 1000;
-        if (p.wet) mm += (Hf - D) * (p.age < 10 ? 25 : p.mat === 'rubble' ? 6 : 10);
-        if (p.mat === 'waste') mm += (Hf - D) * 22 * (1 - Math.min(1, p.age / 60));
-        return mm;
-      };
-      return { sL: one(HfL), sR: one(HfR), HfL, HfR, E };
-    },
-    verdict(r, p) {
-      const out = [];
-      out.push(p.q <= 150 ? ['ok', `Talpfeszültség ${p.q} kPa ≤ 150–200 kPa.`] : p.q <= 200 ? ['mid', `Talpfeszültség ${p.q} kPa: a 150–200 kPa-os határ felső részén.`] : ['no', `Talpfeszültség ${p.q} kPa > 200 kPa: túl nagy feltöltésre.`]);
-      out.push(Math.abs(r.HfL - r.HfR) <= 0.5 ? ['ok', 'Az alapok alatt közel azonos vastagságú a feltöltés.'] : ['no', `Eltérő feltöltésvastagság: ${fmt(r.HfL, 1)} m és ${fmt(r.HfR, 1)} m az alapok alatt.`]);
-      if (p.mat === 'waste') out.push(['no', 'Házi szemét: bomlik, gázt termel, sokáig süllyed. Nagyon veszélyes!']);
-      else if (p.age < 10 && (r.HfL > 1 || r.HfR > 1)) out.push(['no', '8–10 évnél fiatalabb, tömörítetlen feltöltés: nagyon veszélyes, átázva roskad.']);
-      if (p.wet && (r.HfL > 1 || r.HfR > 1)) out.push(['mid', 'A víz a károk 87%-ának kiváltója: tartsuk távol!']);
-      return out;
-    },
-  },
   peat: {
     name: 'Szerves talaj (tőzeg)', ch: 4, ex: 3,
     controls: [
@@ -228,7 +191,6 @@ export function initSims() {
     st.extra.innerHTML = '';
     if (soil === 'loess') st.extra.append(h('div', { class: 'venn3' }, ...['roskadékony talaj', 'terhelés', 'víz az alap alatt'].map((t, i) => h('span', { class: 'chip ' + (r.cond[i] ? 'no' : 'ok') }, (r.cond[i] ? '● ' : '○ ') + t))));
     if (soil === 'peat') st.extra.append(h('div', { class: 'small muted' }, `Bal oldal: konszolidáció ${fmt(r.L.cons / 10, 1)} cm · talajvíz ${fmt(r.L.gw / 10, 1)} cm · másodlagos (50 év) ${fmt(r.L.sec / 10, 1)} cm`));
-    if (soil === 'fill') st.extra.append(h('div', { class: 'small muted' }, `Feltöltés az alapok alatt: bal ${fmt(r.HfL, 1)} m, jobb ${fmt(r.HfR, 1)} m · E ≈ ${fmt(r.E / 1000, 1)} MPa`));
     if (soil === 'clay') st.extra.append(h('div', { class: 'small muted' }, `Talpfeszültség ≈ ${r.q} kPa (duzzadási nyomás ~150 kPa) · kiszáradó zóna a fa felőli oldalon: ${fmt(r.zt, 1)} m`));
     st.vd.innerHTML = '';
     st.M.verdict(r, p).forEach(([c, t]) => st.vd.append(h('div', { class: 'verdict ' + c, style: 'margin-top:8px' }, h('span', {}, c === 'ok' ? '✓' : c === 'mid' ? '!' : '✕'), h('div', { style: 'font-weight:600' }, t))));
@@ -364,7 +326,7 @@ function buildWorld(renderer, S) {
     for (let i = 0; i < 70; i++) { const t = r(); const y = 2.6 + t * 9.4; const rad = (0.35 + 1.25 * Math.sin(Math.PI * Math.pow(t, 0.75))) * 0.9; const a = r() * 6.283, d = rad * Math.sqrt(r()) * 0.9; const m = new THREE.Mesh(sph, greens[(r() * greens.length) | 0]); const sc = 0.45 + r() * 0.45; m.scale.set(sc, sc * 1.25, sc); m.position.set(Math.cos(a) * d, y, Math.sin(a) * d); m.castShadow = true; tree.add(m); } }
   tree.position.z = 1.0;
 
-  // ---------------- puddle (loess) and gas (fill)
+  // ---------------- puddle and dust (loess)
   const puddle = new THREE.Mesh(new THREE.CircleGeometry(1, 48), new THREE.MeshStandardMaterial({ color: 0x3e6f8f, roughness: 0.08, metalness: 0.2, transparent: true, opacity: 0.8 }));
   puddle.rotation.x = -Math.PI / 2; puddle.position.set(-8.6, 0.02, 3.6); scene.add(puddle);
   const dustN = 120; const dustG = new THREE.BufferGeometry(); const dustP = new Float32Array(dustN * 3); dustG.setAttribute('position', new THREE.BufferAttribute(dustP, 3));
@@ -421,21 +383,6 @@ function buildWorld(renderer, S) {
         footing(XL, 1.0, 0.6, yL); footing(XR, 1.0, 0.6, yR);
       }
       label('lösz (makropórusos)', 14, Y(5.6), '#fff', 26);
-    } else if (soil === 'fill') {
-      layerBand(0.3, BD, 'natural'); topsoil();
-      const depth = (x) => clamp((p.edge - x) * 1.0, 0, p.Hmax);
-      // fill polygon
-      g.save(); g.beginPath(); g.moveTo(0, Y(0.3)); for (let x = -BX; x <= BX; x += 0.1) g.lineTo(X(x), Y(Math.max(0.3, depth(x)))); g.lineTo(w, Y(0.3)); g.closePath(); g.clip();
-      g.fillStyle = soilPattern(g, p.mat, PXM * 1.6); g.fillRect(0, 0, w, hgt);
-      { const gr = g.createLinearGradient(0, Y(0.3), 0, Y(0.9)); gr.addColorStop(0, 'rgba(40,28,16,0.55)'); gr.addColorStop(1, 'rgba(40,28,16,0)'); g.fillStyle = gr; g.fillRect(0, Y(0.3), w, Y(0.6)); }
-      if (p.wet) { g.fillStyle = 'rgba(30,60,90,0.38)'; g.fillRect(0, 0, w, hgt); }
-      g.restore();
-      for (const [col, lw, dash] of [['rgba(20,14,8,0.55)', 5, []], ['#ffffff', 2.2, [10, 7]]]) { g.strokeStyle = col; g.lineWidth = lw; g.setLineDash(dash); g.beginPath(); for (let x = -BX; x <= BX; x += 0.1) { const d = depth(x); if (d > 0.3) g.lineTo(X(x), Y(d)); else g.moveTo(X(x), Y(0.3)); } g.stroke(); } g.setLineDash([]);
-      if (p.mat === 'waste' && !sideView) { g.fillStyle = 'rgba(200,255,120,0.8)'; for (let k = 0; k < 40; k++) { const x = rr() * X(p.edge); const dd = depth(-BX + x / PXM); g.beginPath(); g.arc(x, Y(0.3) + rr() * Y(Math.max(0.4, dd - 0.3)), 3 + rr() * 3, 0, 7); g.fill(); } label('metán', 20, Y(1.0), '#d8ff8a', 20); }
-      label('feltöltés', 16, Y(Math.min(p.Hmax, 6) * 0.55 + 0.4), '#fff', 26);
-      label('termett talaj', w - 210, Y(5.8), '#fff', 24);
-      if (!sideView) { footing(XL, 1.0, 0.7, yL); footing(XR, 1.0, 0.7, yR);
-        [[XL, r.HfL], [XR, r.HfR]].forEach(([xc, hf]) => { if (hf > 1.05) { g.strokeStyle = '#ffd36a'; g.lineWidth = 3; g.beginPath(); g.moveTo(X(xc + 0.7), Y(1.0)); g.lineTo(X(xc + 0.7), Y(hf)); g.stroke(); label(fmt(hf, 1) + ' m', X(xc + 0.85), Y((1 + hf) / 2) + 8, '#ffd36a', 20); } }); }
     } else if (soil === 'peat') {
       const hpAt = (x) => lerp(p.hp, r.hpR, smooth((x - XL) / (XR - XL)));
       layerBand(0, BD, 'silt');
@@ -470,7 +417,6 @@ function buildWorld(renderer, S) {
     g.clearRect(0, 0, w, hgt);
     if (soil === 'clay') band(0.3, BD, 'clay');
     else if (soil === 'loess') band(0.3, BD, 'loess');
-    else if (soil === 'fill') { band(0, BD, 'natural'); const hf = isLeft ? clamp((p.edge + BX), 0, p.Hmax) : clamp(p.edge - BX, 0, p.Hmax); if (hf > 0.3) band(0.3, hf, p.mat, 1.6); }
     else if (soil === 'peat') { band(0, BD, 'silt'); band(0.3, p.hc, 'sand'); band(p.hc, p.hc + (isLeft ? p.hp : r.hpR), 'peat', 1.5); }
     band(0, 0.3, 'topsoil');
   }

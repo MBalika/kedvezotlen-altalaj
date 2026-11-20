@@ -5,8 +5,8 @@ eb519e3	<b>Unfavourable ground</b><span>BME · Foundation Engineering</span>
 a23fb86	Magyar változat
 f7e4d5c	<span>HU</span><b>EN</b>
 b54a672	Light / dark theme
-5d3a135	Borehole log navigation
-4884ae8	borehole log
+701c929	Borehole log navigation
+0605c67	borehole log
 936752f	Clay
 32478f4	Loess
 4d2677c	Fill
@@ -16,7 +16,7 @@ f833e5a	Foundations on<br>unfavourable<br><em>ground</em>
 44e78e3	Four soils you cannot simply build on: swelling and shrinking clay, loess that collapses when wetted, artificially placed heterogeneous made ground, and compressible organic soils full of water. For each of them we look at why it moves, how to recognise it and how to found on it.
 ea921f1	<a class="btn primary" href="#terfogatvaltozo">Start with clay</a>⏎          <a class="btn" href="#sim-clay">3D soil lab</a>⏎          <a class="btn" href="#teszt">True / false test</a>
 8160059	<b>4</b><span>soil types, 5 animations</span>
-1c503bd	<b>4×3D</b><span>simulators with sliders</span>
+225e499	<b>3×3D</b><span>simulators with sliders</span>
 da76ab1	<b id="statInter">20+</b><span>interactive figures</span>
 92ad7ba	<b id="statQ">70+</b><span>questions and statements</span>
 2cd5cae	The four soil samples

@@ -487,3 +487,7 @@ main .note.rag { text-align: center !important; }
 .tf-card { margin-inline: auto; } .tf-dots { justify-content: center; }
 .tree-step, .tree-res, main .tree-step p, main .tree-res p { text-align: center; text-align-last: center; }
 .tree-step .det-opts, .tree-step > div:last-child { justify-content: center; }
+/* fejezetvideó kártyája: a kicker, a cím és a leírás középen; a részek számozott listája balra zárt, blokként középen */
+.video-info { text-align: center; align-items: center; }
+main .video-info p { text-align-last: center; }
+.video-info ol { text-align: left; align-self: center; }

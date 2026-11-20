@@ -25,13 +25,10 @@ df12966	${ok} correct so far
 e7676db	False
 6f749fd	no tree
 b136299	 storeys
-ecbc310	Material
-744cb39	Slag, ash
 4cef9a2	none
 bfd4a7c	Soil lab: 
 e15a3f9	Left corner
 cf4a5bc	Right corner
-c859805	natural ground
 eab6db6	swells · shrinks
 a6022e3	When does it appear?
 33f9a0d	How do I recognise it?
@@ -49,7 +46,6 @@ ba6d20d	mild
 bfa805e	low
 cae8d76	SOIL
 42ac5c8	%.
-248a8a3	slag, ash
 175c8c5	Floors
 4fd91c4	Structural elements
 909873a	 vol%

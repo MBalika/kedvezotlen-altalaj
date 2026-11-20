@@ -116,15 +116,4 @@ b8bd94e	iᵣ ≤ 0.01: the soil is not at risk of collapse.
 3dfb71f	No water reaches the loess: no collapse.
 c9a10db	The water has not yet reached the soil under the footings.
 4dcf8f4	A stiff structure does not prevent collapse, but it makes the settlement more even, so the damage is smaller.
-7185f0b	Edge of the filled pit
-9e9cc23	beside the house
-0886c22	beyond the house
-62e1375	under the house
-746594a	Depth of the pit
-d691230	Age of the fill
 ee62b01	 years
-046533a	Soil, rubble
-1386458	Household waste
-cb34816	Soaking (burst pipe, roof water)
-0122ad4	Contact pressure ${p.q} kPa ≤ 150–200 kPa.
-630d31c	Contact pressure ${p.q} kPa: in the upper part of the 150–200 kPa limit.

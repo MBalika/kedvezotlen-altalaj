@@ -1,9 +1,3 @@
-1b9758a	Contact pressure ${p.q} kPa > 200 kPa: too high for fill.
-d58f18a	The fill under the footings is of nearly the same thickness.
-4d13d01	Different fill thicknesses: ${fmt(r.HfL, 1)} m and ${fmt(r.HfR, 1)} m under the footings.
-6842bdc	Household waste: it decays, produces gas and keeps settling for a long time. Very dangerous!
-97bd63b	Uncompacted fill less than 8–10 years old: very dangerous, it collapses when soaked.
-1b11da8	Water triggers 87% of the damage: keep it away!
 fabce5c	Organic soil (peat)
 d939710	Sand cover layer
 efed5da	Peat thickness (left side)
@@ -37,7 +31,6 @@ c96b9f5	Expected damage
 ddf6f1b	load
 f51b1b4	water under the footing
 3246c71	Left side: consolidation ${fmt(r.L.cons / 10, 1)} cm · groundwater ${fmt(r.L.gw / 10, 1)} cm · secondary (50 years) ${fmt(r.L.sec / 10, 1)} cm
-86ef3c1	Fill under the footings: left ${fmt(r.HfL, 1)} m, right ${fmt(r.HfR, 1)} m · E ≈ ${fmt(r.E / 1000, 1)} MPa
 5038c32	Contact pressure ≈ ${r.q} kPa (swelling pressure ~150 kPa) · drying zone on the side facing the tree: ${fmt(r.zt, 1)} m
 1d39a22	depth of seasonal movement ≈ 2–2.5 m
 cefc77e	groundwater deep
@@ -46,8 +39,6 @@ a25cf28	soaked loess
 555b2f9	burst pipe
 ce6d24c	in a sleeve
 960e40d	loess (macroporous)
-0b42153	methane
-75ab37c	fill
 0a80612	falling groundwater
 3f75bcb	groundwater
 67d073f	sand cover layer

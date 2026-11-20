@@ -1,7 +1,7 @@
 import { $, $$, h, fireTheme, EN } from './util.js';
 import { initSoilSVG } from './soil.js';
 import { heroCores, compare, clayMicro, criteria, season, storeys, rules, loessMicro, oedometer } from './widgets1.js';
-import { history, sortGame, stats, gas, improve, holme, peatGame, peatBars, settle, timeCurve, bulb, peatTree } from './widgets2.js';
+import { sortGame, stats, gas, improve, holme, peatGame, peatBars, settle, timeCurve, bulb, peatTree } from './widgets2.js';
 import { quizzes, detective, trueFalse } from './quiz.js';
 import { QUIZ, DETECTIVE, TF } from './data.js';
 import { initSims } from './sim3d.js';
@@ -130,7 +130,7 @@ function safe(fn, name) { try { fn(); } catch (e) { console.error('widget hiba: 
 theme();
 safe(initSoilSVG, 'soil');
 [['cores', heroCores], ['compare', compare], ['videos', videos], ['videoStrip', videoStrip], ['methodVideos', methodVideos], ['clayMicro', clayMicro], ['criteria', criteria], ['season', season], ['storeys', storeys], ['rules', rules],
-  ['loessMicro', loessMicro], ['oedometer', oedometer], ['history', history], ['sortGame', sortGame], ['stats', stats], ['gas', gas], ['improve', improve],
+  ['loessMicro', loessMicro], ['oedometer', oedometer], ['sortGame', sortGame], ['stats', stats], ['gas', gas], ['improve', improve],
   ['holme', holme], ['peatGame', peatGame], ['peatBars', peatBars], ['settle', settle], ['timeCurve', timeCurve], ['bulb', bulb], ['peatTree', peatTree],
   ['quizzes', quizzes], ['detective', detective], ['trueFalse', trueFalse], ['sims', initSims], ['nav', navigation], ['counts', counts], ['vedekezes', vedekezes], ['lang', langSwitch]].forEach(([n, f]) => safe(f, n));
 startFormatting();   // sorkizárás + magyar elválasztás + nem törő egységek (formázás skill)
