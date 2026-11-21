@@ -507,3 +507,5 @@ main .video-info p { text-align-last: center; }
 @media (max-width: 440px) { .series { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .series a.next b { color: #b8650e; } }
 :root[data-theme="dark"] .series a.next b { color: #b8650e; }
+/* fejléc: az app teljes neve – keskeny kijelzőn két sorba törhet */
+@media (max-width: 440px) { .brandmark { flex: 1 1 auto; min-width: 0; } .brandmark b { display: block; white-space: normal; line-height: 1.12; font-size: 13.5px; } }

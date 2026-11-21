@@ -527,6 +527,8 @@ main .video-info p { text-align-last: center; }
 @media (max-width: 440px) { .series { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .series a.next b { color: #b8650e; } }
 :root[data-theme="dark"] .series a.next b { color: #b8650e; }
+/* fejléc: az app teljes neve – keskeny kijelzőn két sorba törhet */
+@media (max-width: 440px) { .brandmark { flex: 1 1 auto; min-width: 0; } .brandmark b { display: block; white-space: normal; line-height: 1.12; font-size: 13.5px; } }
 
 </style>
 </head>
@@ -535,7 +537,7 @@ main .video-info p { text-align-last: center; }
   <div class="topbar-in">
     <a class="brandmark" href="#top" aria-label="Kezdőlap">
       <svg viewBox="0 0 26 26" aria-hidden="true"><rect x="7" y="1" width="12" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="8.5" y="2.5" width="9" height="5" fill="var(--c1s)"/><rect x="8.5" y="7.5" width="9" height="5" fill="var(--c2s)"/><rect x="8.5" y="12.5" width="9" height="5" fill="var(--c3s)"/><rect x="8.5" y="17.5" width="9" height="6" fill="var(--c4s)"/></svg>
-      <div><b>Kedvezőtlen altalaj</b><span>BME · Alapozás</span></div>
+      <div><b>Alapozás kedvezőtlen altalajon</b><span>BME · Alapozás</span></div>
     </a>
     <nav class="navlinks" aria-label="Fejezetek">
       <a href="#bevezeto" data-nav="bevezeto">Bevezető</a>
