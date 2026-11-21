@@ -174,45 +174,71 @@ export function improve() {
   }
 }
 
-// ------------------------------------------------------------------ Holme Fen
-export function holme() {
-  const box = $('#holmeBox'); if (!box) return;
-  const W = 900, H = 360; const svg = svgRoot(W, H); box.append(svg);
-  const drop = (y) => 4.05 * (1 - Math.pow(1 - clamp((y - 1851) / (2024 - 1851)), 1.8));
-  function render(year) {
+// ------------------------------------------------------------------ töltés a tőzegen (Kaposvár, lépcsős építés)
+// 5,5–7 m tőzeg és szerves iszap, 12 m-ig magasodó töltés ellensúlyozó padkákkal; a süllyedés az idővel nő, a töltés
+// anyagának 20–25 %-a csak a süllyedést pótolja. A lépcsők üteme és a görbe alakja szemléltető.
+export function embank() {
+  const box = $('#embBox'); if (!box) return;
+  const W = 900, H = 380; const svg = svgRoot(W, H); svg.classList.add('wide'); box.append(svg);   // mobilon oldalra görgethető, olvasható betűmérettel
+  const m = 12, cx = 450, y0 = 214, yF = y0 + 6.5 * m, HD = 12, crestH = 7 * m, sl = 1.5;
+  // a töltés magassága az eredeti terepszint fölött (lépcsők) és a padkák magassága
+  const ramp = (t, a, b) => clamp((t - a) / (b - a));
+  const hOf = (t) => 4 * ramp(t, 0, 20) + 4 * ramp(t, 110, 140) + 4 * ramp(t, 230, 260);
+  const bermOf = (t) => 3 * ramp(t, 0, 20);
+  // konszolidációs süllyedés a töltés tengelyében: lépcsőnként exponenciálisan közelít a végértékhez
+  const STEPS = [[10, 1.25], [125, 0.85], [245, 0.7]], TAU = 55;
+  const sOf = (t) => STEPS.reduce((a, [ti, ds]) => a + (t > ti ? ds * (1 - Math.exp(-(t - ti) / TAU)) : 0), 0);
+  const shape = (dx) => { const d = Math.abs(dx); if (d <= 150) return 1; if (d <= 300) return 1 - 0.75 * (1 - Math.cos(Math.PI * (d - 150) / 150)) / 2; if (d <= 400) return 0.25 * (1 + Math.cos(Math.PI * (d - 300) / 100)) / 2; return 0; };
+  const xs = []; for (let x = 0; x <= W; x += 6) xs.push(x);
+  function render(t) {
     svg.innerHTML = '';
-    const mpx = 34, y0 = 90; const dr = drop(year);
-    const surf = y0 + dr * mpx, clayTop = y0 + 6.2 * mpx;
-    svg.append(s('defs', {}, s('linearGradient', { id: 'holmeSky', x1: 0, x2: 0, y1: 0, y2: 1 }, s('stop', { offset: 0, 'stop-color': '#a9c6de' }), s('stop', { offset: 1, 'stop-color': '#e9eef0' }))));
-    svg.append(s('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#holmeSky)' }));
-    // peat
-    svg.append(s('rect', { x: 0, y: surf, width: W, height: clayTop - surf, fill: 'url(#hatch-peat)' }));
-    svg.append(s('rect', { x: 0, y: surf, width: W, height: Math.min(0.9 * mpx * clamp(dr * 3), clayTop - surf), fill: 'url(#tex-peatdry)' }));
-    svg.append(s('rect', { x: 0, y: clayTop, width: W, height: H - clayTop, fill: 'url(#tex-silt)' })); svg.append(s('rect', { x: 0, y: clayTop, width: W, height: H - clayTop, fill: '#5d7488', opacity: 0.4 })); svg.append(s('rect', { x: 0, y: clayTop - 1, width: W, height: 2.5, fill: 'rgba(0,0,0,0.45)' }));
-    svg.append(s('text', { x: 20, y: clayTop + 24, 'font-size': 15, 'font-weight': 800, class: 'onsoil', text: 'agyag' }));
-    svg.append(s('text', { x: 20, y: (surf + clayTop) / 2 + 5, 'font-size': 15, 'font-weight': 800, class: 'onsoil', text: 'tőzeg' }));
-    // grass line
-    svg.append(s('rect', { x: 0, y: surf - 6, width: W, height: 8, fill: 'url(#tex-grass)' }));
-    // GW line
-    svg.append(s('line', { x1: 0, x2: W, y1: surf + 0.9 * mpx, y2: surf + 0.9 * mpx, stroke: 'var(--waters)', 'stroke-width': 2 }));
-    // original level
-    svg.append(s('line', { x1: 0, x2: W, y1: y0, y2: y0, stroke: 'var(--acc)', 'stroke-width': 2.5, 'stroke-dasharray': '10 7' }));
-    svg.append(s('text', { x: 20, y: y0 - 10, 'font-size': 14, 'font-weight': 700, class: 'onsoil', style: 'fill: var(--acc)', text: '1851-es terepszint' }));
-    // post
-    const px = 520;
-    svg.append(s('rect', { x: px - 7, y: y0 - 4, width: 14, height: clayTop + 1.5 * mpx - y0, fill: '#2e3430' })); svg.append(s('rect', { x: px - 5, y: y0 - 4, width: 3, height: clayTop + 1.5 * mpx - y0, fill: 'rgba(255,255,255,0.18)' }));
-    svg.append(s('rect', { x: px - 12, y: y0 - 8, width: 24, height: 7, rx: 2, fill: '#2e3430' }));
-    if (dr > 0.15) {
-      svg.append(s('line', { x1: px + 40, x2: px + 40, y1: y0, y2: surf, stroke: '#1d2420', 'stroke-width': 2.5 }));
-      svg.append(s('line', { x1: px + 32, x2: px + 48, y1: y0, y2: y0, stroke: '#1d2420', 'stroke-width': 2.5 }));
-      svg.append(s('line', { x1: px + 32, x2: px + 48, y1: surf, y2: surf, stroke: '#1d2420', 'stroke-width': 2.5 }));
-      svg.append(s('text', { x: px + 56, y: (y0 + surf) / 2 + 8, 'font-size': 26, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: '#1d2420', text: (year >= 2024 ? '> 4' : fmt(dr, 2)) + ' m' }));
+    const h = hOf(t), hb = bermOf(t), sc = sOf(t), sy = (x) => y0 + sc * shape(x - cx) * m;
+    svg.append(s('defs', {}, s('linearGradient', { id: 'embSky', x1: 0, x2: 0, y1: 0, y2: 1 }, s('stop', { offset: 0, 'stop-color': '#a9c6de' }), s('stop', { offset: 1, 'stop-color': '#e9eef0' }))));
+    svg.append(s('rect', { x: 0, y: 0, width: W, height: H, fill: 'url(#embSky)' }));
+    // teherbíró réteg és a (töltés alatt összenyomódó) tőzeg
+    svg.append(s('rect', { x: 0, y: yF, width: W, height: H - yF, fill: 'url(#tex-sand)' }));
+    svg.append(s('rect', { x: 0, y: yF - 1, width: W, height: 2.5, fill: 'rgba(0,0,0,0.45)' }));
+    svg.append(s('path', { d: 'M' + xs.map((x) => `${x} ${sy(x)}`).join(' L') + ` L${W} ${yF} L0 ${yF} Z`, fill: 'url(#hatch-peat)' }));
+    svg.append(s('rect', { x: 0, y: y0 - 5, width: 54, height: 7, fill: 'url(#tex-grass)' })); svg.append(s('rect', { x: 846, y: y0 - 5, width: 54, height: 7, fill: 'url(#tex-grass)' }));
+    // a töltés: felső körvonal (tengely körül szimmetrikus) a mostani magassággal, alja a lesüllyedt tőzegfelszín
+    const top = (x) => { const dx = Math.abs(x - cx); let z = 0;
+      if (h > 0) { const hm = Math.min(h, Math.max(0, HD - (dx - crestH) / (sl * m))); z = Math.max(z, dx <= crestH ? h : hm); }
+      if (hb > 0) { const bx0 = crestH + sl * (HD - 3) * m, bx1 = bx0 + 8 * m, bx2 = bx1 + sl * 3 * m;
+        const zb = dx <= bx1 ? hb : dx <= bx2 ? Math.max(0, hb - (dx - bx1) / (sl * m)) : 0; z = Math.max(z, Math.min(zb, dx <= bx0 ? hb : zb)); }
+      return z; };
+    const foot = xs.filter((x) => top(x) > 0.01);
+    if (foot.length) {
+      const x0 = foot[0] - 6, x1 = foot[foot.length - 1] + 6, pts = xs.filter((x) => x >= x0 && x <= x1);
+      const upper = pts.map((x) => `${x} ${y0 - top(x) * m}`), lower = pts.slice().reverse().map((x) => `${x} ${sy(x)}`);
+      svg.append(s('path', { d: 'M' + upper.join(' L') + ' L' + lower.join(' L') + ' Z', fill: 'url(#tex-gravel)' }));
+      // a süllyedést pótló többlettöltés: az eredeti terepszint alatti rész
+      if (sc > 0.02) {
+        const inner = pts.filter((x) => top(x) > 0.01);
+        svg.append(s('path', { d: 'M' + inner.map((x) => `${x} ${y0}`).join(' L') + ' L' + inner.slice().reverse().map((x) => `${x} ${sy(x)}`).join(' L') + ' Z', fill: 'var(--acc)', opacity: 0.33 }));
+      }
+      svg.append(s('path', { d: 'M' + upper.join(' L'), fill: 'none', stroke: 'rgba(0,0,0,0.35)', 'stroke-width': 1.5 }));
     }
-    // trees and a house that sink with the land
-    for (const tx of [150, 300, 640, 720]) { svg.append(s('path', { d: `M${tx - 4} ${surf - 4} L${tx - 2.5} ${surf - 46} L${tx + 2.5} ${surf - 46} L${tx + 4} ${surf - 4} Z`, fill: '#5a4030' })); [[0, -58, 19, '#3f6a26'], [-11, -50, 13, '#4f7a2c'], [11, -51, 13, '#467226'], [-4, -66, 13, '#5c8a34'], [7, -64, 11, '#55802e']].forEach(([dx, dy, r, c]) => svg.append(s('circle', { cx: tx + dx, cy: surf + dy, r, fill: c }))); }
-    svg.append(s('text', { x: W - 20, y: 44, 'text-anchor': 'end', 'font-size': 40, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: '#1d2420', text: year }));
+    // eredeti terepszint
+    svg.append(s('line', { x1: 0, x2: W, y1: y0, y2: y0, stroke: 'var(--acc)', 'stroke-width': 2.5, 'stroke-dasharray': '10 7' }));
+    // süllyedés a tengelyben
+    if (sc > 0.15) {
+      const xd = cx - 120, yb = y0 + sc * m;
+      svg.append(s('line', { x1: xd, x2: xd, y1: y0, y2: yb, stroke: '#1d2420', 'stroke-width': 2.5 }));
+      svg.append(s('line', { x1: xd - 8, x2: xd + 8, y1: y0, y2: y0, stroke: '#1d2420', 'stroke-width': 2.5 }));
+      svg.append(s('line', { x1: xd - 8, x2: xd + 8, y1: yb, y2: yb, stroke: '#1d2420', 'stroke-width': 2.5 }));
+    }
+    // feliratok (utoljára, hogy semmi ne takarja őket)
+    svg.append(s('text', { x: 14, y: y0 + 22, 'font-size': 14, 'font-weight': 700, class: 'onsoil', style: 'fill: var(--acc)', text: 'eredeti térszín' }));
+    svg.append(s('text', { x: 14, y: (y0 + yF) / 2 + 16, 'font-size': 15, 'font-weight': 800, class: 'onsoil', text: 'tőzeg, szerves iszap' }));
+    svg.append(s('text', { x: 14, y: yF + 30, 'font-size': 15, 'font-weight': 800, class: 'onsoil', text: 'teherbíró réteg' }));
+    if (h > 2.5) svg.append(s('text', { x: cx, y: y0 - h * m / 2 + 5, 'text-anchor': 'middle', 'font-size': 15, 'font-weight': 800, class: 'onsoil', text: 'töltés' }));
+    if (hb > 1.5) svg.append(s('text', { x: 892, y: y0 - hb * m - 12, 'text-anchor': 'end', 'font-size': 13, 'font-weight': 700, class: 'onsoil', text: 'ellensúlyozó padka' }));
+    if (sc > 1.2) svg.append(s('text', { x: cx, y: y0 + sc * m / 2 + 5, 'text-anchor': 'middle', 'font-size': 13, 'font-weight': 800, class: 'onsoil', text: 'a süllyedést pótló töltés' }));
+    svg.append(s('text', { x: 20, y: 40, 'font-size': 15, 'font-weight': 700, fill: '#1d2420', text: `töltésmagasság: ${fmt(h, 1)} m` }));
+    svg.append(s('text', { x: 20, y: 64, 'font-size': 15, 'font-weight': 700, fill: '#1d2420', text: `süllyedés: ${fmt(sc, 2)} m` }));
+    svg.append(s('text', { x: W - 20, y: 44, 'text-anchor': 'end', 'font-size': 30, 'font-weight': 900, 'font-family': 'Archivo, sans-serif', fill: '#1d2420', text: `Építés: ${Math.round(t)}. nap` }));
   }
-  bindRange('holmeY', (v) => render(v), (v) => String(v));
+  bindRange('embT', (v) => render(v));
 }
 
 // ------------------------------------------------------------------ peat recognition game

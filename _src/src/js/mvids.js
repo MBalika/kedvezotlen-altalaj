@@ -11,7 +11,7 @@ const MV = {
   inj: { yt: 'CgKwZBWn_xM', ytEn: 'bVTljbQcE6U', name: 'Injektálás, szilárdítás', title: 'Injektálások', dur: '5:53' },
   fdp: { yt: 'hwP8iZzAq6I', ytEn: 'Mps1k494kSo', name: 'Talajkiszorításos cölöp', title: 'Helyben betonozott, csavart cölöpök', dur: '3:30' },
   colop: { yt: 'c3vKfjgqJdA', name: 'Cölöpalapozások', title: 'Cölöpalapozások rendszerezése', dur: '2:32' },
-  cfa: { yt: 'wqOU4bcUiCk', ytEn: 'Z94hg0Y4SNY', name: 'CFA-cölöp', title: 'Folyamatos spirállal készített cölöpök (CFA)', dur: '2:41' },
+  tjosz: { yt: '8Zcv7ktWD68', name: 'Talajjavítások', title: 'A talajjavítások áttekintése', dur: '2:36' },
   tj1: { app: VED, file: '/video/tj1.html', fileEn: '/video/en/tj1.html', appName: 'Védekezés a káros süllyedések ellen', name: 'Talajcsere', title: 'Talajcsere', en: 'Soil replacement', dur: '2:16' },
   tj7: { app: VED, file: '/video/tj7.html', fileEn: '/video/en/tj7.html', appName: 'Védekezés a káros süllyedések ellen', name: 'Előterhelés', title: 'Előterhelés', dur: '2:14' },
   mv1: { app: MEL, file: '/video/v1.html', fileEn: '/video/en/v1.html', appName: 'Mélyalapozások', name: 'Mélyalapozás', title: 'A mélyalapozás alapjai', dur: '2:31' },

@@ -55,8 +55,6 @@ cfce836	Plate compactor
 d1b63c0	Displacement
 ad61405	suitable
 18f4804	not suitable
-d1591f7	clay
-9f587c6	1851 ground level
 a914a89	 sample
 3e73d08	Sand
 cb21e2d	1 day
@@ -82,8 +80,6 @@ f915afc	Basics of deep foundations
 02e61b4	Deep foundations
 4b9e166	Deep foundations
 ba9fcbd	Preloading
-7ff1e0a	CFA piles
-28ca6b2	CFA pile
 7923610	Overview of pile foundations
 71c391e	Pile foundations
 c38e42f	Full displacement piles (FDP) and Screwsol piles
@@ -94,3 +90,19 @@ e8c47cf	Dynamic compaction
 478b2e9	in a sleeve, with clearance
 9ceb0c4	porch on shallow footing
 9888fcd	porch on deep footing
+584b5e4	The timing of the stages and the shape of the settlement curve are illustrative (rapid at first, then slowing settlement after each stage).
+84c9393	Construction time
+04550a9	Drag the time
+3763c8b	Staged embankment construction
+4ad1837	The northern bypass of Kaposvár crosses a fishpond over a 150 m long section. Here there is 5.5–7 m of loose, water-saturated organic sediment (peat, organic silt) with a water content of 260–500%. Soil replacement would have been too expensive, so the 5–12 m high embankment was built in stages with counterweight berms: the next stage could only be placed once consolidation under the previous one had progressed sufficiently. On average 20–25% of the fill material only made up for the settlement – under a 12 m high embankment this means 2.4–3 m of compression.
+1fd0295	Embankment on peat <span class="tag">Kaposvár, 1999–2003</span>
+51e21a7	original ground level
+c123fcb	counterweight berm
+b0f63ac	An overview of ground improvement
+5dad6a5	Ground improvement
+97a3bf0	Day ${Math.round(t)}
+125df14	settlement: ${fmt(sc, 2)} m
+112dc47	embankment height: ${fmt(h, 1)} m
+d76fdfb	fill making up for the settlement
+773103d	embankment
+8d5b4c7	peat, organic silt
