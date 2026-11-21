@@ -491,3 +491,19 @@ main .note.rag { text-align: center !important; }
 .video-info { text-align: center; align-items: center; }
 main .video-info p { text-align-last: center; }
 .video-info ol { text-align: left; align-self: center; }
+
+/* ============ A sorozat többi része (minden tananyag alján) ============ */
+.series { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.series a { position: relative; display: block; text-align: center; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 15px 20px; box-shadow: var(--shadow); transition: transform .2s, border-color .2s; }
+.series a:hover { transform: translateY(-2px); border-color: var(--line2); }
+.series a::after { content: "↗"; position: absolute; top: 7px; right: 10px; font-size: 12px; color: var(--faint); }
+.series a b { display: block; font-family: var(--f-display); font-size: 16px; font-weight: 800; line-height: 1.25; margin-bottom: 4px; }
+.series a small { display: block; font-size: 13px; line-height: 1.45; color: var(--muted); }
+.series a.next { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.series a.next b { color: var(--c1s); }
+.series a.next small, .series a.next::after { color: var(--bg); opacity: .78; }
+@media (max-width: 1040px) { .series { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .series { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 440px) { .series { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .series a.next b { color: #b8650e; } }
+:root[data-theme="dark"] .series a.next b { color: #b8650e; }
